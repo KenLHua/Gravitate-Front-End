@@ -47,8 +47,6 @@ public class MainActivity extends AppCompatActivity {
             //
         //
 
-
-
         fab = findViewById(R.id.fab);
 
 
@@ -68,11 +66,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, MyProfile.class));
             }
         });
-
-
-
-
-
 
     }
     // Open NavDrawer when MenuButton is pressed
