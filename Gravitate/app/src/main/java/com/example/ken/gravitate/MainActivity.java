@@ -17,11 +17,13 @@ import  android.support.v4.widget.NestedScrollView;
 import android.widget.ImageView;
 
 public class MainActivity extends AppCompatActivity {
+
     private FloatingActionButton fab;
     private NestedScrollView nestedScrollView;
     private DrawerLayout drawerLayout;
     private ImageView profile;
     private View header;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,8 +50,6 @@ public class MainActivity extends AppCompatActivity {
         //
 
         fab = findViewById(R.id.fab);
-
-
 
         // Pressing on FAB, open new Activity -> New Event
         fab.setOnClickListener(new View.OnClickListener() {
