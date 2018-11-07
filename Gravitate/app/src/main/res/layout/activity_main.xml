@@ -8,12 +8,15 @@
     android:clickable="true"
     android:fitsSystemWindows="true"
     android:focusableInTouchMode="true"
-    android:focusable="true">
+    android:focusable="true"
+    tools:context="com.example.ken.gravitate.MainActivity">
 
     <FrameLayout
         android:id="@+id/content_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"

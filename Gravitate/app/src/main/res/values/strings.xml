@@ -4,4 +4,8 @@
     <string name="hint_event_name">Event Location</string>
     <string name="hint_event_time">Event Time</string>
     <string name="new_event_toolbar">Find a Ride</string>
+
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
 </resources>
