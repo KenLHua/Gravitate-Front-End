@@ -77,6 +77,22 @@ public class MainActivity extends AppCompatActivity
                 break;
         }
         switch(menuItem.getItemId()){
+            case R.id.nav_simple_activity_1:
+                startActivity(new Intent(MainActivity.this, SimpleActivity1.class));
+                break;
+        }
+        switch(menuItem.getItemId()){
+            case R.id.nav_simple_activity_2:
+                startActivity(new Intent(MainActivity.this, SimpleActivity2.class));
+                break;
+        }
+        switch(menuItem.getItemId()){
+            case R.id.nav_simple_activity_3:
+                startActivity(new Intent(MainActivity.this, SimpleActivity3.class));
+                break;
+        }
+
+        switch(menuItem.getItemId()){
             case R.id.nav_settings:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         new SettingFragment()).commit();
@@ -106,11 +122,6 @@ public class MainActivity extends AppCompatActivity
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-    // Not Finished
-    private CardView createNewCard(String eventName){
-        //CardView newCard = getApplicationContext().obtainStyledAttributes(attrs)
-        return null;
     }
 }
 
