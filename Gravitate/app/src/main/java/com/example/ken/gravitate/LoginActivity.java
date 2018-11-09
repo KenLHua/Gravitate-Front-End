@@ -2,6 +2,7 @@ package com.example.ken.gravitate;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -25,33 +26,58 @@ public class LoginActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
     private final static int RC_SIGN_IN = 2; // Request Code for starting new activity
     GoogleSignInClient mGoogleSignInClient;
+    FirebaseAuth.AuthStateListener mAuthListener;
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        mAuth.addAuthStateListener(mAuthListener);
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        button = (SignInButton) findViewById(R.id.googleBtn);
+        // Configure sign-in to request the user's ID, email address, and basic profile.
+        // ID and basic profile are included in DEFAULT_SIGN_IN.
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
 
         // Build a GoogleSignInClient with the options specified by gso.
-        GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
+        // Gets Button Reference in Login_Activity Layout
+        button = (SignInButton) findViewById(R.id.googleBtn);
+        button.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    case R.id.googleBtn:
+                        signIn();
+                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        break;
+                    // ...
+                }
+            }
+        });
+
+        mAuth = FirebaseAuth.getInstance();
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                // We have a user
+                if ( firebaseAuth.getCurrentUser() != null ) {
+                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                }
+            }
+        };
+
     }
 
-    // Configure sign-in to request the user's ID, email address, and basic profile.
-    // ID and basic profile are included in DEFAULT_SIGN_IN.
-    GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestEmail()
-            .build();
 
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.googleBtn:
-                signIn();
-                break;
-            // ...
-        }
-    }
 
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
@@ -76,17 +102,17 @@ public class LoginActivity extends AppCompatActivity {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
 
             // Signed in successfully, show authenticated UI.
-            updateUI(account);
+//            updateUI(account);
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
             // TODO: Need Tag Codes
             Log.w("Google-Sign-In", "signInResult:failed code=" + e.getStatusCode());
-            updateUI(null);
+//            updateUI(null);
         }
     }
 
-    private void updateUI(GoogleSignInAccount account) {
+/*    private void updateUI(GoogleSignInAccount account) {
         startActivity(new Intent(LoginActivity.this, MainActivity.class));
-    }
+    }*/
 }
