@@ -10,6 +10,24 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+        // Simple activities for adding new features
+        <activity android:name=".SimpleActivity1">
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".SimpleActivity2">
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".SimpleActivity3">
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+      
+      
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -20,6 +38,8 @@
         <activity android:name=".MainActivity"></activity>
         <activity android:name=".NewEvent"> </activity>
         <activity android:name=".MyProfile"> </activity>
+
+      
     </application>
 
 </manifest>

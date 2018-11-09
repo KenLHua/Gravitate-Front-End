@@ -12,6 +12,15 @@
             android:icon="@drawable/ic_message_grey_24dp"
             android:title="Messages" />
         <item
+            android:id="@+id/nav_simple_activity_1"
+            android:title="Simple Activity 1" />
+        <item
+            android:id="@+id/nav_simple_activity_2"
+            android:title="Simple Activity 2" />
+        <item
+            android:id="@+id/nav_simple_activity_3"
+            android:title="Simple Activity 3" />
+        <item
             android:id="@+id/nav_settings"
             android:icon="@drawable/ic_settings_grey_24dp"
             android:title="Settings" />
