@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity
         }
         switch(menuItem.getItemId()){
             case R.id.nav_simple_activity_2:
-                startActivity(new Intent(MainActivity.this, SimpleActivity2.class));
+                startActivity(new Intent(MainActivity.this, InputPickupAddress.class));
                 break;
         }
         switch(menuItem.getItemId()){

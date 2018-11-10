@@ -16,7 +16,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SimpleActivity2">
+        <activity android:name=".InputPickupAddress">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
@@ -38,6 +38,12 @@
         <activity android:name=".MainActivity"></activity>
         <activity android:name=".NewEvent"> </activity>
         <activity android:name=".MyProfile"> </activity>
+
+        //API Key for Google Maps
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAXMSQY8WQqLcNhY-wHvUwzI9763f13G4w"/>
+
 
       
     </application>
