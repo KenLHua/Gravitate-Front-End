@@ -27,6 +27,7 @@ public class LoginActivity extends AppCompatActivity {
     private final static int RC_SIGN_IN = 2; // Request Code for starting new activity
     GoogleSignInClient mGoogleSignInClient;
     FirebaseAuth.AuthStateListener mAuthListener;
+    boolean skipLoginPage = true; // skip the login page
 
     @Override
     protected void onStart() {
@@ -37,6 +38,9 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        if(skipLoginPage){
+            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 

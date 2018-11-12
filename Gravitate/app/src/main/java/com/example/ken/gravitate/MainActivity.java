@@ -5,7 +5,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -28,6 +30,7 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         fragmentManager = getSupportFragmentManager();
+
 
         setContentView(R.layout.activity_main);
 
@@ -65,36 +68,39 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch(menuItem.getItemId()){
             case R.id.nav_profile:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                        new ProfileFragment()).addToBackStack(null).commit();
+                startActivity(new Intent(MainActivity.this, MyProfile.class));
+                drawer.closeDrawer(GravityCompat.START);
                 break;
         }
         switch(menuItem.getItemId()){
             case R.id.nav_messages:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                        new MessageFragment()).addToBackStack(null).commit();
+                replaceFragment(new MessageFragment());
+                drawer.closeDrawer(GravityCompat.START);
                 break;
         }
         switch(menuItem.getItemId()){
             case R.id.nav_simple_activity_1:
                 startActivity(new Intent(MainActivity.this, SimpleActivity1.class));
+                drawer.closeDrawer(GravityCompat.START);
                 break;
         }
         switch(menuItem.getItemId()){
             case R.id.nav_simple_activity_2:
                 startActivity(new Intent(MainActivity.this, InputPickupAddress.class));
+                drawer.closeDrawer(GravityCompat.START);
                 break;
         }
         switch(menuItem.getItemId()){
             case R.id.nav_simple_activity_3:
                 startActivity(new Intent(MainActivity.this, SimpleActivity3.class));
+                drawer.closeDrawer(GravityCompat.START);
                 break;
         }
 
         switch(menuItem.getItemId()){
             case R.id.nav_settings:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                        new SettingFragment()).addToBackStack(null).commit();
+                replaceFragment(new SettingFragment());
+                drawer.closeDrawer(GravityCompat.START);
                 break;
         }
 
@@ -121,6 +127,22 @@ public class MainActivity extends AppCompatActivity
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+    // Display a fragment and handle backstack behavior
+    private void replaceFragment (Fragment fragment){
+        String backStateName =  fragment.getClass().getName();
+        String fragmentTag = backStateName;
+
+        FragmentManager manager = getSupportFragmentManager();
+        boolean fragmentPopped = manager.popBackStackImmediate (backStateName, 0);
+
+        if (!fragmentPopped && manager.findFragmentByTag(fragmentTag) == null){ //fragment not in back stack, create it.
+            FragmentTransaction ft = manager.beginTransaction();
+            ft.replace(R.id.content_frame, fragment, fragmentTag);
+            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+            ft.addToBackStack(backStateName);
+            ft.commit();
+        }
     }
 }
 
