@@ -66,43 +66,39 @@ public class MainActivity extends AppCompatActivity
     // TODO: Determine whether to use Fragments or Activites
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+
         switch(menuItem.getItemId()){
             case R.id.nav_profile:
                 startActivity(new Intent(MainActivity.this, MyProfile.class));
-                drawer.closeDrawer(GravityCompat.START);
                 break;
         }
         switch(menuItem.getItemId()){
             case R.id.nav_messages:
                 replaceFragment(new MessageFragment());
-                drawer.closeDrawer(GravityCompat.START);
                 break;
         }
         switch(menuItem.getItemId()){
             case R.id.nav_simple_activity_1:
                 startActivity(new Intent(MainActivity.this, SimpleActivity1.class));
-                drawer.closeDrawer(GravityCompat.START);
                 break;
         }
         switch(menuItem.getItemId()){
             case R.id.nav_simple_activity_2:
                 startActivity(new Intent(MainActivity.this, InputPickupAddress.class));
-                drawer.closeDrawer(GravityCompat.START);
                 break;
         }
         switch(menuItem.getItemId()){
             case R.id.nav_simple_activity_3:
                 startActivity(new Intent(MainActivity.this, SimpleActivity3.class));
-                drawer.closeDrawer(GravityCompat.START);
                 break;
         }
 
         switch(menuItem.getItemId()){
             case R.id.nav_settings:
                 replaceFragment(new SettingFragment());
-                drawer.closeDrawer(GravityCompat.START);
                 break;
         }
+        drawer.closeDrawer(GravityCompat.START);
 
         return true;
     }
