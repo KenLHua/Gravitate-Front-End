@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context="com.example.ken.gravitate.SimpleActivity3">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -15,5 +16,11 @@
         android:text="@string/new_event_toolbar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/airport_ride_request_list_k"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:divider="#00000000" />
 
 </android.support.constraint.ConstraintLayout>
