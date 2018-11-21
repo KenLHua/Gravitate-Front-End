@@ -40,7 +40,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-auth:16.0.1'
     implementation 'com.google.android.gms:play-services-places:16.0.0'
     implementation 'com.android.support:cardview-v7:28.0.0'
-    compile project(path: ':module')
+    implementation project(path: ':module')
     implementation 'com.jakewharton:butterknife:9.0.0-rc1'
 }
 

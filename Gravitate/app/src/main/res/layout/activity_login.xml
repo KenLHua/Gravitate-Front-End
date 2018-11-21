@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<<<<<<< HEAD
     xmlns:app="http://schemas.android.com/apk/res-auto"
+=======
+>>>>>>> 5b0c27a047100ebbb3df424a3a6c6bfa44c99894
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/login_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.ken.gravitate.LoginActivity">
@@ -95,6 +99,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/passwordField"
         tools:ignore="HardcodedText" />
+
+    <Button
+        android:id="@+id/signout_bttn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sign Out"
+        tools:layout_editor_absoluteX="148dp"
+        tools:layout_editor_absoluteY="293dp" />
 
 
 </android.support.constraint.ConstraintLayout>
