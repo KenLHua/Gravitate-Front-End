@@ -43,6 +43,18 @@
         app:layout_constraintVertical_bias="0.867"
         tools:ignore="HardcodedText" />
 
+    <Button
+        android:id="@+id/signout_bttn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="Testing Purpose"
+        android:text="Sign Out"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/googleBtn"
+        app:layout_constraintTop_toBottomOf="@+id/cancelButton" />
+
     <ImageView
         android:id="@+id/logoView"
         android:layout_width="325dp"

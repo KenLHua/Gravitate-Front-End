@@ -39,17 +39,11 @@ public class LoginActivity extends AppCompatActivity {
     FirebaseAuth.AuthStateListener mAuthListener;
     private static final String TAG = "GoogleActivity";
     private static final String web_client_id = "1070051773756-o6l5r1l6v7m079r1oua2lo0rsfeu8m9i.apps.googleusercontent.com";
+    private static final String DOMAIN = "ucsd.edu";
 
     @Override
     protected void onStart() {
         super.onStart();
-
-        FirebaseUser curUser = mAuth.getCurrentUser();
-        // Moves to Main Page if User is already logged in
-        if ( curUser != null ) {
-            startActivity(new Intent(LoginActivity.this, MainActivity.class));
-        }
-
         mAuth.addAuthStateListener(mAuthListener);
     }
 
@@ -63,6 +57,7 @@ public class LoginActivity extends AppCompatActivity {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(web_client_id)
                 .requestEmail()
+                .setHostedDomain(DOMAIN)
                 .build();
 
         // Build a GoogleSignInClient with the options specified by gso.
@@ -73,16 +68,16 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 // We have a user
-                FirebaseUser user = firebaseAuth.getCurrentUser();
+/*                FirebaseUser user = firebaseAuth.getCurrentUser();
                 if ( user != null ) {
                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                }
+                }*/
             }
         };
 
         // Floating Action Button Setup
         sign_in_bttn = findViewById(R.id.googleBtn);
-        sign_out_bttn = findViewById(R.id.signout_bttn);
+        sign_out_bttn = findViewById(R.id.signout_bttn);            // Testing Purposes
 
         // Gets Google Button Reference in Login_Activity Layout
         sign_in_bttn.setOnClickListener(new View.OnClickListener() {
@@ -91,7 +86,6 @@ public class LoginActivity extends AppCompatActivity {
                 switch (v.getId()) {
                     case R.id.googleBtn:
                         signIn();
-                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
                         break;
                     // ...
                 }
@@ -150,6 +144,7 @@ public class LoginActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
                             // updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
