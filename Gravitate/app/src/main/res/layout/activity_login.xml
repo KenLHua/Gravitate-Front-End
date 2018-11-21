@@ -1,26 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.ken.gravitate.LoginActivity">
 
-    <TextView
-        android:id="@+id/sign_in_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        tools:layout_editor_absoluteX="145dp"
-        tools:layout_editor_absoluteY="50dp"
-        tools:text="Sign-In Page" />
-
     <com.google.android.gms.common.SignInButton
         android:id="@+id/googleBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:layout_editor_absoluteX="137dp"
-        tools:layout_editor_absoluteY="452dp"></com.google.android.gms.common.SignInButton>
+        android:layout_width="141dp"
+        android:layout_height="51dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.968"></com.google.android.gms.common.SignInButton>
+
+    <Button
+        android:id="@+id/signUpButton"
+        android:layout_width="96dp"
+        android:layout_height="52dp"
+        android:text="Sign Up"
+        app:layout_constraintBottom_toTopOf="@+id/googleBtn"
+        app:layout_constraintEnd_toStartOf="@+id/cancelButton"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/usernameField"
+        app:layout_constraintVertical_bias="0.867"
+        tools:ignore="HardcodedText" />
+
+    <Button
+        android:id="@+id/cancelButton"
+        android:layout_width="96dp"
+        android:layout_height="52dp"
+        android:text="Cancel"
+        app:layout_constraintBottom_toTopOf="@+id/googleBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/signUpButton"
+        app:layout_constraintTop_toBottomOf="@+id/usernameField"
+        app:layout_constraintVertical_bias="0.867"
+        tools:ignore="HardcodedText" />
+
+    <ImageView
+        android:id="@+id/logoView"
+        android:layout_width="325dp"
+        android:layout_height="255dp"
+        android:contentDescription="gravitateLogo"
+        app:layout_constraintBottom_toTopOf="@+id/usernameField"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.41"
+        app:srcCompat="@drawable/gravitate_logo2_transparent"
+        tools:ignore="HardcodedText" />
+
+    <EditText
+        android:id="@+id/usernameField"
+        android:layout_width="306dp"
+        android:layout_height="43dp"
+        android:hint="Input account associated email"
+        android:inputType="textEmailAddress"
+        app:layout_constraintBottom_toTopOf="@+id/passwordField"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/logoView"
+        tools:ignore="HardcodedText,UnusedAttribute" />
+
+    <EditText
+        android:id="@+id/passwordField"
+        android:layout_width="306dp"
+        android:layout_height="43dp"
+        android:hint="Input account password"
+        android:inputType="text|textPassword"
+        app:layout_constraintBottom_toTopOf="@+id/verifyPassField"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/usernameField"
+        tools:ignore="HardcodedText" />
+
+    <EditText
+        android:id="@+id/verifyPassField"
+        android:layout_width="306dp"
+        android:layout_height="43dp"
+        android:hint="Verify the password above"
+        android:inputType="text|textPassword"
+        app:layout_constraintBottom_toTopOf="@+id/signUpButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/passwordField"
+        tools:ignore="HardcodedText" />
 
 
 </android.support.constraint.ConstraintLayout>
