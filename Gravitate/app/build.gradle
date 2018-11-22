@@ -1,6 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'gravitate_key'
+            keyPassword 'gravitate123'
+            storeFile file('C:/Users/LeonWu/Desktop/gravitate/Gravitate-Front-End/gravitate_key.jks')
+            storePassword 'gravitate123'
+        }
+    }
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.example.ken.gravitate"
