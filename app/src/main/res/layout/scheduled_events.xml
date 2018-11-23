@@ -25,6 +25,16 @@
             android:theme="@style/ToolbarTheme"
             android:elevation="4dp"/>
 
+        <com.leinardi.android.speeddial.SpeedDialView
+            android:id="@+id/speedDial"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:layout_gravity="bottom|end"
+            app:sdMainFabClosedSrc="@drawable/system_icon_plus_white" />
+
+        <!-- Deprecated FAB button
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"
             android:layout_width="56dp"
@@ -34,7 +44,7 @@
             android:layout_marginBottom="16dp"
             android:backgroundTint="@color/colorFAB"
             android:src="@drawable/system_icon_plus_white"
-            app:borderWidth="0dp" />
+            app:borderWidth="0dp" /> -->
 
         <FrameLayout
             android:id="@+id/fragment_container"

@@ -13,27 +13,13 @@
         android:theme="@style/AppTheme">
 
         // Simple activities for adding new features
-        <activity android:name=".SimpleActivity1">
-            <intent-filter>
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".Event.InputPickupAddress">
-            <intent-filter>
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".SimpleActivity3">
-            <intent-filter>
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-      
-      
+        <activity android:name=".SimpleActivity1"></activity>
+        <activity android:name=".Event.InputPickupAddress"></activity>
+        <activity android:name=".SimpleActivity3"></activity>
+
         <activity android:name=".Account.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -46,6 +32,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Event.ScheduledEvents"/>
         </activity>
+        <activity android:name=".Event.InputFlight"></activity>
 
         //API Key for Google Maps
         <meta-data
