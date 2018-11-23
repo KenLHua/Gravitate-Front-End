@@ -40,6 +40,12 @@
         <activity android:name=".Event.ScheduledEvents"></activity>
         <activity android:name=".Event.NewEvent"> </activity>
         <activity android:name=".Account.MyProfile"> </activity>
+        <activity android:name=".Settings.SettingsActivity"
+            android:label="Settings">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Event.ScheduledEvents"/>
+        </activity>
 
         //API Key for Google Maps
         <meta-data

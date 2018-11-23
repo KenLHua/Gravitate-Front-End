@@ -2,8 +2,9 @@
 <resources>
     <color name="colorPrimary">#661D92</color>
     <color name="colorPrimaryDark">#441362</color>
-    <color name="colorAccent">#000000</color>
+    <color name="colorAccent">#9022FF</color>
     <color name="colorFAB">#845EC2</color>
     <color name="colorCardYellow">#FFD600</color>
     <color name="colorCardOrange">#FF6F00</color>
+    <color name="colorTextSummary">#727272</color>
 </resources>

@@ -20,7 +20,8 @@ import android.widget.ImageView;
 import com.example.ken.gravitate.Messaging.MessageFragment;
 import com.example.ken.gravitate.Account.MyProfile;
 import com.example.ken.gravitate.R;
-import com.example.ken.gravitate.SettingFragment;
+import com.example.ken.gravitate.Settings.SettingsActivity;
+import com.example.ken.gravitate.Settings.SettingsFragment;
 import com.example.ken.gravitate.SimpleActivity1;
 import com.example.ken.gravitate.SimpleActivity3;
 
@@ -102,7 +103,7 @@ public class ScheduledEvents extends AppCompatActivity
 
         switch(menuItem.getItemId()){
             case R.id.nav_settings:
-                replaceFragment(new SettingFragment());
+                startActivity(new Intent(ScheduledEvents.this, SettingsActivity.class));
                 break;
         }
         drawer.closeDrawer(GravityCompat.START);
