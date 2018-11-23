@@ -18,7 +18,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".InputPickupAddress">
+        <activity android:name=".Event.InputPickupAddress">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
@@ -30,16 +30,16 @@
         </activity>
       
       
-        <activity android:name=".LoginActivity">
+        <activity android:name=".Account.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity"></activity>
-        <activity android:name=".NewEvent"> </activity>
-        <activity android:name=".MyProfile"> </activity>
+        <activity android:name=".Event.ScheduledEvents"></activity>
+        <activity android:name=".Event.NewEvent"> </activity>
+        <activity android:name=".Account.MyProfile"> </activity>
 
         //API Key for Google Maps
         <meta-data

@@ -1,4 +1,4 @@
-package com.example.ken.gravitate;
+package com.example.ken.gravitate.Event;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,7 +17,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
-public class MainActivity extends AppCompatActivity
+import com.example.ken.gravitate.Messaging.MessageFragment;
+import com.example.ken.gravitate.Account.MyProfile;
+import com.example.ken.gravitate.R;
+import com.example.ken.gravitate.SettingFragment;
+import com.example.ken.gravitate.SimpleActivity1;
+import com.example.ken.gravitate.SimpleActivity3;
+
+public class ScheduledEvents extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     public static FragmentManager fragmentManager;
@@ -56,7 +63,7 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, NewEvent.class));
+                startActivity(new Intent(ScheduledEvents.this, NewEvent.class));
             }
         });
 
@@ -69,7 +76,7 @@ public class MainActivity extends AppCompatActivity
 
         switch(menuItem.getItemId()){
             case R.id.nav_profile:
-                startActivity(new Intent(MainActivity.this, MyProfile.class));
+                startActivity(new Intent(ScheduledEvents.this, MyProfile.class));
                 break;
         }
         switch(menuItem.getItemId()){
@@ -79,17 +86,17 @@ public class MainActivity extends AppCompatActivity
         }
         switch(menuItem.getItemId()){
             case R.id.nav_simple_activity_1:
-                startActivity(new Intent(MainActivity.this, SimpleActivity1.class));
+                startActivity(new Intent(ScheduledEvents.this, SimpleActivity1.class));
                 break;
         }
         switch(menuItem.getItemId()){
             case R.id.nav_simple_activity_2:
-                startActivity(new Intent(MainActivity.this, InputPickupAddress.class));
+                startActivity(new Intent(ScheduledEvents.this, InputPickupAddress.class));
                 break;
         }
         switch(menuItem.getItemId()){
             case R.id.nav_simple_activity_3:
-                startActivity(new Intent(MainActivity.this, SimpleActivity3.class));
+                startActivity(new Intent(ScheduledEvents.this, SimpleActivity3.class));
                 break;
         }
 

@@ -1,7 +1,9 @@
-package com.example.ken.gravitate;
+package com.example.ken.gravitate.Account;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+
+import com.example.ken.gravitate.R;
 
 public class MyProfile extends AppCompatActivity {
     @Override

@@ -1,9 +1,11 @@
-package com.example.ken.gravitate;
+package com.example.ken.gravitate.Event;
 
 import android.app.ActionBar;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+
+import com.example.ken.gravitate.R;
 
 public class NewEvent extends AppCompatActivity {
     @Override

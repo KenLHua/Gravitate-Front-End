@@ -5,7 +5,7 @@
     android:id="@+id/login_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.ken.gravitate.LoginActivity">
+    tools:context="com.example.ken.gravitate.Account.LoginActivity">
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/googleBtn"
@@ -108,6 +108,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/passwordField"
         tools:ignore="HardcodedText" />
+
+    <Button
+        android:id="@+id/loginSkip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginBottom="17dp"
+        android:text="SKIP/TEST"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/googleBtn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/signUpButton" />
 
 
 </android.support.constraint.ConstraintLayout>

@@ -9,7 +9,7 @@
     android:fitsSystemWindows="true"
     android:focusableInTouchMode="true"
     android:focusable="true"
-    tools:context="com.example.ken.gravitate.MainActivity">
+    tools:context="com.example.ken.gravitate.Event.ScheduledEvents">
 
     <FrameLayout
         android:id="@+id/content_frame"
@@ -33,7 +33,7 @@
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
             android:backgroundTint="@color/colorFAB"
-            android:src="@drawable/ic_add_white_24dp"
+            android:src="@drawable/system_icon_plus_white"
             app:borderWidth="0dp" />
 
         <FrameLayout
@@ -45,7 +45,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="?attr/actionBarSize"
-                tools:context=".MainActivity">
+                tools:context=".Event.ScheduledEvents">
 
                 <ScrollView
                     android:layout_width="match_parent"

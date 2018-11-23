@@ -1,4 +1,4 @@
-package com.example.ken.gravitate;
+package com.example.ken.gravitate.Event;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -6,6 +6,7 @@ import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
 
 //Necessary libraries for Address Autocomplete functionality
+import com.example.ken.gravitate.R;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.Place;
