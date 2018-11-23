@@ -2,7 +2,6 @@
 <android.support.v7.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <android.support.v7.preference.PreferenceCategory
-        android:theme="@style/PreferenceCategory"
         android:title="Notification Settings">
 
         <android.support.v7.preference.SwitchPreferenceCompat
@@ -26,7 +25,6 @@
             android:title="Messages" />
     </android.support.v7.preference.PreferenceCategory>
     <android.support.v7.preference.PreferenceCategory
-        android:theme="@style/PreferenceCategory"
         android:title="Account Settings">
 
         <android.support.v7.preference.EditTextPreference

@@ -6,7 +6,6 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:colorControlActivated">@color/colorPrimary</item>
         <item name="preferenceTheme">@style/PreferenceScreen</item>
         <item name="preferenceStyle">@style/PreferenceScreen</item>
     </style>
@@ -21,11 +20,6 @@
         <item name="android:textColorPrimary">@color/colorPrimaryDark</item>
         <item name="android:textColorSecondary">@color/colorTextSummary</item>
         <item name="android:colorPrimary">@color/colorPrimary</item>
-    </style>
-
-    <style name="PreferenceCategory" parent="PreferenceScreen">
-        <item name="android:textSize">20sp</item>
-        <item name="android:textColorPrimary">#999999</item>
     </style>
 
 </resources>
