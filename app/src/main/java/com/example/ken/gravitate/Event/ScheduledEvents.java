@@ -61,10 +61,28 @@ public class ScheduledEvents extends AppCompatActivity
         // Populate the FAB secondary menu
         speedDialView.addActionItem(
                 new SpeedDialActionItem.Builder(R.id.fab_input_flight_number, R.drawable.system_icon_plane_ticket)
-                        .setLabel(getString(R.string.input_flight_number))
+                        .setLabel(getString(R.string.fab_flight))
                         .setLabelClickable(false)
                         .create());
+        speedDialView.addActionItem(
+                new SpeedDialActionItem.Builder(R.id.fab_new_event, R.drawable.system_icon_event)
+                        .setLabel(getString(R.string.fab_event))
+                        .setLabelClickable(false)
+                        .create());
+        
         // Provide behavior to the secondary FAB buttons
+        speedDialView.setOnActionSelectedListener(new SpeedDialView.OnActionSelectedListener() {
+            @Override
+            public boolean onActionSelected(SpeedDialActionItem speedDialActionItem) {
+                switch (speedDialActionItem.getId()) {
+                    case R.id.fab_input_flight_number:
+                        startActivity(new Intent(ScheduledEvents.this, InputFlight.class));
+                        return false; // true to keep the Speed Dial open
+                    default:
+                        return false;
+                }
+            }
+        });
         speedDialView.setOnActionSelectedListener(new SpeedDialView.OnActionSelectedListener() {
             @Override
             public boolean onActionSelected(SpeedDialActionItem speedDialActionItem) {
