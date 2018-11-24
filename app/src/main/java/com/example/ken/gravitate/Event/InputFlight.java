@@ -4,21 +4,23 @@ import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.RadioGroup.OnCheckedChangeListener;
 
 import com.example.ken.gravitate.R;
+
+import org.w3c.dom.Text;
 
 public class InputFlight extends AppCompatActivity {
     private RadioGroup inputGroup;
     private RadioButton flightRadio;
     private RadioButton manualRadio;
-    private TextInputLayout flightNumberEditText;
+    private TextInputLayout flightNumberTextDisplay;
+    private TextInputLayout manualTimeDisplay;
+    private TextInputLayout manualFlightAddress;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,7 +36,10 @@ public class InputFlight extends AppCompatActivity {
         inputGroup = (RadioGroup) findViewById(R.id.flightRadioGroup);
         flightRadio = (RadioButton) findViewById(R.id.flightRadio);
         manualRadio = (RadioButton) findViewById(R.id.manualRadio);
-        flightNumberEditText = (TextInputLayout) findViewById(R.id.eventLocationLayout);
+        // Setting Text Fields
+        flightNumberTextDisplay = (TextInputLayout) findViewById(R.id.flightNumber);
+        manualTimeDisplay = (TextInputLayout) findViewById(R.id.manualTime);
+        manualFlightAddress = (TextInputLayout) findViewById(R.id.manualFlightAddress);
 
 
         // Setting Radio hide/show behavior
@@ -42,10 +47,10 @@ public class InputFlight extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(flightRadio.isChecked()){
-                    flightNumberEditText.setVisibility(View.GONE);
+                    hideManualInput();
                 }
                 else {
-                    flightNumberEditText.setVisibility(View.VISIBLE);
+                    showManualInput();
                 }
             }
         });
@@ -59,4 +64,17 @@ public class InputFlight extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.actionbar_menu, menu);
         return true;
     }
+    // Helper method to make hide more readable
+    public void hideManualInput(){
+        flightNumberTextDisplay.setVisibility(View.VISIBLE);
+        manualTimeDisplay.setVisibility(View.GONE);
+        manualFlightAddress.setVisibility(View.GONE);
+
+    };
+    // Helper method to make show more readable
+    public void showManualInput(){
+        flightNumberTextDisplay.setVisibility(View.GONE);
+        manualTimeDisplay.setVisibility(View.VISIBLE);
+        manualFlightAddress.setVisibility(View.VISIBLE);
+    };
 }

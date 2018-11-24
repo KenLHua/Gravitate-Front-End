@@ -1,8 +1,10 @@
 <resources>
     <string name="app_name">Gravitate</string>
     <string name="snackbar_test">Hey it/s me the Snackbar!</string>
+
     <string name="hint_event_name">Event Location</string>
     <string name="hint_event_time">Event Time</string>
+    <string name="hint_flight_number">Flight Number</string>
     <string name="input_flight_number">Find by Flight</string>
 
     <string name="new_event_toolbar">Find a Ride</string>
@@ -15,4 +17,5 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="checkmarkDone">Submit</string>
+
 </resources>

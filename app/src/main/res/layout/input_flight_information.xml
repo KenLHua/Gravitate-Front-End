@@ -50,8 +50,8 @@
         </RadioGroup>
 
         <android.support.design.widget.TextInputLayout
-            android:id="@+id/eventLocationLayout"
-            android:visibility="gone"
+            android:id="@+id/flightNumber"
+            android:visibility="visible"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_marginTop="16dp"
             android:layout_width="match_parent"
@@ -60,27 +60,46 @@
             >
 
             <android.support.design.widget.TextInputEditText
-                android:id="@+id/inputEventLocation"
+                android:id="@+id/inputFlightNumber"
                 android:layout_marginTop="16dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/hint_event_name" />
+                android:hint="@string/hint_flight_number" />
 
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
-            android:id="@+id/eventTimeLayout"
+            android:id="@+id/manualFlightAddress"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/eventLocationLayout"
-            android:layout_alignParentStart="true">
+            android:layout_below="@+id/flightRadioGroup"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="16dp"
+            android:visibility="gone">
 
             <android.support.design.widget.TextInputEditText
-                android:id="@+id/inputEventTime"
+                android:id="@+id/inputFlightAddress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/hint_event_time" />
+                android:hint="@string/hint_event_name" />
+
+
+        </android.support.design.widget.TextInputLayout>
+        <android.support.design.widget.TextInputLayout
+        android:id="@+id/manualTime"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/manualFlightAddress"
+        android:layout_alignParentStart="true"
+        android:visibility="gone">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/inputTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_event_time" />
 
 
         </android.support.design.widget.TextInputLayout>
