@@ -25,6 +25,7 @@ import com.android.volley.toolbox.BasicNetwork;
 import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.StringRequest;
+import com.example.ken.gravitate.APIRequestSingleton;
 import com.example.ken.gravitate.R;
 
 public class InputFlight extends AppCompatActivity {
@@ -80,9 +81,11 @@ public class InputFlight extends AppCompatActivity {
         manualTimeDisplay = (TextInputLayout) findViewById(R.id.manualTime);
         manualFlightAddress = (TextInputLayout) findViewById(R.id.manualFlightAddress);
 
-        // Initializing Request Components
-        mRequestQueue = getRequestQueue();
+/*        // Initializing Request Components
+        mRequestQueue = getRequestQueue();*/
 
+        mRequestQueue = APIRequestSingleton.getInstance(this.getApplicationContext()).
+                getRequestQueue();
 
         // Setting Radio hide/show behavior
         flightRadio.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -146,26 +149,6 @@ public class InputFlight extends AppCompatActivity {
         }
     }
 
-    // Initializes RequestQueue if it hasn't been already
-    public RequestQueue getRequestQueue() {
-        if (mRequestQueue == null) {
-
-            // Instantiate the cache
-            Cache cache = new DiskBasedCache(getCacheDir(), 1024 * 1024); // 1MB cap
-            // Set up the network to use HttpURLConnection as the HTTP client.
-            Network network = new BasicNetwork(new HurlStack());
-            // Instantiate the RequestQueue with the cache and network.
-            mRequestQueue = new RequestQueue(cache, network);
-            // Start the queue
-            mRequestQueue.start();
-
-            // getApplicationContext() is key, it keeps you from leaking the
-            // Activity or BroadcastReceiver if someone passes one in.
-            //mRequestQueue = Volley.newRequestQueue(mContext.getApplicationContext());
-        }
-        return mRequestQueue;
-    }
-
     /* Sends a GET Request to Flightstats API
      *  RETURNS: String in JSON format that contains flight information
      * */
@@ -189,7 +172,7 @@ public class InputFlight extends AppCompatActivity {
                         Log.w(TAG, "GET_REQUEST:failure");
                     }
                 });
-        mRequestQueue.add(stringRequest);
+        APIRequestSingleton.getInstance(this).addToRequestQueue(stringRequest);
     }
 
     /* Gets the correct Endpoint for FlightStats Schedule API
