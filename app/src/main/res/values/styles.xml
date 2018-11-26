@@ -6,11 +6,20 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="preferenceTheme">@style/PreferenceScreen</item>
+        <item name="preferenceStyle">@style/PreferenceScreen</item>
     </style>
 
     <style name="ToolbarTheme" parent = "ThemeOverlay.AppCompat.ActionBar">
         <item name="android:textColorPrimary">@android:color/white</item>
         <item name="android:textColorSecondary">@android:color/black</item>
+    </style>
+
+
+    <style name="PreferenceScreen" parent="@style/PreferenceThemeOverlay">
+        <item name="android:textColorPrimary">@color/colorPrimaryDark</item>
+        <item name="android:textColorSecondary">@color/colorTextSummary</item>
+        <item name="android:colorPrimary">@color/colorPrimary</item>
     </style>
 
 </resources>

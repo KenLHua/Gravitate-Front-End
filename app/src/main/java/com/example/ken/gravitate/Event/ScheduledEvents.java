@@ -13,33 +13,35 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.example.ken.gravitate.Account.LoginActivity;
 import com.example.ken.gravitate.Messaging.MessageFragment;
 import com.example.ken.gravitate.Account.MyProfile;
 import com.example.ken.gravitate.R;
-import com.example.ken.gravitate.SettingFragment;
+import com.example.ken.gravitate.Settings.SettingsActivity;
 import com.example.ken.gravitate.SimpleActivity1;
 import com.example.ken.gravitate.SimpleActivity3;
+import com.leinardi.android.speeddial.SpeedDialActionItem;
+import com.leinardi.android.speeddial.SpeedDialView;
 
 public class ScheduledEvents extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     public static FragmentManager fragmentManager;
     private DrawerLayout drawer;
-    private FloatingActionButton fab;
     private ImageView profile;
     private View header;
-
+    private SpeedDialView fab;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         fragmentManager = getSupportFragmentManager();
-
-
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.scheduled_events);
 
         // Toolbar Setup
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -57,16 +59,44 @@ public class ScheduledEvents extends AppCompatActivity
         toggle.syncState();
 
         // Floating Action Button Setup
-        fab = findViewById(R.id.fab);
-
-        // Pressing on FAB, open new Activity -> New Event
-        fab.setOnClickListener(new View.OnClickListener() {
+        SpeedDialView speedDialView = findViewById(R.id.speedDial);
+        // Populate the FAB secondary menu
+        speedDialView.addActionItem(
+                new SpeedDialActionItem.Builder(R.id.fab_input_flight_number, R.drawable.system_icon_plane_ticket)
+                        .setLabel(getString(R.string.fab_flight))
+                        .setLabelClickable(false)
+                        .create());
+        speedDialView.addActionItem(
+                new SpeedDialActionItem.Builder(R.id.fab_new_event, R.drawable.system_icon_event)
+                        .setLabel(getString(R.string.fab_event))
+                        .setLabelClickable(false)
+                        .create());
+        
+        // Provide behavior to the secondary FAB buttons
+        speedDialView.setOnActionSelectedListener(new SpeedDialView.OnActionSelectedListener() {
             @Override
-            public void onClick(View v) {
-                startActivity(new Intent(ScheduledEvents.this, NewEvent.class));
+            public boolean onActionSelected(SpeedDialActionItem speedDialActionItem) {
+                switch (speedDialActionItem.getId()) {
+                    case R.id.fab_input_flight_number:
+                        startActivity(new Intent(ScheduledEvents.this, InputFlight.class));
+                        return false; // true to keep the Speed Dial open
+                    default:
+                        return false;
+                }
             }
         });
-
+        speedDialView.setOnActionSelectedListener(new SpeedDialView.OnActionSelectedListener() {
+            @Override
+            public boolean onActionSelected(SpeedDialActionItem speedDialActionItem) {
+                switch (speedDialActionItem.getId()) {
+                    case R.id.fab_input_flight_number:
+                        startActivity(new Intent(ScheduledEvents.this, InputFlight.class));
+                        return false; // true to keep the Speed Dial open
+                    default:
+                        return false;
+                }
+            }
+        });
     }
 
     // Creates a Fragment Instance of respective menu item
@@ -102,9 +132,16 @@ public class ScheduledEvents extends AppCompatActivity
 
         switch(menuItem.getItemId()){
             case R.id.nav_settings:
-                replaceFragment(new SettingFragment());
+                startActivity(new Intent(ScheduledEvents.this, SettingsActivity.class));
                 break;
         }
+        switch(menuItem.getItemId()) {
+            case R.id.nav_logout:
+                LoginActivity logactivity = new LoginActivity();
+                logactivity.signOut();
+                break;
+        }
+
         drawer.closeDrawer(GravityCompat.START);
 
         return true;

@@ -93,7 +93,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        sign_out_bttn.setOnClickListener( new View.OnClickListener() {
+/*        sign_out_bttn.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 switch(v.getId()) {
@@ -102,7 +102,7 @@ public class LoginActivity extends AppCompatActivity {
                     break;
                 }
             }
-        });
+        });*/
         testSkip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -178,7 +178,7 @@ public class LoginActivity extends AppCompatActivity {
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
-    private void signOut() {
+    public void signOut() {
         mGoogleSignInClient.signOut()
                 .addOnCompleteListener(this, new OnCompleteListener<Void>() {
                     @Override
