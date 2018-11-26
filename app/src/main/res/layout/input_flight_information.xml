@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/input_flight_information"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -11,8 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
-        android:theme="@style/ToolbarTheme"
         android:text="@string/new_event_toolbar"
+        android:theme="@style/ToolbarTheme"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -43,27 +43,26 @@
             <RadioButton
                 android:id="@+id/manualRadio"
                 android:layout_width="wrap_content"
-                android:layout_marginTop="16dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
                 android:layout_weight="1"
                 android:text="@string/radio_manual" />
         </RadioGroup>
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/flightNumber"
-            android:visibility="visible"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_marginTop="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/flightRadioGroup"
-            >
+            android:layout_marginTop="16dp"
+            android:visibility="visible">
 
             <android.support.design.widget.TextInputEditText
                 android:id="@+id/inputFlightNumber"
-                android:layout_marginTop="16dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
                 android:hint="@string/hint_flight_number" />
 
         </android.support.design.widget.TextInputLayout>
@@ -86,23 +85,32 @@
 
 
         </android.support.design.widget.TextInputLayout>
-        <android.support.design.widget.TextInputLayout
-        android:id="@+id/manualTime"
-        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/manualFlightAddress"
-        android:layout_alignParentStart="true"
-        android:visibility="gone">
 
-        <android.support.design.widget.TextInputEditText
-            android:id="@+id/inputTime"
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/manualTime"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/hint_event_time" />
+            android:layout_below="@+id/manualFlightAddress"
+            android:layout_alignParentStart="true"
+            android:visibility="gone">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/inputTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_event_time" />
 
 
         </android.support.design.widget.TextInputLayout>
     </RelativeLayout>
+
+    <TextView
+        android:id="@+id/output"
+        android:layout_width="319dp"
+        android:layout_height="330dp"
+        android:text="TextView"
+        tools:layout_editor_absoluteX="33dp"
+        tools:layout_editor_absoluteY="212dp" />
 
 </android.support.constraint.ConstraintLayout>
