@@ -2,7 +2,7 @@
     <string name="app_name">Gravitate</string>
     <string name="snackbar_test">Hey it/s me the Snackbar!</string>
 
-    <string name="hint_event_name">Event Location</string>
+    <string name="hint_event_location">Event Location</string>
     <string name="hint_event_time">Event Time</string>
     <string name="hint_flight_number">Flight Number</string>
     <string name="fab_flight">For a Flight</string>

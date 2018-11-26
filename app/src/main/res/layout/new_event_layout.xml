@@ -34,7 +34,7 @@
                 android:id="@+id/inputEventLocation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/hint_event_name" />
+                android:hint="@string/hint_event_location" />
 
         </android.support.design.widget.TextInputLayout>
 
