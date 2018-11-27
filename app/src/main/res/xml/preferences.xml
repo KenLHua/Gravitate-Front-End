@@ -27,12 +27,15 @@
     <android.support.v7.preference.PreferenceCategory
         android:title="Account Settings">
 
-        <android.support.v7.preference.EditTextPreference
-            android:defaultValue="Default value"
-            android:key="Edit Account"
+        <android.support.v7.preference.Preference
+            android:id="@+id/edit_account"
             android:selectAllOnFocus="true"
             android:singleLine="true"
             android:summary="Change your public information or login and password"
-            android:title="Change Account Information" />
+            android:title="Change Account Information" >
+            <intent android:action="com.example.ken.gravitate.Account.EditAccount" />
+        </android.support.v7.preference.Preference>
+
+
     </android.support.v7.preference.PreferenceCategory>
 </android.support.v7.preference.PreferenceScreen>

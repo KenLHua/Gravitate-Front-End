@@ -34,6 +34,18 @@
         </activity>
         <activity android:name=".Event.InputFlight"></activity>
 
+
+        <activity android:name=".Account.EditAccount"
+            android:label="Edit Account">
+            <intent-filter>
+                <action android:name="com.example.ken.gravitate.Account.EditAccount" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+
+
+
         //API Key for Google Maps
         <meta-data
             android:name="com.google.android.geo.API_KEY"
