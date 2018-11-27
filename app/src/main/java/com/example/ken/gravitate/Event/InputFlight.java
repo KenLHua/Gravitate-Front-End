@@ -1,6 +1,5 @@
 package com.example.ken.gravitate.Event;
 
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
@@ -10,6 +9,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -23,11 +23,13 @@ import com.android.volley.toolbox.StringRequest;
 import com.example.ken.gravitate.Utils.APIRequestSingleton;
 import com.example.ken.gravitate.R;
 import com.example.ken.gravitate.Utils.APIUtils;
+import com.example.ken.gravitate.Utils.JSONUtils;
 
 public class InputFlight extends AppCompatActivity {
     private RadioGroup inputGroup;
     private RadioButton flightRadio;
     private RadioButton manualRadio;
+    private Button mFlightStats_Bttn;
     private TextInputLayout flightNumberTextDisplay;
     private TextInputLayout manualTimeDisplay;
     private TextInputLayout manualFlightAddress;
@@ -36,6 +38,8 @@ public class InputFlight extends AppCompatActivity {
     private TextInputEditText mflightYear;
     private TextInputEditText mflightMonth;
     private TextInputEditText mflightDay;
+    private TextInputEditText mPickUpAddress;
+    private boolean toEvent = true;
     private RequestQueue mRequestQueue;
 
     /**** TESTING ****/
@@ -50,22 +54,41 @@ public class InputFlight extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         // Creating input TextFields
+        mflightCarrier = findViewById(R.id.inputFlightCarrier);
+        mflightNum = findViewById(R.id.inputFlightNumber);
+        mflightYear = findViewById(R.id.inputFlightYear);
+        mflightMonth = findViewById(R.id.inputFlightMonth);
+        mflightDay = findViewById(R.id.inputFlightDay);
+        mPickUpAddress = findViewById(R.id.inputFlightAddress);
 
-        /**************************************************************/
 
         /**** Testing ****/
         mOutput = findViewById(R.id.output);
 
 
-        /**** Actual Code ****/
-/*      mflightCarrier = findViewById(R.id.inputFlightCarrier);
-        mflightNum = findViewById(R.id.inputFlightNumber);
-        mflightYear = findViewById(R.id.inputFlightYear);
-        mflightMonth = findViewById(R.id.inputFlightMonth);
-        mflightDay = findViewById(R.id.inputFlightDay);*/
+        // Setting Flightstats Bttn
+        mFlightStats_Bttn = findViewById(R.id.flightStats_bttn);
+        mFlightStats_Bttn.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch(v.getId()) {
+                    case R.id.flightStats_bttn:
+                        /*** TEST CODE ****/
+/*                        String request_url = APIUtils.getFSScheduleURL("DL", "89",
+                                "2019", "5", "2");*/
 
-        /**************************************************************/
+                        /****** ACTUAL CODE ****/
+                        String request_url = APIUtils.getFSScheduleURL(
+                                mflightCarrier.getText().toString(),mflightNum.getText().toString(),
+                                mflightYear.getText().toString(),mflightMonth.getText().toString(),
+                                mflightDay.getText().toString());
 
+
+                        getFlightStats(request_url);
+                        break;
+                }
+            }
+        });
 
         // Setting Radio Buttons
         inputGroup = (RadioGroup) findViewById(R.id.flightRadioGroup);
@@ -94,7 +117,6 @@ public class InputFlight extends AppCompatActivity {
                 }
             }
         });
-
         inputGroup.check(R.id.flightRadio);
     }
 
@@ -114,37 +136,11 @@ public class InputFlight extends AppCompatActivity {
 
     }
 
-    ;
-
     // Helper method to make show more readable
     public void showManualInput() {
         flightNumberTextDisplay.setVisibility(View.GONE);
         manualTimeDisplay.setVisibility(View.VISIBLE);
         manualFlightAddress.setVisibility(View.VISIBLE);
-    }
-
-    ;
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.action_settings:
-
-                /*** TEST CODE ****/
-/*                String request_url = getFSScheduleURL("DL","89",
-                        "2019","5","2");*/
-                String request_url = APIUtils.getFSScheduleURL("DL", "89",
-                        "2019", "5", "2");
-
-                /****** ACTUAL CODE ****/
-/*                String request_url = getFSScheduleURL(mflightCarrier.toString(),mflightNum.toString(),
-                        mflightYear.toString(),mflightMonth.toString(),mflightDay.toString());*/
-                getFlightStats(request_url);
-
-
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 
     /* Sends a GET Request to Flightstats API
@@ -160,7 +156,7 @@ public class InputFlight extends AppCompatActivity {
                     public void onResponse(String response) {
                         // Do something with the response
                         Log.w(TAG, "GET_REQUEST:success");
-                        mOutput.setText(response);
+                        mOutput.setText(JSONUtils.retrieveFSInfo(response, mPickUpAddress.getText().toString(), toEvent));
                     }
                 },
                 new Response.ErrorListener() {
