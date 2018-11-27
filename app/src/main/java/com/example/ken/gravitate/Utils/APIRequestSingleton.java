@@ -1,4 +1,4 @@
-package com.example.ken.gravitate;
+package com.example.ken.gravitate.Utils;
 
 import android.content.Context;
 
