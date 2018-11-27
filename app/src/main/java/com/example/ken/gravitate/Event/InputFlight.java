@@ -15,18 +15,14 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import com.android.volley.Cache;
-import com.android.volley.Network;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.BasicNetwork;
-import com.android.volley.toolbox.DiskBasedCache;
-import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.StringRequest;
-import com.example.ken.gravitate.APIRequestSingleton;
+import com.example.ken.gravitate.Utils.APIRequestSingleton;
 import com.example.ken.gravitate.R;
+import com.example.ken.gravitate.Utils.APIUtils;
 
 public class InputFlight extends AppCompatActivity {
     private RadioGroup inputGroup;
@@ -135,8 +131,10 @@ public class InputFlight extends AppCompatActivity {
             case R.id.action_settings:
 
                 /*** TEST CODE ****/
-                String request_url = getFSScheduleURL("DL","89",
-                        "2019","5","2");
+/*                String request_url = getFSScheduleURL("DL","89",
+                        "2019","5","2");*/
+                String request_url = APIUtils.getFSScheduleURL("DL", "89",
+                        "2019", "5", "2");
 
                 /****** ACTUAL CODE ****/
 /*                String request_url = getFSScheduleURL(mflightCarrier.toString(),mflightNum.toString(),
@@ -173,28 +171,5 @@ public class InputFlight extends AppCompatActivity {
                     }
                 });
         APIRequestSingleton.getInstance(this).addToRequestQueue(stringRequest);
-    }
-
-    /* Gets the correct Endpoint for FlightStats Schedule API
-     *  Builds through URI Builder
-     *  https://developer.android.com/reference/android/net/Uri.Builder
-     *  */
-    private String getFSScheduleURL ( String flightCarrier, String flightNumber,
-                                      String flightYear, String flightMonth, String flightDay ){
-        String appId = "501e6179";
-        String appKey = "d3832a53deb968c36e7e4da1af4e6ed9";
-        Uri.Builder builder = new Uri.Builder();
-        builder.scheme("https")
-                .path("api.flightstats.com/flex/schedules/rest/v1/json/flight")
-                .appendPath(flightCarrier)
-                .appendPath(flightNumber)
-                .appendPath("departing")
-                .appendPath(flightYear)
-                .appendPath(flightMonth)
-                .appendPath(flightDay)
-                .appendQueryParameter("appId",appId)
-                .appendQueryParameter("appKey",appKey);
-
-        return builder.toString();
     }
 }
