@@ -119,7 +119,6 @@ public class ScheduledEvents extends AppCompatActivity
         }
         switch(menuItem.getItemId()){
             case R.id.nav_simple_activity_2:
-                startActivity(new Intent(ScheduledEvents.this, InputPickupAddress.class));
                 break;
         }
         switch(menuItem.getItemId()){

@@ -1,6 +1,10 @@
 package com.example.ken.gravitate.Event;
 
+<<<<<<< HEAD
+import android.content.Intent;
+=======
 import android.content.DialogInterface;
+>>>>>>> MaterialSettings
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
@@ -12,6 +16,7 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -28,13 +33,29 @@ import com.example.ken.gravitate.R;
 import com.example.ken.gravitate.Utils.APIUtils;
 import com.example.ken.gravitate.Utils.JSONUtils;
 
+<<<<<<< HEAD
+//Necessary libraries for Address Autocomplete functionality
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.AutocompleteFilter;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocomplete;
+=======
 import org.json.JSONObject;
+>>>>>>> MaterialSettings
 
 public class InputFlight extends AppCompatActivity {
+    // Autrocomplete Request Code
+    int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
+
+    // Radio Group Filters
     private RadioGroup inputGroup;
     private RadioButton flightRadio;
     private RadioButton manualRadio;
+
     private Button mFlightStats_Bttn;
+
     private TextInputLayout flightNumberTextDisplay;
     private TextInputLayout manualTimeDisplay;
     private TextInputLayout manualFlightAddress;
@@ -47,8 +68,14 @@ public class InputFlight extends AppCompatActivity {
     private boolean toEvent = true;
     private RequestQueue mRequestQueue;
 
+    //
+    private TextView inputPickup;
+
+
+
     /**** TESTING ****/
     private TextView mOutput;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +85,17 @@ public class InputFlight extends AppCompatActivity {
         toolbar.setTitle(R.string.input_flight_toolbar);
         setSupportActionBar(toolbar);
 
+        // Initializing place autocompletion
+        inputPickup = findViewById(R.id.inputPickup);
+        final ImageButton pickupClear = findViewById(R.id.clear_pickup_button);
+        //Limit search to addresses in United States only, without the filter the autocomplete will
+        //display results from different countries
+        final AutocompleteFilter filter = new AutocompleteFilter.Builder()
+                .setCountry("us")
+                .build();
+
+
+
         // Creating input TextFields
         mflightCarrier = findViewById(R.id.inputFlightCarrier);
         mflightNum = findViewById(R.id.inputFlightNumber);
@@ -66,9 +104,23 @@ public class InputFlight extends AppCompatActivity {
         mflightDay = findViewById(R.id.inputFlightDay);
         mPickUpAddress = findViewById(R.id.inputFlightAddress);
 
+        // Clears the pickup Text Box using the X
+        pickupClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                inputPickup.setText("");
+            }
+        });
 
-        /**** Testing ****/
-        mOutput = findViewById(R.id.output);
+        // Clicking on the Text Box lets Google's autocomplete do the work
+        inputPickup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                callPlaceAutocompleteActivityIntent(filter);
+            }
+        });
+
+
 
 
         // Setting Flightstats Bttn
@@ -123,6 +175,19 @@ public class InputFlight extends AppCompatActivity {
             }
         });
         inputGroup.check(R.id.flightRadio);
+    }
+    // Calling the PlaceAutoComplete activity
+    private void callPlaceAutocompleteActivityIntent( AutocompleteFilter filter){
+        try {
+            Intent intent = new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
+                    .setFilter(filter)
+                    .build(this);
+            startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
+        } catch (GooglePlayServicesRepairableException e) {
+            // TODO: Handle the error.
+        } catch (GooglePlayServicesNotAvailableException e) {
+            // TODO: Handle the error.
+        }
     }
 
     // **Incomplete** Add Checkmark to the ActionBar
@@ -200,5 +265,39 @@ public class InputFlight extends AppCompatActivity {
                 APIRequestSingleton.getInstance(this).addToRequestQueue(jsonObjectRequest, "postRequest");
 
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                Place place = PlaceAutocomplete.getPlace(this, data);
+                inputPickup.setText(place.getAddress());
+            } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
+                Status status = PlaceAutocomplete.getStatus(this, data);
+                // TODO: Handle the error.
+                inputPickup.setText("");
+                Log.i("Autocomplete Error", status.getStatusMessage());
+
+            } else if (resultCode == RESULT_CANCELED) {
+                // The user canceled the operation.
+            }
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // The CheckMark in this case
+            case R.id.send_request_checkmark:
+                //  TODO : Double check that all text boxes are filled before sending the request
+                return true;
+
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+
+        }
     }
 }
