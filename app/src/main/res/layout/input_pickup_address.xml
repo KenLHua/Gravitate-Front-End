@@ -65,7 +65,7 @@
             android:layout_alignTop="@+id/pickupLayout"
             android:layout_alignRight="@+id/pickupLayout"
             android:layout_alignBottom="@+id/pickupLayout"
-            android:layout_margin="10dp"
+            android:layout_margin="16dp"
             android:layout_centerVertical="true"
             android:src="@drawable/system_icon_clear"
             android:background="#f0f0f0"/>

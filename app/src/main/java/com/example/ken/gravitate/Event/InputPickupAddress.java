@@ -48,11 +48,13 @@ public class InputPickupAddress extends AppCompatActivity {
             }
         });
 
+
         //Listener to store selected address and display on screen
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
                 inputPickup.setText(place.getAddress());
+
             }
             @Override
             public void onError(Status status) {
