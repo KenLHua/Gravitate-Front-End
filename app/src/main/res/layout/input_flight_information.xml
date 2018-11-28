@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/input_flight_information"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -11,8 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
-        android:theme="@style/ToolbarTheme"
         android:text="@string/new_event_toolbar"
+        android:theme="@style/ToolbarTheme"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -43,30 +43,155 @@
             <RadioButton
                 android:id="@+id/manualRadio"
                 android:layout_width="wrap_content"
-                android:layout_marginTop="16dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
                 android:layout_weight="1"
                 android:text="@string/radio_manual" />
+
         </RadioGroup>
 
         <android.support.design.widget.TextInputLayout
-            android:id="@+id/flightNumber"
-            android:visibility="visible"
+            android:id="@+id/flightCarrier"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_marginTop="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/flightRadioGroup"
-            >
+            android:layout_marginTop="16dp"
+            android:visibility="visible">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/inputFlightCarrier"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:hint="Flight Carrier" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/flightNumber"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/flightCarrier"
+            android:layout_marginTop="16dp"
+            android:visibility="visible">
 
             <android.support.design.widget.TextInputEditText
                 android:id="@+id/inputFlightNumber"
-                android:layout_marginTop="16dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
                 android:hint="@string/hint_flight_number" />
 
         </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/flightYear"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/flightNumber"
+            android:layout_marginTop="16dp"
+            android:visibility="visible">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/inputFlightYear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:hint="Year" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/flightMonth"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_below="@+id/flightNumber"
+            android:layout_toRightOf="@id/flightYear"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:visibility="visible">>
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/inputFlightMonth"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:hint="Month" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/flightDay"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_toRightOf="@id/flightMonth"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/flightNumber"
+            android:layout_marginTop="16dp"
+            android:visibility="visible">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/inputFlightDay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:hint="Day" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/eventTimeLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/flightYear"
+            android:layout_toRightOf="@id/pickupLayout">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/inputEventTime"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:drawableStart="@drawable/system_icon_date"
+                android:focusable="false"
+                android:hint="Arrival" />
+        </android.support.design.widget.TextInputLayout>
+
+        <Button
+            android:id="@+id/flightStats_bttn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/pickupLayout"
+            android:layout_marginTop="16dp"
+            android:text="FlightStats Api"
+            android:visibility="visible" />
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/pickupLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+            android:layout_width="240dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/flightYear"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="8dp">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/inputPickup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="false"
+                android:hint="Pick up Address"
+                android:paddingEnd="50dp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <TextView
+            android:id="@+id/output"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/flightStats_bttn"
+            android:text="TextView" />
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/manualFlightAddress"
@@ -82,24 +207,25 @@
                 android:id="@+id/inputFlightAddress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/hint_event_name" />
+                android:hint="@string/hint_event_location" />
 
 
         </android.support.design.widget.TextInputLayout>
-        <android.support.design.widget.TextInputLayout
-        android:id="@+id/manualTime"
-        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/manualFlightAddress"
-        android:layout_alignParentStart="true"
-        android:visibility="gone">
 
-        <android.support.design.widget.TextInputEditText
-            android:id="@+id/inputTime"
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/manualTime"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/hint_event_time" />
+            android:layout_below="@+id/manualFlightAddress"
+            android:layout_alignParentStart="true"
+            android:visibility="gone">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/inputTime"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/hint_event_time" />
 
 
         </android.support.design.widget.TextInputLayout>

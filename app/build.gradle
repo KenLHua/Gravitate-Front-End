@@ -5,7 +5,11 @@ android {
         config {
             keyAlias 'gravitate_key'
             keyPassword 'gravitate123'
+<<<<<<< HEAD
             storeFile file('gravitate_key.jks')
+=======
+            storeFile file('../gravitate_key.jks')
+>>>>>>> MaterialSettings
             storePassword 'gravitate123'
         }
     }

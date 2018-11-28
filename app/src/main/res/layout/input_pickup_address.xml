@@ -16,37 +16,113 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <!--Wrap search bar fragment in cardview, since search fragment-->
-    <!--has no background by default.-->
-    <android.support.v7.widget.CardView
-        android:id="@+id/idCardView"
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:layout_marginTop="5dp"
-        app:cardCornerRadius="4dp">
-        <!--Address Autocomplete Search Fragment -->
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
+
         <fragment
             android:id="@+id/place_autocomplete_fragment"
-            android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </android.support.v7.widget.CardView>
+            android:layout_height="wrap_content"
+            android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
+            android:layout_marginTop="?actionBarSize"/>
 
-    <!--TextView placeholder to display inputted pick-up address-->
-    <!--Can change as needed once layout is decided-->
-    <TextView
-        android:id="@+id/placeName"
-        android:layout_width="354dp"
-        android:layout_height="161dp"
-        android:text="Pick-Up Address: "
-        android:textSize="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.533"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.201" />
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:background="?android:attr/listDivider"
+            android:layout_below="@+id/place_autocomplete_fragment"/>
 
-</android.support.constraint.ConstraintLayout>
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/pickupLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+            android:layout_width="match_parent"
+            android:layout_marginTop="8dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/divider"
+            android:layout_alignParentStart="true">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/inputPickup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingEnd = "50dp"
+                android:focusable="false"
+                android:clickable="true"
+                android:hint="Pick up Address"
+                />
+        </android.support.design.widget.TextInputLayout>
+
+        <ImageButton
+            android:id="@+id/clear_pickup_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/pickupLayout"
+            android:layout_alignRight="@+id/pickupLayout"
+            android:layout_alignBottom="@+id/pickupLayout"
+            android:layout_margin="10dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/system_icon_clear"
+            android:background="#f0f0f0"/>
+
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/eventLocationLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/pickupLayout"
+            >
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/eventLocation"
+                android:layout_width="225dp"
+                android:layout_height="wrap_content"
+                android:hint="Event Address" />
+
+        </android.support.design.widget.TextInputLayout>
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/eventTimeLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/eventLocationLayout"
+            android:layout_below="@+id/pickupLayout">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/inputEventTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_event_time"
+                android:drawableStart="@drawable/system_icon_date"
+                android:focusable="false"
+                android:clickable="true" />
+        </android.support.design.widget.TextInputLayout>
+
+        <!-- <android.support.design.widget.TextInputLayout
+            android:id="@+id/pickUpDetailsLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/eventDetailsLayout"
+            android:layout_alignParentStart="true">
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/inputPickupLocation"
+                android:layout_width="225dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_pickup_location"
+                android:layout_margin="1dp"/>
+        </android.support.design.widget.TextInputLayout> -->
+
+
+    </RelativeLayout>
+
+</android.support.constraint.ConstraintLayout >
+
 
