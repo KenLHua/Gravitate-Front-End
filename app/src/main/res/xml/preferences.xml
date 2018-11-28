@@ -8,21 +8,24 @@
             android:defaultValue="false"
             android:key="switch_preference_1"
             android:summary="Receive notifications from incoming drivers"
-            android:title="Incoming Drivers" />
+            android:title="Incoming Drivers"
+            android:icon="@drawable/baseline_directions_car_black_18dp" />
         <android.support.v7.preference.SwitchPreferenceCompat
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:defaultValue="false"
             android:key="switch_preference_3"
             android:summary="Receive notifications about delayed flights"
-            android:title="Incoming Driver Notifications" />
+            android:title="Incoming Driver Notifications"
+            android:icon="@drawable/baseline_airplanemode_active_black_18dp" />
         <android.support.v7.preference.SwitchPreferenceCompat
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:defaultValue="false"
             android:key="Messaging Notifications"
             android:summary="Receive notifications from group messaging"
-            android:title="Messages" />
+            android:title="Messages"
+            android:icon="@drawable/baseline_sms_black_18dp"/>
     </android.support.v7.preference.PreferenceCategory>
     <android.support.v7.preference.PreferenceCategory
         android:title="Account Settings">
@@ -32,10 +35,9 @@
             android:selectAllOnFocus="true"
             android:singleLine="true"
             android:summary="Change your public information or login and password"
+            android:title="Change Account Information"
+            android:icon="@drawable/baseline_person_black_18dp" />
             android:title="Change Account Information" >
             <intent android:action="com.example.ken.gravitate.Account.EditAccount" />
-        </android.support.v7.preference.Preference>
-
-
     </android.support.v7.preference.PreferenceCategory>
 </android.support.v7.preference.PreferenceScreen>

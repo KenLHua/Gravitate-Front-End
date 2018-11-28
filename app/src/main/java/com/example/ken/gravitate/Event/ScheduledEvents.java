@@ -13,17 +13,24 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.ken.gravitate.Account.LoginActivity;
 import com.example.ken.gravitate.Messaging.MessageFragment;
 import com.example.ken.gravitate.Account.MyProfile;
 import com.example.ken.gravitate.R;
 import com.example.ken.gravitate.Settings.SettingsActivity;
 import com.example.ken.gravitate.SimpleActivity1;
 import com.example.ken.gravitate.SimpleActivity3;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.leinardi.android.speeddial.SpeedDialActionItem;
 import com.leinardi.android.speeddial.SpeedDialView;
 
@@ -35,11 +42,26 @@ public class ScheduledEvents extends AppCompatActivity
     private ImageView profile;
     private View header;
     private SpeedDialView fab;
+    GoogleSignInClient mGoogleSignInClient;
+    private static final String web_client_id = "1070051773756-o6l5r1l6v7m079r1oua2lo0rsfeu8m9i.apps.googleusercontent.com";
+    private static final String DOMAIN = "ucsd.edu";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         fragmentManager = getSupportFragmentManager();
         setContentView(R.layout.scheduled_events);
+
+        // Configure sign-in to request the user's ID, email address, and basic profile.
+        // ID and basic profile are included in DEFAULT_SIGN_IN.
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(web_client_id)
+                .requestEmail()
+                .setHostedDomain(DOMAIN)
+                .build();
+
+        // Build a GoogleSignInClient with the options specified by gso.
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         // Toolbar Setup
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -132,6 +154,13 @@ public class ScheduledEvents extends AppCompatActivity
                 startActivity(new Intent(ScheduledEvents.this, SettingsActivity.class));
                 break;
         }
+        switch(menuItem.getItemId()) {
+            case R.id.nav_logout:
+                signOut();
+                startActivity(new Intent(ScheduledEvents.this, LoginActivity.class));
+                break;
+        }
+
         drawer.closeDrawer(GravityCompat.START);
 
         return true;
@@ -173,6 +202,16 @@ public class ScheduledEvents extends AppCompatActivity
             ft.addToBackStack(backStateName);
             ft.commit();
         }
+    }
+
+    public void signOut() {
+        mGoogleSignInClient.signOut()
+                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        // ...
+                    }
+                });
     }
 }
 
