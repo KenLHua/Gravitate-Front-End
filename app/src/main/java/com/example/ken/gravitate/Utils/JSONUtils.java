@@ -11,13 +11,8 @@ import java.util.Map;
 
 public class JSONUtils {
 
-    public static String toJSONFlightInfo(Map<String,String> params) {
-        String formattedJSON="";
-        return formattedJSON;
-    }
-
     /* Parse FlightStats API JSON String */
-    public static String retrieveFSInfo( String JSONString, String pickUpAddress,
+    public static JSONObject retrieveFSInfo( String JSONString, String pickUpAddress,
                                                     boolean toEvent) {
         JSONObject newJSON = new JSONObject();
 
@@ -30,8 +25,8 @@ public class JSONUtils {
 
             JSONObject info = scheduledFlights.getJSONObject(0);
             String flightNumber = info.getString("carrierFsCode")+info.getString("flightNumber");
-            String departureAirportFsCode = info.getString("departureAirportFsCode");
-            String departureTerminal = info.getString("departureTerminal");
+/*          String departureAirportFsCode = info.getString("departureAirportFsCode");
+            String departureTerminal = info.getString("departureTerminal");*/
             String departureTime = info.getString("departureTime");
             // Do we need to calculate Earliest and Latest Arrival in Frontend or Backend?
 
@@ -44,13 +39,11 @@ public class JSONUtils {
                     + departureAirport.getString("stateCode")+ ","
                     + departureAirport.getString("postalCode");
 
-            Log.w(TAG, "JSON_SUCCESS:" + airport_address);
-
             newJSON.put("flightNumber",flightNumber);
             newJSON.put("flightLocalTime",departureTime);
             newJSON.put("airportLocation",airport_address);
             newJSON.put("pickUpAddress",pickUpAddress);
-            newJSON.put("toEvent",toEvent);
+            newJSON.put("toEvent",String.valueOf(toEvent));
 
 
         } catch (JSONException e) {
@@ -59,6 +52,6 @@ public class JSONUtils {
             e.printStackTrace();
         }
 
-        return newJSON.toString();
+        return newJSON;
     }
 }

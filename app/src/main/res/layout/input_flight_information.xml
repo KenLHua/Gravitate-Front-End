@@ -190,7 +190,7 @@
             android:id="@+id/output"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/divider"
+            android:layout_below="@+id/flightStats_bttn"
             android:text="TextView" />
 
         <android.support.design.widget.TextInputLayout

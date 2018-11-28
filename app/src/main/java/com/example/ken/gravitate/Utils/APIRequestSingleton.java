@@ -1,12 +1,13 @@
 package com.example.ken.gravitate.Utils;
 
+import android.app.Application;
 import android.content.Context;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
-public class APIRequestSingleton {
+public class APIRequestSingleton extends Application {
     private static APIRequestSingleton mInstance;
     private RequestQueue mRequestQueue;
     private static Context mCtx;
@@ -32,7 +33,13 @@ public class APIRequestSingleton {
         return mRequestQueue;
     }
 
-    public <T> void addToRequestQueue(Request<T> req) {
+    public <T> void addToRequestQueue(Request<T> req, String tag) {
+        req.setTag(tag);
         getRequestQueue().add(req);
+    }
+
+    /* Cancel all the requests matching with the given tag */
+    public void cancelAllRequests(String tag) {
+        getRequestQueue().cancelAll(tag);
     }
 }
