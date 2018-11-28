@@ -16,7 +16,7 @@
             android:title="Simple Activity 1" />
         <item
             android:id="@+id/nav_simple_activity_2"
-            android:title="Input Pick-Up Address" />
+            android:title="Place holder" />
         <item
             android:id="@+id/nav_simple_activity_3"
             android:title="Simple Activity 3" />
