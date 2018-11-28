@@ -35,15 +35,9 @@
             android:selectAllOnFocus="true"
             android:singleLine="true"
             android:summary="Change your public information or login and password"
-<<<<<<< HEAD
             android:title="Change Account Information"
             android:icon="@drawable/baseline_person_black_18dp" />
-=======
             android:title="Change Account Information" >
             <intent android:action="com.example.ken.gravitate.Account.EditAccount" />
-        </android.support.v7.preference.Preference>
->>>>>>> MaterialSettings
-
-
     </android.support.v7.preference.PreferenceCategory>
 </android.support.v7.preference.PreferenceScreen>
