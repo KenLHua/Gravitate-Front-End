@@ -14,7 +14,6 @@
 
         // Simple activities for adding new features
         <activity android:name=".SimpleActivity1"></activity>
-        <activity android:name=".Event.InputPickupAddress"></activity>
         <activity android:name=".SimpleActivity3"></activity>
 
         <activity android:name=".Account.LoginActivity">
