@@ -1,10 +1,7 @@
 package com.example.ken.gravitate.Event;
 
-<<<<<<< HEAD
 import android.content.Intent;
-=======
 import android.content.DialogInterface;
->>>>>>> MaterialSettings
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
@@ -13,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -33,7 +31,6 @@ import com.example.ken.gravitate.R;
 import com.example.ken.gravitate.Utils.APIUtils;
 import com.example.ken.gravitate.Utils.JSONUtils;
 
-<<<<<<< HEAD
 //Necessary libraries for Address Autocomplete functionality
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
@@ -41,9 +38,7 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
-=======
 import org.json.JSONObject;
->>>>>>> MaterialSettings
 
 public class InputFlight extends AppCompatActivity {
     // Autrocomplete Request Code
