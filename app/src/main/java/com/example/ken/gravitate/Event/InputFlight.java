@@ -169,6 +169,7 @@ public class InputFlight extends AppCompatActivity {
                 }
             }
         });
+
         inputGroup.check(R.id.flightRadio);
     }
     // Calling the PlaceAutoComplete activity
@@ -263,6 +264,7 @@ public class InputFlight extends AppCompatActivity {
     }
 
     @Override
+    // TODO: Move to a more relevant position
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
