@@ -249,6 +249,13 @@
 
 
         </android.support.design.widget.TextInputLayout>
+
+        <TextView
+            android:id="@+id/outputText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/flightStats_bttn"
+            android:text="TextView" />
     </RelativeLayout>
 
 </android.support.constraint.ConstraintLayout>

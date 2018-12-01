@@ -12,6 +12,8 @@ import android.widget.Button;
 
 import com.example.ken.gravitate.Event.ScheduledEvents;
 import com.example.ken.gravitate.R;
+import com.example.ken.gravitate.Utils.APIUtils;
+import com.example.ken.gravitate.Utils.JSONUtils;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -25,6 +27,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+
+import org.json.JSONObject;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -66,12 +70,10 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 // We have a user
-                /*
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if ( user != null ) {
                     startActivity(new Intent(LoginActivity.this, ScheduledEvents.class));
                 }
-                */
             }
         };
 
@@ -93,7 +95,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-/*        sign_out_bttn.setOnClickListener( new View.OnClickListener() {
+        sign_out_bttn.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 switch(v.getId()) {
@@ -102,7 +104,7 @@ public class LoginActivity extends AppCompatActivity {
                     break;
                 }
             }
-        });*/
+        });
         testSkip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -133,9 +135,14 @@ public class LoginActivity extends AppCompatActivity {
 
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
+            // Signed in successfully
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
             firebaseAuthWithGoogle(account);
-            // Signed in successfully, show authenticated UI.
+
+            // Post User JSON Data to Endpoint
+            JSONObject userInfo = JSONUtils.retrieveUserInfo(mAuth.getInstance().getCurrentUser());
+            APIUtils.postUser(this, userInfo);
+
             // updateUI(account);
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
