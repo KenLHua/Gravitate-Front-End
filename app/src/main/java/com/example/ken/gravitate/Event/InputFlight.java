@@ -86,8 +86,6 @@ public class InputFlight extends AppCompatActivity {
         mflightCarrier = findViewById(R.id.inputFlightCarrier);
         mflightNum = findViewById(R.id.inputFlightNumber);
 
-        // Initializing place autocompletion
-        final ImageButton pickupClear = findViewById(R.id.clear_pickup_button);
         //Limit search to addresses in United States only, without the filter the autocomplete will
         //display results from different countries
         final AutocompleteFilter filter = new AutocompleteFilter.Builder()
