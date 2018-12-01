@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <android.support.v7.preference.PreferenceCategory>
+
+        <android.support.v7.preference.Preference
+            android:id="@+id/change_password"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:summary="Change the password used to login"
+            android:title="Change password"
+            android:icon="@drawable/baseline_https_black_18dp" >
+            <intent android:action="com.example.ken.gravitate.Account.ChangePassword" />
+        </android.support.v7.preference.Preference>
+
+        <android.support.v7.preference.SwitchPreferenceCompat
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="false"
+            android:key="Become Driver"
+            android:summary="Allow driver functionality within the app"
+            android:title="Be Classified as a Driver"
+            android:icon="@drawable/baseline_directions_car_black_18dp"/>
+    </android.support.v7.preference.PreferenceCategory>
+</PreferenceScreen>

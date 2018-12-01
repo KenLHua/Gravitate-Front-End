@@ -7,19 +7,14 @@ import android.view.Menu;
 
 import com.example.ken.gravitate.R;
 
-public class EditAccount extends AppCompatActivity {
+public class ChangePassword extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.edit_account_layout);
+        setContentView(R.layout.change_password);
         Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("Edit Account");
+        toolbar.setTitle("Change Password");
         setSupportActionBar(toolbar);
-
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.edit_account_fragment, new EditAccountFragment())
-                .commit();
     }
 
     // **Incomplete** Add Checkmark to the ActionBar
