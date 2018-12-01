@@ -6,6 +6,7 @@ public class Card {
     String destName;
     int profilePhoto;
     String destTime;
+    String eventStatus;
 
     //default
     public Card() {}
@@ -13,11 +14,12 @@ public class Card {
     //
 
     //constructor
-    public Card(int background, String destName, int profilePhoto, String destTime) {
+    public Card(int background, String destName, int profilePhoto, String destTime, String eventStatus) {
         this.background = background;
         this.destName = destName;
         this.profilePhoto = profilePhoto;
         this.destTime = destTime;
+        this.eventStatus = eventStatus;
     }
 
     //getters
@@ -37,6 +39,8 @@ public class Card {
         return destTime;
     }
 
+    public String getEventStatus() { return eventStatus; }
+
     //setters
     public void setBackground(int background) {
         this.background = background;
@@ -53,4 +57,8 @@ public class Card {
     public void setDestTime(String destTime) {
         this.destTime = destTime;
     }
+
+    public void setEventStatus(String eventStatus) { this.eventStatus = eventStatus; }
+
+
 }

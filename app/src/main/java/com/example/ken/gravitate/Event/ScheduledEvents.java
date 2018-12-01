@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.example.ken.gravitate.Account.LoginActivity;
+import com.example.ken.gravitate.RideEvent;
 import com.example.ken.gravitate.Utils.Card;
 import com.example.ken.gravitate.Utils.CardAdapter;
 import com.example.ken.gravitate.Messaging.MessageFragment;
@@ -128,12 +129,12 @@ public class ScheduledEvents extends AppCompatActivity
         // TODO:: do this programatically with the server data
         RecyclerView recyclerView = findViewById(R.id.recycler_list);
         final List<Card> card_list = new ArrayList<>();
-        card_list.add(new Card(R.drawable.lax, "LAX", R.drawable.default_profile, "Mon 8pm"));
-        card_list.add(new Card(R.drawable.lax, "LAX", R.drawable.default_profile, "Tue 8pm"));
-        card_list.add(new Card(R.drawable.lax, "LAX", R.drawable.default_profile, "Mon 8pm"));
-        card_list.add(new Card(R.drawable.lax, "LAX", R.drawable.default_profile, "Tue 8pm"));
-        card_list.add(new Card(R.drawable.lax, "LAX", R.drawable.default_profile, "Mon 8pm"));
-        card_list.add(new Card(R.drawable.lax, "LAX", R.drawable.default_profile, "Tue 8pm"));
+        card_list.add(new Card(R.drawable.lax, "LAX", R.drawable.default_profile, "Mon 8pm", "PENDING"));
+        card_list.add(new Card(R.drawable.lax, "LAX", R.drawable.default_profile, "Tue 8pm", "PENDING"));
+        card_list.add(new Card(R.drawable.lax, "LAX", R.drawable.default_profile, "Mon 8pm", "PENDING"));
+        card_list.add(new Card(R.drawable.lax, "LAX", R.drawable.default_profile, "Tue 8pm", "PENDING"));
+        card_list.add(new Card(R.drawable.lax, "LAX", R.drawable.default_profile, "Mon 8pm", "PENDING"));
+        card_list.add(new Card(R.drawable.lax, "LAX", R.drawable.default_profile, "Tue 8pm", "PENDING"));
         final CardAdapter adapter = new CardAdapter(this,card_list);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -141,6 +142,7 @@ public class ScheduledEvents extends AppCompatActivity
             @Override
             public void onCardClick(int position) {
                 card_list.get(position).setDestName("Clicked");
+                startActivity(new Intent(ScheduledEvents.this, RideEvent.class));
                 adapter.notifyItemChanged(position);
             }
         });
