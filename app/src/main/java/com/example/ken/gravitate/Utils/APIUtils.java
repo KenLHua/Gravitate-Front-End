@@ -51,7 +51,7 @@ public class APIUtils {
     }
 
     public static void postUser(final Context loginScreen, JSONObject userJSON) {
-        final String server_url = "https://gravitate-e5d01.appspot.com/user";
+        final String server_url = "https://gravitate-e5d01.appspot.com/users";
         final String TAG = "User";
         // Formulate the request and handle the response.
         Log.w(TAG, "REQUEST:Attempt to create User Object");
@@ -113,7 +113,7 @@ public class APIUtils {
                     @Override
                     public void onResponse(JSONObject response) {
                         // Do something with the response
-                        Log.w(TAG, "POST_REQUEST:Create Ride Request success");
+                        Log.w(TAG, "POST_REQUEST:Create Ride Request success" + response.toString());
                         Toast.makeText(inputFlight,"Success", Toast.LENGTH_SHORT).show();
                     }
                 }, new Response.ErrorListener() {

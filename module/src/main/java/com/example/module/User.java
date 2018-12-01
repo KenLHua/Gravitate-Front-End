@@ -3,7 +3,8 @@ package com.example.module;
 import java.util.Map;
 
 public class User {
-    private String uid, membership, firstName, lastName;
+    private String uid, memberships, fullName;
+    private String phoneNumber;
     // private Image pic;
     private Map<String,User> friendList;
     // private Map<String,Event> eventSchedule;
@@ -12,14 +13,14 @@ public class User {
     } // Needed for Firestore
 
     // Need to add Picture and EventSchedule
-    public User ( String UID, String Membership, String FirstName, String LastName,
-                  Map<String,User> FriendList) {
-        uid = UID;
-        membership = Membership;
-        firstName = FirstName;
-        lastName = LastName;
+    public User ( String uid, String memberships, String fullName,
+                  String phoneNumber, Map<String,User> friendList) {
+        this.uid = uid;
+        this.memberships = memberships;
+        this.fullName = fullName;
+        this.phoneNumber = phoneNumber
         // pic = Pic;
-        friendList = FriendList;
+        this.friendList = friendList;
         // eventSchedule = EventSchedule;
     }
 
@@ -32,27 +33,11 @@ public class User {
     }
 
     public String getMembership() {
-        return membership;
+        return memberships;
     }
 
-    public void setMembership(String membership) {
-        this.membership = membership;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setMembership(String memberships) {
+        this.memberships = memberships;
     }
 
 }
