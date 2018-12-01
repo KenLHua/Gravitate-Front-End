@@ -3,63 +3,56 @@ package com.example.module;
 import java.util.Map;
 
 public class User {
-    private String mUid, mMemberships, mfirstName, mlastName;
-    // private Image mPicture;
-    private Map<String,User> mFriendList;
-    // private Map<String,Event> mEventSchedule;
+    private String uid, membership, firstName, lastName;
+    // private Image pic;
+    private Map<String,User> friendList;
+    // private Map<String,Event> eventSchedule;
 
     public User () {
     } // Needed for Firestore
 
     // Need to add Picture and EventSchedule
-    public User ( String uid, String memberships, String firstName, String lastName,
-                  Map<String,User> friendList) {
-        mUid = uid;
-        mMemberships = memberships;
-        mfirstName = firstName;
-        mlastName = lastName;
-        // mPicture = picture;
-        mFriendList = friendList;
-        // mEventSchedule = eventSchedule;
+    public User ( String UID, String Membership, String FirstName, String LastName,
+                  Map<String,User> FriendList) {
+        uid = UID;
+        membership = Membership;
+        firstName = FirstName;
+        lastName = LastName;
+        // pic = Pic;
+        friendList = FriendList;
+        // eventSchedule = EventSchedule;
     }
 
-    public String getmUid() {
-        return mUid;
+    public String getUid() {
+        return uid;
     }
 
-    public void setmUid(String mUid) {
-        this.mUid = mUid;
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
-    public String getmMemberships() {
-        return mMemberships;
+    public String getMembership() {
+        return membership;
     }
 
-    public void setmMemberships(String mMemberships) {
-        this.mMemberships = mMemberships;
+    public void setMembership(String membership) {
+        this.membership = membership;
     }
 
-    public String getMfirstName() {
-        return mfirstName;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setMfirstName(String mfirstName) {
-        this.mfirstName = mfirstName;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getMlastName() {
-        return mlastName;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setMlastName(String mlastName) {
-        this.mlastName = mlastName;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
-    public Map<String, User> getmFriendList() {
-        return mFriendList;
-    }
-
-    public void setmFriendList(Map<String, User> mFriendList) {
-        this.mFriendList = mFriendList;
-    }
 }

@@ -2,6 +2,7 @@ package com.example.ken.gravitate.Event;
 import com.example.ken.gravitate.Utils.APIUtils;
 import com.example.ken.gravitate.Utils.DateAndTimePickerAdapter;
 
+import android.content.Context;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,16 +20,11 @@ import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.example.ken.gravitate.Utils.APIRequestSingleton;
 import com.example.ken.gravitate.R;
+import com.example.ken.gravitate.Utils.APIUtils;
 import com.example.ken.gravitate.Utils.JSONUtils;
 
 //Necessary libraries for Address Autocomplete functionality
@@ -38,7 +34,6 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
-import org.json.JSONObject;
 
 import java.util.Calendar;
 
@@ -65,6 +60,7 @@ public class InputFlight extends AppCompatActivity {
 
     //The pickupAddress text
     private TextView inputPickup;
+    private Context mContext;
 
     private Calendar cal;
 
@@ -81,6 +77,17 @@ public class InputFlight extends AppCompatActivity {
         toolbar.setTitle(R.string.input_flight_toolbar);
         setSupportActionBar(toolbar);
 
+
+
+        mContext = this;
+        mOutput = findViewById(R.id.outputText);
+
+        // Creating input TextFields
+        mflightCarrier = findViewById(R.id.inputFlightCarrier);
+        mflightNum = findViewById(R.id.inputFlightNumber);
+
+        // Initializing place autocompletion
+        final ImageButton pickupClear = findViewById(R.id.clear_pickup_button);
         //Limit search to addresses in United States only, without the filter the autocomplete will
         //display results from different countries
         final AutocompleteFilter filter = new AutocompleteFilter.Builder()
@@ -91,19 +98,6 @@ public class InputFlight extends AppCompatActivity {
         inputGroup = (RadioGroup) findViewById(R.id.flightRadioGroup);
         flightRadio = (RadioButton) findViewById(R.id.flightRadio);
         manualRadio = (RadioButton) findViewById(R.id.manualRadio);
-        // Default have by flight number checked
-        inputGroup.check(R.id.flightRadio);
-        // Setting Radio hide/show behavior
-        flightRadio.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (flightRadio.isChecked()) {
-                    hideManualInput();
-                } else {
-                    showManualInput();
-                }
-            }
-        });
 
         // Creating input TextFields
         inputPickup = findViewById(R.id.inputPickup);
@@ -174,8 +168,7 @@ public class InputFlight extends AppCompatActivity {
                                 ,flightDate.substring(0,2)
                                 ,flightDate.substring(3,5));
 
-
-                        getFlightStats(request_url);
+                        APIUtils.getFlightStats(mContext,request_url, inputPickup.getText().toString(),toEvent,mOutput);
                         break;
                 }
             }
@@ -195,8 +188,6 @@ public class InputFlight extends AppCompatActivity {
         mRequestQueue = APIRequestSingleton.getInstance(this.getApplicationContext()).
                 getRequestQueue();
     }
-// **************** END OF onCreate **************** //
-
     // Calling the PlaceAutoComplete activity
     private void callPlaceAutocompleteActivityIntent( AutocompleteFilter filter){
         try {
@@ -237,7 +228,8 @@ public class InputFlight extends AppCompatActivity {
         return true;
     }
 
-    // TODO: Give behavior to checkmark press
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -254,75 +246,4 @@ public class InputFlight extends AppCompatActivity {
         }
     }
 
-
-    // Helper method to make hide more readable
-    // TODO: Add all valid textdisplays
-    public void hideManualInput() {
-        flightNumberTextDisplay.setVisibility(View.VISIBLE);
-        manualTimeDisplay.setVisibility(View.GONE);
-        manualFlightAddress.setVisibility(View.GONE);
-
-    }
-
-    // Helper method to make show more readable
-    // TODO: Add all valid textdisplays
-    public void showManualInput() {
-        flightNumberTextDisplay.setVisibility(View.GONE);
-        manualTimeDisplay.setVisibility(View.VISIBLE);
-        manualFlightAddress.setVisibility(View.VISIBLE);
-    }
-
-    /* Sends a GET Request to Flightstats API
-     *  RETURNS: String in JSON format that contains flight information
-     * */
-    private void getFlightStats(String request_url) {
-
-        final String TAG = "FlightStatsAPI";
-        // Formulate the request and handle the response.
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, request_url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        // Do something with the response
-                        JSONObject Ride_Request = JSONUtils.retrieveFSInfo(response, mPickUpAddress.getText().toString(),toEvent);
-                        postRideRequest(Ride_Request);
-                        mOutput.setText(Ride_Request.toString());
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // Handle error
-                        Log.w(TAG, "GET_REQUEST: FlightStatsAPI failure");
-                    }
-                });
-        APIRequestSingleton.getInstance(this).addToRequestQueue(stringRequest,"getRequest");
-    }
-
-    private void postRideRequest(JSONObject Ride_RequestJSON) {
-        final String server_url = "https://gravitate-e5d01.appspot.com/rideRequests";
-        final String TAG = "Ride_Request";
-        // Formulate the request and handle the response.
-        Log.w(TAG, "REQUEST:Attempt to create jsonObjectRequest");
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                (Request.Method.POST, server_url, Ride_RequestJSON, new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        // Do something with the response
-                        Log.w(TAG, "POST_REQUEST:Create Ride Request success");
-                        Toast.makeText(InputFlight.this,"Success", Toast.LENGTH_SHORT).show();
-                    }
-                }, new Response.ErrorListener() {
-
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // TODO: Handle error
-                        Toast.makeText(InputFlight.this,"Error...", Toast.LENGTH_SHORT).show();
-                        error.printStackTrace();
-                    }
-                });
-                APIRequestSingleton.getInstance(this).addToRequestQueue(jsonObjectRequest, "postRequest");
-
-
-    }
 }
