@@ -40,4 +40,27 @@ public class User {
         this.memberships = memberships;
     }
 
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public Map<String, User> getFriendList() {
+        return friendList;
+    }
+
+    public void setFriendList(Map<String, User> friendList) {
+        this.friendList = friendList;
+    }
 }
