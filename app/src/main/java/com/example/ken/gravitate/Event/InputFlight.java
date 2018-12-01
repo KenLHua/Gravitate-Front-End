@@ -1,4 +1,5 @@
 package com.example.ken.gravitate.Event;
+import com.example.ken.gravitate.Utils.APIUtils;
 import com.example.ken.gravitate.Utils.DateAndTimePickerAdapter;
 
 import android.app.DatePickerDialog;
@@ -55,14 +56,12 @@ public class InputFlight extends AppCompatActivity {
     private TextInputLayout flightNumberTextDisplay;
     private TextInputLayout manualTimeDisplay;
     private TextInputLayout manualFlightAddress;
-    private TextInputEditText mflightNum;
-    private TextInputEditText mflightCarrier;
-    private TextInputEditText mflightYear;
-    private TextInputEditText mflightMonth;
-    private TextInputEditText mflightDay;
     private TextInputEditText mPickUpAddress;
     private boolean toEvent = true;
     private RequestQueue mRequestQueue;
+    private TextView mflightCarrier;
+    private TextView mflightNum;
+    private TextView inputDepartureDate;
 
     //The pickupAddress text
     private TextView inputPickup;
@@ -110,11 +109,6 @@ public class InputFlight extends AppCompatActivity {
         inputPickup = findViewById(R.id.inputPickup);
         mflightCarrier = findViewById(R.id.inputFlightCarrier);
         mflightNum = findViewById(R.id.inputFlightNumber);
-        /* TODO: Moving Y/M/D into a single TextView
-        mflightYear = findViewById(R.id.inputFlightYear);
-        mflightMonth = findViewById(R.id.inputFlightMonth);
-        mflightDay = findViewById(R.id.inputFlightDay);
-        */
         mPickUpAddress = findViewById(R.id.inputFlightAddress);
 
         // Clears the pickup Text Box using the X
@@ -135,14 +129,14 @@ public class InputFlight extends AppCompatActivity {
         int year, month, day, hour, min;
         cal = Calendar.getInstance();
 
-        TextView inputDepartureTime = findViewById(R.id.inputDepartureTime);
+        inputDepartureDate = findViewById(R.id.inputDepartureTime);
         TextView inputArrivalTime = findViewById(R.id.inputArrivalTime);
-        // Set a date and time picker to update inputDepartureTime
-        // Once inputDepartureTime is updated, also update inputArrivalTime with a time 4 hours before
-        final DateAndTimePickerAdapter datePicker = new DateAndTimePickerAdapter(cal,inputDepartureTime
-                , inputArrivalTime, -4, InputFlight.this);
+        // Set a date and time picker to update inputDepartureDate
+        // Once inputDepartureDate is updated, also update inputArrivalTime with a time 4 hours before
+        final DateAndTimePickerAdapter datePicker = new DateAndTimePickerAdapter(cal,inputDepartureDate,
+                InputFlight.this, false);
 
-        inputDepartureTime.setOnClickListener(new View.OnClickListener() {
+        inputDepartureDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Create the datePicker window
@@ -161,7 +155,7 @@ public class InputFlight extends AppCompatActivity {
 
         // Setting Flightstats Bttn
         mFlightStats_Bttn = findViewById(R.id.flightStats_bttn);
-        /*
+
         mFlightStats_Bttn.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -171,12 +165,14 @@ public class InputFlight extends AppCompatActivity {
 /*                        String request_url = APIUtils.getFSScheduleURL("DL", "89",
                                 "2019", "5", "2");*/
 
-                        /****** ACTUAL CODE ****/    /*
+                        /****** ACTUAL CODE ****/
+                        String flightDate = inputDepartureDate.getText().toString();
+                        // Request_URL = ("Carrier", "Flight Number", "YEAR", "MONTH", "DATE")
                         String request_url = APIUtils.getFSScheduleURL(
-                        // TODO: Moving Y/M/D into a single TextView
                                 mflightCarrier.getText().toString(),mflightNum.getText().toString(),
-                                mflightYear.getText().toString(),mflightMonth.getText().toString(),
-                                mflightDay.getText().toString());
+                                flightDate.substring(6, flightDate.length())
+                                ,flightDate.substring(0,2)
+                                ,flightDate.substring(3,5));
 
 
                         getFlightStats(request_url);
@@ -184,7 +180,8 @@ public class InputFlight extends AppCompatActivity {
                 }
             }
         });
-        */
+
+
 
 
         // Setting Text Fields
@@ -236,7 +233,7 @@ public class InputFlight extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.actionbar_menu, menu);
+        getMenuInflater().inflate(R.menu.inputflight_menu, menu);
         return true;
     }
 
