@@ -58,6 +58,12 @@ dependencies {
     // Tyler Imports
     implementation "com.android.support:recyclerview-v7:28.0.0-alpha3"
     implementation 'de.hdodenhof:circleimageview:1.2.1'
+
+    //Chat SDK Imports
+    implementation 'co.chatsdk.chatsdk:chat-sdk-core:4.4.7'
+    implementation 'co.chatsdk.chatsdk:chat-sdk-ui:4.4.7'
+    implementation 'co.chatsdk.chatsdk:chat-sdk-firebase-adapter:4.4.7'
+    implementation 'co.chatsdk.chatsdk:chat-sdk-file-storage:4.4.7'
 }
 
 apply plugin: 'com.google.gms.google-services'

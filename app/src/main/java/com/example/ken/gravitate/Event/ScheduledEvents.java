@@ -54,6 +54,26 @@ public class ScheduledEvents extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+	//CHAT SDK SETUP
+	Context context = getApplicationContext();
+
+	// Create a new configuration
+	Configuration.Builder builder = new Configuration.Builder(context);
+
+	// Perform any configuration steps (optional)
+	builder.firebaseRootPath("prod");
+
+	// Initialize the Chat SDK
+	try {
+		ChatSDK.initialize(builder.build(), new BaseInterfaceAdapter(context), new FirebaseNetworkAdapter());
+	}
+	catch (ChatSDKException e) {
+	}
+
+	// File storage is needed for profile image upload and image messages
+	FirebaseFileStorageModule.activate();
+	FirebasePushModule.activate();
         fragmentManager = getSupportFragmentManager();
         setContentView(R.layout.scheduled_events);
 
@@ -178,7 +198,7 @@ public class ScheduledEvents extends AppCompatActivity
                 super.onScrolled(recyclerView, dx, dy);
             }
         });
-
+	
 
     }
 
