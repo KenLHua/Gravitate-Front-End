@@ -64,7 +64,13 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAXMSQY8WQqLcNhY-wHvUwzI9763f13G4w"/>
 
-
+	//Chat SDK login activity
+	<activity android:name="co.chatsdk.ui.login.LoginActivity">
+	    <intent-filter>
+	        <action android:name="android.intent.action.MAIN"/>
+	        <category android:name="android.intent.category.LAUNCHER"/>
+	    </intent-filter>
+	</activity>
       
     </application>
 
