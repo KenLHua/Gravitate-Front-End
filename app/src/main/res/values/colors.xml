@@ -7,4 +7,5 @@
     <color name="colorCardYellow">#FFD600</color>
     <color name="colorCardOrange">#FF6F00</color>
     <color name="colorTextSummary">#727272</color>
+    <color name="colorDark">#273833</color>
 </resources>
