@@ -1,6 +1,7 @@
 package com.example.ken.gravitate.Event;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -84,7 +85,7 @@ public class ScheduledEvents extends AppCompatActivity
         toggle.syncState();
 
         // Floating Action Button Setup
-        SpeedDialView speedDialView = findViewById(R.id.speedDial);
+        final SpeedDialView speedDialView = findViewById(R.id.speedDial);
 
         // Populate the FAB secondary menu
         speedDialView.addActionItem(
@@ -128,6 +129,14 @@ public class ScheduledEvents extends AppCompatActivity
         //Recycler view with adapter to display cards
         // TODO:: do this programatically with the server data
         RecyclerView recyclerView = findViewById(R.id.recycler_list);
+        /*
+        Parse the JSON File and add all the events and times into the cardList
+        TODO: Fill in the process
+         */
+
+        /*
+         Create the cards and dispaly then
+         */
         final List<Card> card_list = new ArrayList<>();
         card_list.add(new Card(R.drawable.lax, "LAX", R.drawable.default_profile, "Mon 8pm", "PENDING"));
         card_list.add(new Card(R.drawable.lax, "LAX", R.drawable.default_profile, "Tue 8pm", "PENDING"));
@@ -135,6 +144,16 @@ public class ScheduledEvents extends AppCompatActivity
         card_list.add(new Card(R.drawable.lax, "LAX", R.drawable.default_profile, "Tue 8pm", "PENDING"));
         card_list.add(new Card(R.drawable.lax, "LAX", R.drawable.default_profile, "Mon 8pm", "PENDING"));
         card_list.add(new Card(R.drawable.lax, "LAX", R.drawable.default_profile, "Tue 8pm", "PENDING"));
+
+        /*
+        Parse the JSON File and add all the events and times into the cardList
+        TODO: Fill in the process
+         */
+
+        if(card_list.size() == 0){
+            // TODO: Display "No Ride requests pending"
+        }
+
         final CardAdapter adapter = new CardAdapter(this,card_list);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -146,6 +165,20 @@ public class ScheduledEvents extends AppCompatActivity
                 adapter.notifyItemChanged(position);
             }
         });
+
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                if (dy >0){
+                    speedDialView.hide();
+                }
+                else{
+                    speedDialView.show();
+                }
+                super.onScrolled(recyclerView, dx, dy);
+            }
+        });
+
 
     }
 
@@ -242,6 +275,11 @@ public class ScheduledEvents extends AppCompatActivity
                         // ...
                     }
                 });
+    }
+
+    private List<Card> parseJSONEvents (List<Card> cardList){
+        // TODO: parse them and add them to the cardList
+        return null;
     }
 }
 

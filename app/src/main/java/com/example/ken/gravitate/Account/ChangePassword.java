@@ -8,16 +8,15 @@ import android.view.View;
 
 import com.example.ken.gravitate.R;
 
-public class EditAccount extends AppCompatActivity {
+public class ChangePassword extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.edit_account_layout);
+        setContentView(R.layout.change_password);
         Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("Edit Account");
+        toolbar.setTitle("Change Password");
         toolbar.setNavigationIcon(R.drawable.system_icon_back);
 
-        // Back button will go to previous page when clicked on
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -26,14 +25,9 @@ public class EditAccount extends AppCompatActivity {
         });
 
         setSupportActionBar(toolbar);
-
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.edit_account_fragment, new EditAccountFragment())
-                .commit();
     }
 
-    //  Add Save button to the ActionBar
+    // Add Save button to the ActionBar
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -41,7 +35,7 @@ public class EditAccount extends AppCompatActivity {
         return true;
     }
 
-    // Helper method for back button
+    // Helper function for back button
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();

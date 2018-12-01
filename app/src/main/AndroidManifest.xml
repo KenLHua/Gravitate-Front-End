@@ -49,6 +49,14 @@
         </activity>
         <activity android:name=".RideEvent"></activity>
 
+        <activity android:name=".Account.ChangePassword"
+            android:label="Change Password">
+            <intent-filter>
+                <action android:name="com.example.ken.gravitate.Account.ChangePassword" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
 
 
 
