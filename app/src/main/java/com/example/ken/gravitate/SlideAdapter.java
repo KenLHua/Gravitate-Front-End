@@ -21,9 +21,9 @@ public class SlideAdapter extends PagerAdapter {
     Context context;
     LayoutInflater inflater;
     public int[] lst_images = {
-            R.drawable.welcome_screen_carArt,
+            R.drawable.welcome_screen_car_art,
             R.drawable.card_background_airplane,
-            R.drawable.welcome_screen_rivalryArt
+            R.drawable.welcome_screen_rivalry_art
     };
     public String[] lst_title = {
             "Discover Rides",

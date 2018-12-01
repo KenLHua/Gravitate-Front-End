@@ -56,26 +56,6 @@ public class ScheduledEvents extends AppCompatActivity
         fragmentManager = getSupportFragmentManager();
         setContentView(R.layout.scheduled_events);
 
-        //Recycler view with adapter
-        RecyclerView recyclerView = findViewById(R.id.recycler_list);
-        final List<Card> card_list = new ArrayList<>();
-        card_list.add(new Card(R.drawable.lax, "LAX", R.drawable.default_profile, "Mon 8pm"));
-        card_list.add(new Card(R.drawable.lax, "LAX", R.drawable.default_profile, "Tue 8pm"));
-        card_list.add(new Card(R.drawable.lax, "LAX", R.drawable.default_profile, "Mon 8pm"));
-        card_list.add(new Card(R.drawable.lax, "LAX", R.drawable.default_profile, "Tue 8pm"));
-        card_list.add(new Card(R.drawable.lax, "LAX", R.drawable.default_profile, "Mon 8pm"));
-        card_list.add(new Card(R.drawable.lax, "LAX", R.drawable.default_profile, "Tue 8pm"));
-        final CardAdapter adapter = new CardAdapter(this,card_list);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter.setOnCardClickListener(new CardAdapter.OnCardClickListener() {
-            @Override
-            public void onCardClick(int position) {
-                card_list.get(position).setDestName("Clicked");
-                adapter.notifyItemChanged(position);
-            }
-        });
-
         // Configure sign-in to request the user's ID, email address, and basic profile.
         // ID and basic profile are included in DEFAULT_SIGN_IN.
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -104,6 +84,7 @@ public class ScheduledEvents extends AppCompatActivity
 
         // Floating Action Button Setup
         SpeedDialView speedDialView = findViewById(R.id.speedDial);
+
         // Populate the FAB secondary menu
         speedDialView.addActionItem(
                 new SpeedDialActionItem.Builder(R.id.fab_input_flight_number, R.drawable.system_icon_plane_ticket)
@@ -115,7 +96,8 @@ public class ScheduledEvents extends AppCompatActivity
                         .setLabel(getString(R.string.fab_event))
                         .setLabelClickable(false)
                         .create());
-        
+
+
         // Provide behavior to the secondary FAB buttons
         speedDialView.setOnActionSelectedListener(new SpeedDialView.OnActionSelectedListener() {
             @Override
@@ -141,6 +123,28 @@ public class ScheduledEvents extends AppCompatActivity
                 }
             }
         });
+
+        //Recycler view with adapter to display cards
+        // TODO:: do this programatically with the server data
+        RecyclerView recyclerView = findViewById(R.id.recycler_list);
+        final List<Card> card_list = new ArrayList<>();
+        card_list.add(new Card(R.drawable.lax, "LAX", R.drawable.default_profile, "Mon 8pm"));
+        card_list.add(new Card(R.drawable.lax, "LAX", R.drawable.default_profile, "Tue 8pm"));
+        card_list.add(new Card(R.drawable.lax, "LAX", R.drawable.default_profile, "Mon 8pm"));
+        card_list.add(new Card(R.drawable.lax, "LAX", R.drawable.default_profile, "Tue 8pm"));
+        card_list.add(new Card(R.drawable.lax, "LAX", R.drawable.default_profile, "Mon 8pm"));
+        card_list.add(new Card(R.drawable.lax, "LAX", R.drawable.default_profile, "Tue 8pm"));
+        final CardAdapter adapter = new CardAdapter(this,card_list);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter.setOnCardClickListener(new CardAdapter.OnCardClickListener() {
+            @Override
+            public void onCardClick(int position) {
+                card_list.get(position).setDestName("Clicked");
+                adapter.notifyItemChanged(position);
+            }
+        });
+
     }
 
     // Creates a Fragment Instance of respective menu item
