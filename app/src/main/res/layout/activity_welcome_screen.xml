@@ -12,18 +12,14 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="464dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
         android:background="@drawable/system_background_round_button"
         android:text="Start the tour"
         android:textColor="#FFFFFF"
-        app:layout_constraintBottom_toTopOf="@+id/welcomeSkip"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        tools:layout_editor_absoluteY="528dp" />
 
     <Button
         android:id="@+id/welcomeSkip"
@@ -31,6 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="128dp"
         android:layout_marginBottom="76dp"
         android:background="@drawable/system_background_round_button"
@@ -39,25 +36,23 @@
         app:layout_constraintBottom_toBottomOf="@+id/logo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.976"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/explore"
+        app:layout_constraintVertical_bias="0.461" />
 
 
     <ImageView
         android:id="@+id/logo"
-        android:layout_width="429dp"
-        android:layout_height="660dp"
-        android:layout_alignParentTop="true"
+        android:layout_width="454dp"
+        android:layout_height="match_parent"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
         android:background="@drawable/gravitate_logo"
         android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
 </android.support.constraint.ConstraintLayout>

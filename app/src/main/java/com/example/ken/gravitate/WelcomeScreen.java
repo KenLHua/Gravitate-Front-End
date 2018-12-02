@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.example.ken.gravitate.Account.LoginActivity;
 import com.example.ken.gravitate.Event.ScheduledEvents;
 
 public class WelcomeScreen extends AppCompatActivity {
@@ -36,13 +37,13 @@ public class WelcomeScreen extends AppCompatActivity {
             }
         });
 
-        // Skip to Scheduled Events
+        // Skip to login
         skip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 switch(v.getId()){
                     case R.id.welcomeSkip:
-                        startActivity(new Intent(WelcomeScreen.this, ScheduledEvents.class));
+                        startActivity(new Intent(WelcomeScreen.this, LoginActivity.class));
                         break;
 
                 }
