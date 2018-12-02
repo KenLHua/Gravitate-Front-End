@@ -1,6 +1,8 @@
 package com.example.ken.gravitate.Event;
 
+import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -14,24 +16,31 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.example.ken.gravitate.Account.LoginActivity;
-import com.example.ken.gravitate.Utils.Card;
-import com.example.ken.gravitate.Utils.CardAdapter;
-import com.example.ken.gravitate.Messaging.MessageFragment;
 import com.example.ken.gravitate.Account.MyProfile;
-import com.example.ken.gravitate.R;
+import com.example.ken.gravitate.Messaging.MessageFragment;
 import com.example.ken.gravitate.Settings.SettingsActivity;
 import com.example.ken.gravitate.SimpleActivity1;
 import com.example.ken.gravitate.SimpleActivity3;
+import com.example.ken.gravitate.Utils.Card;
+import com.example.ken.gravitate.R;
+import com.example.ken.gravitate.Utils.CardAdapter;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.leinardi.android.speeddial.SpeedDialActionItem;
 import com.leinardi.android.speeddial.SpeedDialView;
 
@@ -46,6 +55,20 @@ public class ScheduledEvents extends AppCompatActivity
     private ImageView profile;
     private View header;
     private SpeedDialView fab;
+
+    private List<DocumentSnapshot> allDocs;
+    CollectionReference eventsSchedules;
+    DocumentReference userDocRef;
+    private List<Card> mPendingCards;
+    private List<Card> mOrbitCards;
+    private String mDestTime;
+    private DocumentSnapshot locationSnap;
+    FirebaseFirestore db;
+
+    RecyclerView orbitView;
+    RecyclerView requestView;
+    RecyclerView emptyView;
+
     GoogleSignInClient mGoogleSignInClient;
     private static final String web_client_id = "1070051773756-o6l5r1l6v7m079r1oua2lo0rsfeu8m9i.apps.googleusercontent.com";
     private static final String DOMAIN = "ucsd.edu";
@@ -55,6 +78,41 @@ public class ScheduledEvents extends AppCompatActivity
         super.onCreate(savedInstanceState);
         fragmentManager = getSupportFragmentManager();
         setContentView(R.layout.scheduled_events);
+        final String TAG = "documentLOOKUP";
+        //Recycler view with adapter to display cards
+        orbitView = findViewById(R.id.orbit_list);
+        requestView = findViewById(R.id.pending_list);
+        //emptyView = findViewById(R.id.empty_list);
+
+
+        db = FirebaseFirestore.getInstance();
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        //FirebaseUser user = firebaseAuth.getCurrentUser();
+
+        // ACTUAL CODE userDocRef = db.document(user.getUid());
+        userDocRef = db.collection("users").document("zkenneth_test");
+
+
+        userDocRef.collection("eventSchedules")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                                List<DocumentSnapshot> myListOfDocuments = task.getResult().getDocuments();
+                                // Getting all the document references
+                                allDocs = myListOfDocuments;
+                                //Call Async
+                                populateCards(allDocs);
+
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+
+
+
 
         // Configure sign-in to request the user's ID, email address, and basic profile.
         // ID and basic profile are included in DEFAULT_SIGN_IN.
@@ -125,38 +183,12 @@ public class ScheduledEvents extends AppCompatActivity
             }
         });
 
-        //Recycler view with adapter to display cards
-        // TODO:: do this programatically with the server data
-        RecyclerView recyclerView = findViewById(R.id.orbit_list);
         /*
-        Parse the JSON File and add all the events and times into the cardList
-        TODO: Fill in the process
-         */
-
-        /*
-         Create the cards and dispaly then
+         Create the cards and display then
          */
         final List<Card> card_list = new ArrayList<>();
 
-        card_list.add(new Card(R.drawable.lax, "LAX", R.drawable.default_profile, "Mon 8pm"));
-        card_list.add(new Card(R.drawable.lax, "LAX", R.drawable.default_profile, "Tue 8pm"));
-        card_list.add(new Card(R.drawable.lax, "LAX", R.drawable.default_profile, "Mon 8pm"));
-        card_list.add(new Card(R.drawable.lax, "LAX", R.drawable.default_profile, "Tue 8pm"));
-        card_list.add(new Card(R.drawable.lax, "LAX", R.drawable.default_profile, "Mon 8pm"));
-        card_list.add(new Card(R.drawable.lax, "LAX", R.drawable.default_profile, "Tue 8pm"));
-
         /*
-        Parse the JSON File and add all the events and times into the cardList
-        TODO: Fill in the process
-         */
-
-        if(card_list.size() == 0){
-            // TODO: Display "No Ride requests pending"
-        }
-
-        final CardAdapter adapter = new CardAdapter(this,card_list);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter.setOnCardClickListener(new CardAdapter.OnCardClickListener() {
             @Override
             public void onCardClick(int position) {
@@ -164,17 +196,18 @@ public class ScheduledEvents extends AppCompatActivity
                 adapter.notifyItemChanged(position);
             }
         });
+        */
 
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        orbitView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+            public void onScrolled(@NonNull RecyclerView orbitView, int dx, int dy) {
                 if (dy >0){
                     speedDialView.hide();
                 }
                 else{
                     speedDialView.show();
                 }
-                super.onScrolled(recyclerView, dx, dy);
+                super.onScrolled(orbitView, dx, dy);
             }
         });
 
@@ -276,9 +309,67 @@ public class ScheduledEvents extends AppCompatActivity
                 });
     }
 
-    private List<Card> parseJSONEvents (List<Card> cardList){
-        // TODO: parse them and add them to the cardList
-        return null;
+    private class DocumentsAsyncTask extends AsyncTask<List<DocumentSnapshot>, Void, Boolean>{
+        @Override
+        protected
+
+        @Override
+        protected Boolean doInBackground(List<DocumentSnapshot>... lists) {
+            lists
+        }
     }
+
+    private void  populateCards(List<DocumentSnapshot> docs){
+
+        mPendingCards = new ArrayList<Card>();
+        mOrbitCards = new ArrayList<Card>();
+        DocumentReference docRef;
+        for(  DocumentSnapshot x : docs) {
+            if ((boolean) x.get("pending")) {
+                mDestTime = "pending";
+                docRef = (DocumentReference) x.get("airportLocation");
+                docRef.get()
+                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    locationSnap = task.getResult();
+                                    mPendingCards.add(new Card (R.drawable.lax, locationSnap.get("airportCode").toString(), R.drawable.default_profile, "pending"));
+                                } else {
+                                    Log.d("wrong", "Error getting documents: ", task.getException());
+                                }
+                            }
+                        });
+
+            }
+            else {
+                mDestTime = x.get("flightLocalTime").toString();
+                docRef = (DocumentReference) x.get("airportLocation");
+                 docRef.get()
+                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    locationSnap = task.getResult();
+                                    mOrbitCards.add(new Card (R.drawable.lax, locationSnap.get("airportCode").toString(), R.drawable.default_profile, mDestTime));
+                                } else {
+                                    Log.d("wrong", "Error getting documents: ", task.getException());
+                                }
+                            }
+                        });
+
+            }
+
+        }
+        requestView.setAdapter(new CardAdapter(ScheduledEvents.this, mPendingCards ));
+        requestView.setLayoutManager(new LinearLayoutManager(ScheduledEvents.this));
+        orbitView.setAdapter(new CardAdapter(ScheduledEvents.this, mOrbitCards));
+        orbitView.setLayoutManager(new LinearLayoutManager(ScheduledEvents.this));
+
+
+
+    }
+
+
 }
 

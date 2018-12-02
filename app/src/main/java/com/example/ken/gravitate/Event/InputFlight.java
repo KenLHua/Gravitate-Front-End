@@ -1,5 +1,6 @@
 package com.example.ken.gravitate.Event;
 import com.example.ken.gravitate.Utils.APIUtils;
+import com.example.ken.gravitate.Utils.Card;
 import com.example.ken.gravitate.Utils.DateAndTimePickerAdapter;
 
 import android.content.Context;
@@ -30,8 +31,14 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Calendar;
+import java.util.List;
 
 public class InputFlight extends AppCompatActivity {
     // Autrocomplete Request Code
@@ -54,6 +61,8 @@ public class InputFlight extends AppCompatActivity {
     private Calendar cal;
 
 
+
+
     /**** TESTING ****/
     private TextView mOutput;
 
@@ -65,7 +74,6 @@ public class InputFlight extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.input_flight_toolbar);
         setSupportActionBar(toolbar);
-
 
 
         mContext = this;
@@ -165,6 +173,8 @@ public class InputFlight extends AppCompatActivity {
         mRequestQueue = APIRequestSingleton.getInstance(this.getApplicationContext()).
                 getRequestQueue();
     }
+
+
 
     // Checks if all flight input fields are filled
     private boolean invalidFlightFields(String flightCarrier, String flightNum, String flightDate, String pickupAddress) {

@@ -48,7 +48,7 @@ public class JSONUtils {
             flightJSON.put("airportLocation",airport_address);
             flightJSON.put("pickUpAddress",pickUpAddress);
             flightJSON.put("toEvent",String.valueOf(toEvent));
-            flightJSON.put("airportAbbr", departureAirportFsCode);
+            flightJSON.put("airportCode", departureAirportFsCode);
 
 
         } catch (JSONException e) {
