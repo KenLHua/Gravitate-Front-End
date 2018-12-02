@@ -18,8 +18,8 @@ public class MyProfile extends AppCompatActivity {
 
         //Set up toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("My Profile");
         setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(null);
 
         //Set up back button
         toolbar.setNavigationIcon(R.drawable.system_icon_back);
@@ -37,10 +37,7 @@ public class MyProfile extends AppCompatActivity {
                 startActivity(new Intent(MyProfile.this, EditAccount.class));
             }
         });
-
-
-
-
+        
     }
 
 
