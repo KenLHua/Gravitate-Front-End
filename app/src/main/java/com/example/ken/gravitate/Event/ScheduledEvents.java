@@ -1,9 +1,9 @@
 package com.example.ken.gravitate.Event;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -12,14 +12,16 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.example.ken.gravitate.Account.LoginActivity;
+import com.example.ken.gravitate.Utils.Card;
+import com.example.ken.gravitate.Utils.CardAdapter;
 import com.example.ken.gravitate.Messaging.MessageFragment;
 import com.example.ken.gravitate.Account.MyProfile;
 import com.example.ken.gravitate.R;
@@ -33,6 +35,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.leinardi.android.speeddial.SpeedDialActionItem;
 import com.leinardi.android.speeddial.SpeedDialView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ScheduledEvents extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -67,6 +72,7 @@ public class ScheduledEvents extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
         // Side-Navigation Setup
         drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -79,7 +85,8 @@ public class ScheduledEvents extends AppCompatActivity
         toggle.syncState();
 
         // Floating Action Button Setup
-        SpeedDialView speedDialView = findViewById(R.id.speedDial);
+        final SpeedDialView speedDialView = findViewById(R.id.speedDial);
+
         // Populate the FAB secondary menu
         speedDialView.addActionItem(
                 new SpeedDialActionItem.Builder(R.id.fab_input_flight_number, R.drawable.system_icon_plane_ticket)
@@ -91,7 +98,8 @@ public class ScheduledEvents extends AppCompatActivity
                         .setLabel(getString(R.string.fab_event))
                         .setLabelClickable(false)
                         .create());
-        
+
+
         // Provide behavior to the secondary FAB buttons
         speedDialView.setOnActionSelectedListener(new SpeedDialView.OnActionSelectedListener() {
             @Override
@@ -117,6 +125,61 @@ public class ScheduledEvents extends AppCompatActivity
                 }
             }
         });
+
+        //Recycler view with adapter to display cards
+        // TODO:: do this programatically with the server data
+        RecyclerView recyclerView = findViewById(R.id.recycler_list);
+        /*
+        Parse the JSON File and add all the events and times into the cardList
+        TODO: Fill in the process
+         */
+
+        /*
+         Create the cards and dispaly then
+         */
+        final List<Card> card_list = new ArrayList<>();
+
+        card_list.add(new Card(R.drawable.lax, "LAX", R.drawable.default_profile, "Mon 8pm"));
+        card_list.add(new Card(R.drawable.lax, "LAX", R.drawable.default_profile, "Tue 8pm"));
+        card_list.add(new Card(R.drawable.lax, "LAX", R.drawable.default_profile, "Mon 8pm"));
+        card_list.add(new Card(R.drawable.lax, "LAX", R.drawable.default_profile, "Tue 8pm"));
+        card_list.add(new Card(R.drawable.lax, "LAX", R.drawable.default_profile, "Mon 8pm"));
+        card_list.add(new Card(R.drawable.lax, "LAX", R.drawable.default_profile, "Tue 8pm"));
+
+        /*
+        Parse the JSON File and add all the events and times into the cardList
+        TODO: Fill in the process
+         */
+
+        if(card_list.size() == 0){
+            // TODO: Display "No Ride requests pending"
+        }
+
+        final CardAdapter adapter = new CardAdapter(this,card_list);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter.setOnCardClickListener(new CardAdapter.OnCardClickListener() {
+            @Override
+            public void onCardClick(int position) {
+                card_list.get(position).setDestName("Clicked");
+                adapter.notifyItemChanged(position);
+            }
+        });
+
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                if (dy >0){
+                    speedDialView.hide();
+                }
+                else{
+                    speedDialView.show();
+                }
+                super.onScrolled(recyclerView, dx, dy);
+            }
+        });
+
+
     }
 
     // Creates a Fragment Instance of respective menu item
@@ -212,6 +275,11 @@ public class ScheduledEvents extends AppCompatActivity
                         // ...
                     }
                 });
+    }
+
+    private List<Card> parseJSONEvents (List<Card> cardList){
+        // TODO: parse them and add them to the cardList
+        return null;
     }
 }
 

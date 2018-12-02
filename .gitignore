@@ -10,3 +10,4 @@
 /captures
 .externalNativeBuild
 .idea/assetWizardSettings.xml
+module/build/libs/module.jar

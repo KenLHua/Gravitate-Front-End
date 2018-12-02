@@ -12,17 +12,24 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+        <activity android:name=".WelcomeActivity"> </activity>
+        <activity android:name=".WelcomeScreen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
+
         // Simple activities for adding new features
         <activity android:name=".SimpleActivity1"></activity>
         <activity android:name=".SimpleActivity3"></activity>
 
-        <activity android:name=".Account.LoginActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".Account.LoginActivity"></activity>
+
         <activity android:name=".Event.ScheduledEvents"></activity>
+        <activity android:name=".Event.CreatedRequestDetails"></activity>
         <activity android:name=".Event.NewEvent"> </activity>
         <activity android:name=".Account.MyProfile"> </activity>
         <activity android:name=".Settings.SettingsActivity"
