@@ -17,9 +17,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.ken.gravitate.Account.LoginActivity;
 import com.example.ken.gravitate.Account.MyProfile;
@@ -30,22 +33,32 @@ import com.example.ken.gravitate.SimpleActivity3;
 import com.example.ken.gravitate.Utils.Card;
 import com.example.ken.gravitate.R;
 import com.example.ken.gravitate.Utils.CardAdapter;
+import com.example.ken.gravitate.Utils.MyViewHolder;
+import com.example.module.AirportRideRequest;
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.leinardi.android.speeddial.SpeedDialActionItem;
 import com.leinardi.android.speeddial.SpeedDialView;
 
+import org.w3c.dom.Document;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ScheduledEvents extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -65,9 +78,16 @@ public class ScheduledEvents extends AppCompatActivity
     private DocumentSnapshot locationSnap;
     FirebaseFirestore db;
 
+    // Kenneth's spagetti code
     RecyclerView orbitView;
     RecyclerView requestView;
     RecyclerView emptyView;
+
+    private Context context;
+
+    private FirestoreRecyclerAdapter pendingCards;
+    private FirestoreRecyclerAdapter orbitCards;
+    //
 
     GoogleSignInClient mGoogleSignInClient;
     private static final String web_client_id = "1070051773756-o6l5r1l6v7m079r1oua2lo0rsfeu8m9i.apps.googleusercontent.com";
@@ -87,10 +107,11 @@ public class ScheduledEvents extends AppCompatActivity
 
         db = FirebaseFirestore.getInstance();
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-        //FirebaseUser user = firebaseAuth.getCurrentUser();
+        FirebaseUser user = firebaseAuth.getCurrentUser();
 
         // ACTUAL CODE userDocRef = db.document(user.getUid());
-        userDocRef = db.collection("users").document("zkenneth_test");
+        String userID = "zkenneth_test" ;
+        userDocRef = db.collection("users").document(userID);
 
 
         userDocRef.collection("eventSchedules")
@@ -309,15 +330,6 @@ public class ScheduledEvents extends AppCompatActivity
                 });
     }
 
-    private class DocumentsAsyncTask extends AsyncTask<List<DocumentSnapshot>, Void, Boolean>{
-        @Override
-        protected
-
-        @Override
-        protected Boolean doInBackground(List<DocumentSnapshot>... lists) {
-            lists
-        }
-    }
 
     private void  populateCards(List<DocumentSnapshot> docs){
 
@@ -335,6 +347,8 @@ public class ScheduledEvents extends AppCompatActivity
                                 if (task.isSuccessful()) {
                                     locationSnap = task.getResult();
                                     mPendingCards.add(new Card (R.drawable.lax, locationSnap.get("airportCode").toString(), R.drawable.default_profile, "pending"));
+                                    requestView.setAdapter(new CardAdapter(ScheduledEvents.this, mPendingCards ));
+                                    requestView.setLayoutManager(new LinearLayoutManager(ScheduledEvents.this));
                                 } else {
                                     Log.d("wrong", "Error getting documents: ", task.getException());
                                 }
@@ -352,6 +366,8 @@ public class ScheduledEvents extends AppCompatActivity
                                 if (task.isSuccessful()) {
                                     locationSnap = task.getResult();
                                     mOrbitCards.add(new Card (R.drawable.lax, locationSnap.get("airportCode").toString(), R.drawable.default_profile, mDestTime));
+                                    orbitView.setAdapter(new CardAdapter(ScheduledEvents.this, mOrbitCards));
+                                    orbitView.setLayoutManager(new LinearLayoutManager(ScheduledEvents.this));
                                 } else {
                                     Log.d("wrong", "Error getting documents: ", task.getException());
                                 }
@@ -361,14 +377,53 @@ public class ScheduledEvents extends AppCompatActivity
             }
 
         }
-        requestView.setAdapter(new CardAdapter(ScheduledEvents.this, mPendingCards ));
-        requestView.setLayoutManager(new LinearLayoutManager(ScheduledEvents.this));
-        orbitView.setAdapter(new CardAdapter(ScheduledEvents.this, mOrbitCards));
-        orbitView.setLayoutManager(new LinearLayoutManager(ScheduledEvents.this));
+
 
 
 
     }
+    private void init(){
+
+    }
+
+    private void getUserRideRequestList(DocumentReference userRef) {
+        Query rideRequests = userRef.collection("eventSchedules").orderBy("pending").limit(10);
+        // Have to get mPendingCards to be initialized with all the cards here
+        //
+        //
+        mPendingCards = new ArrayList<Card>();
+
+        FirestoreRecyclerOptions<AirportRideRequest> options =
+                new FirestoreRecyclerOptions
+                        .Builder<AirportRideRequest>()
+                        .setQuery(rideRequests, AirportRideRequest.class)
+                        .build();
+
+        
+
+        pendingCards = new FirestoreRecyclerAdapter<AirportRideRequest, MyViewHolder>(options) {
+            @NonNull
+            @Override
+            public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+                LayoutInflater inflater = LayoutInflater.from(context);
+                View v = inflater.inflate(R.layout.card, viewGroup, false);
+                return new MyViewHolder(v);
+            }
+
+            @Override
+            protected void onBindViewHolder(@NonNull MyViewHolder holder, int i, @NonNull AirportRideRequest model) {
+                /* mPendingCards is not passed
+                holder.background_img.setImageResource(mPendingCards.get(i).getBackground());
+                holder.profile_photo.setImageResource(mPendingCards.get(i).getProfilePhoto());
+                holder.card_dest.setText(mPendingCards.get(i).getDestName());
+                holder.card_time.setText(mPendingCards.get(i).getDestTime());
+                */
+            }
+        };
+        pendingCards.notifyDataSetChanged();
+
+    }
+
 
 
 }

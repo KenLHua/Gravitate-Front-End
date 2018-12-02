@@ -6,18 +6,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 
 import com.example.ken.gravitate.R;
 
 import java.util.List;
 
-import de.hdodenhof.circleimageview.CircleImageView;
-
 //class to iterate the list of cards and put them on the screen
-public class CardAdapter extends RecyclerView.Adapter<CardAdapter.myViewHolder> {
+public class CardAdapter extends RecyclerView.Adapter<MyViewHolder> {
 
     Context context;
     List<Card> card_list;
@@ -39,15 +35,15 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.myViewHolder> 
     //create each Card
     @NonNull
     @Override
-    public myViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View v = inflater.inflate(R.layout.card, viewGroup, false);
-        return new myViewHolder(v);
+        return new MyViewHolder(v);
     }
 
     //set the correct images and text for each Card
     @Override
-    public void onBindViewHolder(@NonNull myViewHolder holder, int i) {
+    public void onBindViewHolder(@NonNull MyViewHolder holder, int i) {
         holder.background_img.setImageResource(card_list.get(i).getBackground());
         holder.profile_photo.setImageResource(card_list.get(i).getProfilePhoto());
         holder.card_dest.setText(card_list.get(i).getDestName());
@@ -62,31 +58,6 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.myViewHolder> 
 
 
     //The class that gets the reference to each individual element of the cards
-    public class myViewHolder extends  RecyclerView.ViewHolder {
-
-        ImageView background_img;
-        CircleImageView profile_photo;
-        TextView card_dest, card_time;
-
-        public myViewHolder(View itemView) {
-            super(itemView);
-            profile_photo = itemView.findViewById(R.id.profile_image);
-            background_img = itemView.findViewById(R.id.card_back);
-            card_dest = itemView.findViewById(R.id.card_dest);
-            card_time = itemView.findViewById(R.id.card_date);
-            itemView.setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View v){
-                    if(mlistener != null){
-                        int position = getAdapterPosition();
-                        if(position != RecyclerView.NO_POSITION){
-                            mlistener.onCardClick(position);
-                        }
-                    }
-                }
-            });
-        }
-    }
 
 
 
