@@ -37,7 +37,7 @@ public class MyProfile extends AppCompatActivity {
                 startActivity(new Intent(MyProfile.this, EditAccount.class));
             }
         });
-        
+
     }
 
 

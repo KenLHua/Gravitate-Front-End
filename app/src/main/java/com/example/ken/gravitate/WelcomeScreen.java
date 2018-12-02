@@ -3,6 +3,7 @@ package com.example.ken.gravitate;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.view.View;
@@ -24,11 +25,7 @@ public class WelcomeScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome_screen);
 
-        LinearLayout welcomeScreen = findViewById(R.id.welcomeScreen);
-        AnimationDrawable colorgradient = (AnimationDrawable) welcomeScreen.getBackground();
-        colorgradient.setEnterFadeDuration(2000);
-        colorgradient.setExitFadeDuration(4000);
-        colorgradient.start();
+        ConstraintLayout welcomeScreen = findViewById(R.id.welcomeScreen);
 
         button = (Button) findViewById(R.id.explore);
         skip = (Button) findViewById(R.id.welcomeSkip);
@@ -51,17 +48,6 @@ public class WelcomeScreen extends AppCompatActivity {
                 }
             }
         });
-        ImageView logo = (ImageView) findViewById(R.id.logo);
-        logo.setImageResource(R.drawable.logo);
-        topL = (LinearLayoutCompat) findViewById(R.id.topL);
-        botL = (LinearLayoutCompat) findViewById(R.id.botL);
-        upDown = AnimationUtils.loadAnimation(this,R.anim.updown);
-        upDown.setDuration(800);
-        downUp = AnimationUtils.loadAnimation(this, R.anim.downup);
-        downUp.setDuration(800);
-        topL.setAnimation(upDown);
-        botL.setAnimation(downUp);
-
 
     }
     public void openOnBoard(){
