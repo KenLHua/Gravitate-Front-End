@@ -26,8 +26,6 @@
             android:theme="@style/ToolbarTheme" />
 
 
-
-
         <com.leinardi.android.speeddial.SpeedDialView
             android:id="@+id/speedDial"
             android:layout_width="wrap_content"
@@ -42,13 +40,13 @@
         <FrameLayout
             android:id="@+id/fragment_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_marginTop="?actionBarSize">
 
-            <android.support.design.widget.CoordinatorLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="?attr/actionBarSize"
-                tools:context=".Event.ScheduledEvents">
+                android:layout_height="wrap_content">
+
                 <android.support.v4.widget.SwipeRefreshLayout
                     xmlns:android="http://schemas.android.com/apk/res/android"
                     android:id="@+id/swiperefresh"
@@ -56,17 +54,27 @@
                     android:layout_height="match_parent">
 
                      <android.support.v7.widget.RecyclerView
-                        android:id="@+id/recycler_list"
+                        android:id="@+id/orbit_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                    <View
+                        android:id="@+id/divider"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_below="@+id/airportLayout"
+                        android:layout_marginTop = "16dp"
+                        android:background="@color/colorAccent" />
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/pending_list"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.0"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="1.0" />
+                        android:layout_below = "@id/orbit_list" />
+
+
                 </android.support.v4.widget.SwipeRefreshLayout>
-            </android.support.design.widget.CoordinatorLayout>
+            </RelativeLayout>
         </FrameLayout>
 
     </FrameLayout>

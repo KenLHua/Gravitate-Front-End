@@ -1,7 +1,6 @@
 package com.example.ken.gravitate.Event;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -128,7 +127,7 @@ public class ScheduledEvents extends AppCompatActivity
 
         //Recycler view with adapter to display cards
         // TODO:: do this programatically with the server data
-        RecyclerView recyclerView = findViewById(R.id.recycler_list);
+        RecyclerView recyclerView = findViewById(R.id.orbit_list);
         /*
         Parse the JSON File and add all the events and times into the cardList
         TODO: Fill in the process
