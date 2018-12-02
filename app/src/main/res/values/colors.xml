@@ -12,4 +12,6 @@
     <color name="colorBlack">#000000</color>
     <color name="colorLightGray">#E3E1E1</color>
     <color name="colorPlainBackground">#FAFAFA</color>
+    <color name="colorDark">#273833</color>
+    <color name="colorButton">#8b00dd</color>
 </resources>
