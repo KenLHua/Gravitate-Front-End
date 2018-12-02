@@ -26,39 +26,12 @@
         app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
 
-        <RadioGroup
-            android:id="@+id/flightRadioGroup"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:checkedButton="@+id/flightRadio"
-            android:orientation="horizontal"
-            app:layout_constraintHorizontal_chainStyle="spread">
-
-            <RadioButton
-                android:id="@+id/flightRadio"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_weight="1"
-                android:text="@string/radio_flight_number" />
-
-            <RadioButton
-                android:id="@+id/manualRadio"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_weight="1"
-                android:text="@string/radio_manual" />
-
-        </RadioGroup>
-
         <!-- By Flight Number Fields-->
         <android.support.design.widget.TextInputLayout
             android:id="@+id/flightCarrier"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="142dp"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/flightRadioGroup"
             android:layout_marginTop="16dp"
             android:layout_marginRight="8dp"
             android:layout_alignParentStart="true"
@@ -80,9 +53,8 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/flightRadioGroup"
             android:layout_toRightOf="@+id/flightCarrier"
-            android:layout_alignEnd="@id/flightRadioGroup"
+            android:layout_alignRight="@+id/departureTimeLayout"
             android:layout_marginTop="16dp"
             android:visibility="visible">
 
@@ -116,7 +88,7 @@
                 android:drawablePadding="5dp"
                 android:focusable="false"
                 android:clickable="true"
-                android:hint="Flight Departure Time" />
+                android:hint="Flight Departure Date" />
 
         </android.support.design.widget.TextInputLayout>
 
@@ -126,7 +98,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/departureTimeLayout"
-            android:layout_marginRight="10dp"
             android:layout_marginTop="16dp"
             android:layout_alignParentStart="true">
 
@@ -157,72 +128,37 @@
             android:src="@drawable/system_icon_clear" />
 
         <android.support.design.widget.TextInputLayout
-            android:id="@+id/arrivalTimeLayout"
+            android:id="@+id/earlyArrivalTimeLayout"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/pickupLayout"
+            android:layout_below="@+id/flightStats_bttn"
             android:layout_marginTop="16dp">
 
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/inputArrivalTime"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:drawableStart="@drawable/system_icon_date"
-                android:drawablePadding="5dp"
-                android:focusable="false"
-                android:clickable="true"
-                android:hint="Airport Arrival Time"
-                />
         </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/latestArrivalTimeLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/earlyArrivalTimeLayout"
+            android:layout_marginTop="16dp">
+
+        </android.support.design.widget.TextInputLayout>
+
 
         <Button
             android:id="@+id/flightStats_bttn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/arrivalTimeLayout"
+            android:layout_below="@id/pickupLayout"
+            android:background="@color/colorButton"
+            style="@style/Widget.AppCompat.Button.Colored"
             android:layout_marginTop="16dp"
-            android:text="FlightStats Api"
+            android:elevation="4dp"
+            android:text="Find Flight Data"
             android:visibility="visible" />
-
-        <!-- Manual Input Fields -->
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/manualFlightAddress"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/flightRadioGroup"
-            android:layout_alignParentStart="true"
-            android:layout_marginTop="16dp"
-            android:visibility="gone">
-
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/inputFlightAddress"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/hint_event_location" />
-
-
-        </android.support.design.widget.TextInputLayout>
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/manualTime"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/manualFlightAddress"
-            android:layout_alignParentStart="true"
-            android:visibility="gone">
-
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/inputTime"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="@string/hint_event_time" />
-
-
-        </android.support.design.widget.TextInputLayout>
 
         <TextView
             android:id="@+id/outputText"
@@ -231,5 +167,6 @@
             android:layout_below="@+id/flightStats_bttn"
             android:text="TextView" />
     </RelativeLayout>
+
 
 </android.support.constraint.ConstraintLayout>

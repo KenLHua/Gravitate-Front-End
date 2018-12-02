@@ -15,17 +15,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.ImageButton;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.example.ken.gravitate.Utils.APIRequestSingleton;
 import com.example.ken.gravitate.R;
-import com.example.ken.gravitate.Utils.APIUtils;
-import com.example.ken.gravitate.Utils.JSONUtils;
 
 //Necessary libraries for Address Autocomplete functionality
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -41,16 +37,9 @@ public class InputFlight extends AppCompatActivity {
     // Autrocomplete Request Code
     int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
 
-    // Radio Group Filters
-    private RadioGroup inputGroup;
-    private RadioButton flightRadio;
-    private RadioButton manualRadio;
 
     private Button mFlightStats_Bttn;
 
-    private TextInputLayout flightNumberTextDisplay;
-    private TextInputLayout manualTimeDisplay;
-    private TextInputLayout manualFlightAddress;
     private TextInputEditText mPickUpAddress;
     private boolean toEvent = true;
     private RequestQueue mRequestQueue;
@@ -92,16 +81,11 @@ public class InputFlight extends AppCompatActivity {
                 .setCountry("us")
                 .build();
 
-        // Setting Radio Buttons
-        inputGroup = (RadioGroup) findViewById(R.id.flightRadioGroup);
-        flightRadio = (RadioButton) findViewById(R.id.flightRadio);
-        manualRadio = (RadioButton) findViewById(R.id.manualRadio);
 
         // Creating input TextFields
         inputPickup = findViewById(R.id.inputPickup);
         mflightCarrier = findViewById(R.id.inputFlightCarrier);
         mflightNum = findViewById(R.id.inputFlightNumber);
-        mPickUpAddress = findViewById(R.id.inputFlightAddress);
 
         // Clears the pickup Text Box using the X
         final ImageButton pickupClear = findViewById(R.id.clear_pickup_button);
@@ -122,9 +106,8 @@ public class InputFlight extends AppCompatActivity {
         cal = Calendar.getInstance();
 
         inputDepartureDate = findViewById(R.id.inputDepartureTime);
-        TextView inputArrivalTime = findViewById(R.id.inputArrivalTime);
         // Set a date and time picker to update inputDepartureDate
-        // Once inputDepartureDate is updated, also update inputArrivalTime with a time 4 hours before
+        // Once inputDepartureDate is updated, also update earlyArrivalTime with a time 4 hours before
         final DateAndTimePickerAdapter datePicker = new DateAndTimePickerAdapter(cal,inputDepartureDate,
                 InputFlight.this, false);
 
@@ -159,6 +142,12 @@ public class InputFlight extends AppCompatActivity {
 
                         /****** ACTUAL CODE ****/
                         String flightDate = inputDepartureDate.getText().toString();
+                        // Checking if all necessary inputs are given, if not return and give a error
+                        if (invalidFlightFields(mflightCarrier.getText().toString(),
+                                mflightNum.getText().toString(),
+                                flightDate,
+                                inputPickup.getText().toString())) return;
+
                         // Request_URL = ("Carrier", "Flight Number", "YEAR", "MONTH", "DATE")
                         String request_url = APIUtils.getFSScheduleURL(
                                 mflightCarrier.getText().toString(),mflightNum.getText().toString(),
@@ -172,20 +161,32 @@ public class InputFlight extends AppCompatActivity {
             }
         });
 
-
-
-
-        // Setting Text Fields
-        flightNumberTextDisplay = (TextInputLayout) findViewById(R.id.flightNumber);
-        manualTimeDisplay = (TextInputLayout) findViewById(R.id.manualTime);
-        manualFlightAddress = (TextInputLayout) findViewById(R.id.manualFlightAddress);
-
-/*        // Initializing Request Components
-        mRequestQueue = getRequestQueue();*/
-
+        // Initializing Request Components
         mRequestQueue = APIRequestSingleton.getInstance(this.getApplicationContext()).
                 getRequestQueue();
     }
+
+    // Checks if all flight input fields are filled
+    private boolean invalidFlightFields(String flightCarrier, String flightNum, String flightDate, String pickupAddress) {
+        if(flightCarrier.length() == 0 ){
+            Toast.makeText(mContext, "Error: Please input the flight carrier", Toast.LENGTH_LONG).show();
+            return true;
+        }
+        if(flightNum.length() == 0 ){
+            Toast.makeText(mContext, "Error: Please input the flight number", Toast.LENGTH_LONG).show();
+            return true;
+        }
+        if(flightDate.length() == 0 ){
+            Toast.makeText(mContext, "Error: Please choose a date", Toast.LENGTH_LONG).show();
+            return true;
+        }
+        if(pickupAddress.length() == 0 ){
+            Toast.makeText(mContext, "Error: Please choose a pickup address", Toast.LENGTH_LONG).show();
+            return true;
+        }
+        return false;
+    }
+
     // Calling the PlaceAutoComplete activity
     private void callPlaceAutocompleteActivityIntent( AutocompleteFilter filter){
         try {
