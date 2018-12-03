@@ -3,6 +3,7 @@ package com.example.ken.gravitate.Event;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -10,6 +11,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -27,8 +29,6 @@ import com.example.ken.gravitate.Account.LoginActivity;
 import com.example.ken.gravitate.Account.MyProfile;
 import com.example.ken.gravitate.Messaging.MessageFragment;
 import com.example.ken.gravitate.Settings.SettingsActivity;
-import com.example.ken.gravitate.SimpleActivity1;
-import com.example.ken.gravitate.SimpleActivity3;
 import com.example.ken.gravitate.Utils.Card;
 import com.example.ken.gravitate.R;
 import com.example.ken.gravitate.Utils.MyViewHolder;
@@ -76,6 +76,10 @@ public class ScheduledEvents extends AppCompatActivity
     RecyclerView orbitView;
     RecyclerView requestView;
     RecyclerView emptyView;
+
+    // Swipe to refresh
+    SwipeRefreshLayout swipeLayout;
+    private SwipeRefreshLayout swipeContainer;
 
     private Context context;
 
@@ -203,6 +207,26 @@ public class ScheduledEvents extends AppCompatActivity
             }
         });
 
+        // Swipe to refresh
+        swipeContainer = findViewById(R.id.swipeContainer);
+
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new Handler().postDelayed(new Runnable() {
+                    @Override public void run() {
+                        // Stop animation (This will be after 3 seconds)
+                        swipeContainer.setRefreshing(false);
+                    }
+                }, 3000); // Delay in millis
+
+            }
+        });
+        // Adding colors for refresh
+        swipeContainer.setColorSchemeResources(
+                R.color.colorDark,
+                R.color.colorAccent);
+
 
     }
 
@@ -221,21 +245,6 @@ public class ScheduledEvents extends AppCompatActivity
                 replaceFragment(new MessageFragment());
                 break;
         }
-        switch(menuItem.getItemId()){
-            case R.id.nav_simple_activity_1:
-                startActivity(new Intent(ScheduledEvents.this, SimpleActivity1.class));
-                break;
-        }
-        switch(menuItem.getItemId()){
-            case R.id.nav_simple_activity_2:
-                break;
-        }
-        switch(menuItem.getItemId()){
-            case R.id.nav_simple_activity_3:
-                startActivity(new Intent(ScheduledEvents.this, SimpleActivity3.class));
-                break;
-        }
-
         switch(menuItem.getItemId()){
             case R.id.nav_settings:
                 startActivity(new Intent(ScheduledEvents.this, SettingsActivity.class));
@@ -429,7 +438,6 @@ public class ScheduledEvents extends AppCompatActivity
         super.onStop();
         adapter.stopListening();
     }
-
 
 
 
