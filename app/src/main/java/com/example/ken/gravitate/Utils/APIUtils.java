@@ -128,7 +128,13 @@ public class APIUtils {
     public static void postRideRequest(final Context inputFlight, JSONObject Ride_RequestJSON) {
         final String server_url = "https://gravitate-e5d01.appspot.com/rideRequests";
         final String TAG = "Ride_Request";
-        occuredError = true;
+
+        final Intent intent = new Intent(inputFlight, CreatedRequestDetails.class);
+        intent.putExtra("flightTime", APIUtils.getFlightTime(Ride_RequestJSON, false, true));
+        intent.putExtra("earliestTime", APIUtils.getFlightTime(Ride_RequestJSON, true, false));
+        intent.putExtra("latestTime", APIUtils.getFlightTime(Ride_RequestJSON, false, false));
+        intent.putExtra("airportCode", APIUtils.getAirportAbbr(Ride_RequestJSON));
+
         // Formulate the request and handle the response.
         Log.w(TAG, "REQUEST:Attempt to create jsonObjectRequest");
 
@@ -139,7 +145,7 @@ public class APIUtils {
                         // Do something with the response
                         Log.w(TAG, "POST_REQUEST:Create Ride Request success");
                         Toast.makeText(inputFlight,"Success", Toast.LENGTH_SHORT).show();
-                        occuredError = false;
+                        inputFlight.startActivity(intent);
                     }
                 }, new Response.ErrorListener() {
 
@@ -152,15 +158,6 @@ public class APIUtils {
                     }
                 });
           APIRequestSingleton.getInstance(inputFlight).addToRequestQueue(jsonObjectRequest, "postRequest");
-
-          if(occuredError){
-              Intent intent = new Intent(inputFlight, CreatedRequestDetails.class);
-              intent.putExtra("flightTime", APIUtils.getFlightTime(Ride_RequestJSON, false, true));
-              intent.putExtra("earliestTime", APIUtils.getFlightTime(Ride_RequestJSON, true, false));
-              intent.putExtra("latestTime", APIUtils.getFlightTime(Ride_RequestJSON, false, false));
-              intent.putExtra("airportCode", APIUtils.getAirportAbbr(Ride_RequestJSON));
-              inputFlight.startActivity(intent);
-          }
 
 
 
