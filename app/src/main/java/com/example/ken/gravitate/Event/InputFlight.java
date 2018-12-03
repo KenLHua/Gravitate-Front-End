@@ -1,5 +1,5 @@
 package com.example.ken.gravitate.Event;
-import com.example.ken.gravitate.Utils.APIUtils;
+import com.example.ken.gravitate.Utils.APIFlightStatsUtils;
 import com.example.ken.gravitate.Utils.DateAndTimePickerAdapter;
 
 import android.content.Context;
@@ -7,7 +7,6 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
-import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -137,7 +136,7 @@ public class InputFlight extends AppCompatActivity {
                 switch(v.getId()) {
                     case R.id.flightStats_bttn:
                         /*** TEST CODE ****/
-/*                        String request_url = APIUtils.getFSScheduleURL("DL", "89",
+/*                        String request_url = APIFlightStatsUtils.getFSScheduleURL("DL", "89",
                                 "2019", "5", "2");*/
 
                         /****** ACTUAL CODE ****/
@@ -149,13 +148,13 @@ public class InputFlight extends AppCompatActivity {
                                 inputPickup.getText().toString())) return;
 
                         // Request_URL = ("Carrier", "Flight Number", "YEAR", "MONTH", "DATE")
-                        String request_url = APIUtils.getFSScheduleURL(
+                        String request_url = APIFlightStatsUtils.getFSScheduleURL(
                                 mflightCarrier.getText().toString(),mflightNum.getText().toString(),
                                 flightDate.substring(6, flightDate.length())
                                 ,flightDate.substring(0,2)
                                 ,flightDate.substring(3,5));
 
-                        APIUtils.getFlightStats(mContext,request_url, inputPickup.getText().toString(),toEvent,mOutput);
+                        APIFlightStatsUtils.getFlightStats(mContext,request_url, inputPickup.getText().toString(),toEvent,mOutput);
                         break;
                 }
             }

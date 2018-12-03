@@ -12,7 +12,7 @@ import android.widget.Button;
 
 import com.example.ken.gravitate.Event.ScheduledEvents;
 import com.example.ken.gravitate.R;
-import com.example.ken.gravitate.Utils.APIUtils;
+import com.example.ken.gravitate.Utils.APIUserUtils;
 import com.example.ken.gravitate.Utils.JSONUtils;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -141,7 +141,7 @@ public class LoginActivity extends AppCompatActivity {
 
             // Post User JSON Data to Endpoint
             JSONObject userInfo = JSONUtils.retrieveUserInfo(mAuth.getInstance().getCurrentUser());
-            APIUtils.postUser(this, userInfo);
+            APIUserUtils.postUser(this, userInfo);
 
             // updateUI(account);
         } catch (ApiException e) {
