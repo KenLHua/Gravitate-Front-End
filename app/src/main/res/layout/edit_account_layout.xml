@@ -87,7 +87,7 @@
                     android:backgroundTint="@color/colorAccent"
                     android:hint="Phone Number"
                     android:inputType="number"
-                    android:textSize="18dp" />
+                    android:textSize="18sp" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -106,7 +106,7 @@
                     android:backgroundTint="@color/colorAccent"
                     android:hint="Email Address"
                     android:inputType="textEmailAddress"
-                    android:textSize="18dp" />
+                    android:textSize="18sp" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -125,7 +125,7 @@
                     android:backgroundTint="@color/colorAccent"
                     android:hint="Address"
                     android:inputType="textPostalAddress"
-                    android:textSize="18dp" />
+                    android:textSize="18sp" />
             </android.support.design.widget.TextInputLayout>
 
             <TextView
@@ -135,7 +135,7 @@
                 android:layout_below="@id/address_input"
                 android:text="Login Information"
                 android:layout_marginStart="22dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="30dp"
                 android:textColor="@color/colorAccent"
                 tools:layout_editor_absoluteX="16dp"
                 tools:layout_editor_absoluteY="179dp" />
