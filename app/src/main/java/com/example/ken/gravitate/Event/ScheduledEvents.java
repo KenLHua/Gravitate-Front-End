@@ -244,7 +244,6 @@ public class ScheduledEvents extends AppCompatActivity
         switch(menuItem.getItemId()) {
             case R.id.nav_logout:
                 signOut();
-                startActivity(new Intent(ScheduledEvents.this, LoginActivity.class));
                 break;
         }
 
@@ -296,7 +295,8 @@ public class ScheduledEvents extends AppCompatActivity
                 .addOnCompleteListener(this, new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        // ...
+                        FirebaseAuth.getInstance().signOut();
+                        startActivity(new Intent(ScheduledEvents.this, LoginActivity.class));
                     }
                 });
     }
