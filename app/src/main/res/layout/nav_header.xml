@@ -36,8 +36,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/default_profile"
-        android:src="@drawable/default_profile" />
+        app:srcCompat="@drawable/profile2"
+        android:src="@drawable/profile2" />
 
 
 </android.support.constraint.ConstraintLayout>
