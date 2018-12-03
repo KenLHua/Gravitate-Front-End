@@ -105,11 +105,6 @@ public class InputFlight extends AppCompatActivity {
         mflightCarrier = findViewById(R.id.inputFlightCarrier);
         mflightNum = findViewById(R.id.inputFlightNumber);
 
-        //Limit search to addresses in United States only, without the filter the autocomplete will
-        //display results from different countries
-        final AutocompleteFilter filter = new AutocompleteFilter.Builder()
-                .setCountry("us")
-                .build();
 
 
         // Creating input TextFields

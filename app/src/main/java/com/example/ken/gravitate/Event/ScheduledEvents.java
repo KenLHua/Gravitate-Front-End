@@ -100,6 +100,7 @@ public class ScheduledEvents extends AppCompatActivity
         orbitView = findViewById(R.id.orbit_list);
         requestView = findViewById(R.id.pending_list);
         //emptyView = findViewById(R.id.empty_list);
+        //
 
         context = ScheduledEvents.this;
 
@@ -109,7 +110,8 @@ public class ScheduledEvents extends AppCompatActivity
         FirebaseUser user = firebaseAuth.getCurrentUser();
 
         // ACTUAL CODE userDocRef = db.document(user.getUid());
-        String userID = user.getUid();
+        // String userID = user.getUid();
+        String userID = "zkenneth_test";
                 userDocRef = db.collection("users").document(userID);
 
         getUserRideRequestList(userDocRef, orbitView);
@@ -183,10 +185,6 @@ public class ScheduledEvents extends AppCompatActivity
             }
         });
 
-        /*
-         Create the cards and display then
-         */
-        final List<Card> card_list = new ArrayList<>();
 
 
         orbitView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -221,8 +219,6 @@ public class ScheduledEvents extends AppCompatActivity
         swipeContainer.setColorSchemeResources(
                 R.color.colorDark,
                 R.color.colorAccent);
-
-
     }
 
     // Creates a Fragment Instance of respective menu item
@@ -305,59 +301,6 @@ public class ScheduledEvents extends AppCompatActivity
                 });
     }
 
-
-    private void  populateCards(List<DocumentSnapshot> docs){
-
-        mPendingCards = new ArrayList<Card>();
-        mOrbitCards = new ArrayList<Card>();
-        DocumentReference docRef;
-        for(  DocumentSnapshot x : docs) {
-            //AirportRideRequest currRideRequest = new AirportRideRequest(x.get("airportRide")
-                   // , x.get("driverStatus"), x.get("pickupAddress"), x.get("hasCheckedIn"), x);
-            if ((boolean) x.get("pending")) {
-                mDestTime = "pending";
-                docRef = (DocumentReference) x.get("airportLocation");
-                /*
-                    docRefRideRequest.get() -> Task ->
-
-                 */
-                docRef.get()
-                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                if (task.isSuccessful()) {
-                                    locationSnap = task.getResult();
-
-                                    mPendingCards.add(new Card (R.drawable.lax, locationSnap.get("airportCode").toString(), R.drawable.default_profile, "pending"));
-
-
-                                } else {
-                                    Log.d("wrong", "Error getting documents: ", task.getException());
-                                }
-                            }
-                        });
-
-            }
-            else {
-                mDestTime = x.get("flightLocalTime").toString();
-                docRef = (DocumentReference) x.get("airportLocation");
-                 docRef.get()
-                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                if (task.isSuccessful()) {
-                                    locationSnap = task.getResult();
-                                    mOrbitCards.add(new Card (R.drawable.lax, locationSnap.get("airportCode").toString(), R.drawable.default_profile, mDestTime));
-                                } else {
-                                    Log.d("wrong", "Error getting documents: ", task.getException());
-                                }
-                            }
-                        });
-
-            }
-
-        }
-    }
 
     private void getUserRideRequestList(DocumentReference userRef, RecyclerView display) {
         Log.d("GettingID", userRef.getId().toString());
