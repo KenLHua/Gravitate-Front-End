@@ -41,36 +41,39 @@ public class RideEvent extends AppCompatActivity {
         });
         setSupportActionBar(toolbar);
 
+        Boolean stillPending = getIntent().getExtras().getBoolean("stillPending");
+
+
         RecyclerView recyclerView = findViewById(R.id.rider_list);
 
-        Boolean stillPending = getIntent().getExtras().getBoolean("stillPending");
         final List<Rider> rider_list = new ArrayList<Rider>();
-        Rider riderCard = new Rider(R.drawable.default_profile, "Tyler", "test.ucsd.edu");
+        Rider riderCard = new Rider(R.drawable.default_profile, "Kenneth Hua", "example.ucsd.edu");
         rider_list.add(riderCard);
 
         RiderAdapter adapter = new RiderAdapter(this,rider_list);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-/*
+        adapter.stillPending = stillPending.booleanValue();
+
         if(!stillPending.booleanValue()){
             ArrayList<String> profileImages = getIntent().getExtras().getStringArrayList("profileImages");
-            Log.d("profileImagesSize", profileImages.size()+"");
-            int i = 0;
-            for(String url : profileImages){
-
-                ImageView profilePic = adapter.cards.get(i).profile_photo;
-                new DownloadImageTask(profilePic).execute(url);
-                i++;
-
-            }
+            adapter.setProfileImages(profileImages);
+            recyclerView.setAdapter(adapter);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
         }
-*/
+        else{
+            recyclerView.setAdapter(null);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        }
+
+
+
+
         TextView flightTimeDisplay = findViewById(R.id.flightTime);
         String flightTime = getIntent().getStringExtra("flightTime");
         flightTimeDisplay.setText(flightTime);
 
 
     }
+
     private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
         ImageView bmImage;
 

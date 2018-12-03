@@ -8,17 +8,17 @@
     android:layout_marginTop="20dp"
     android:layout_marginLeft="15dp">
 
-    <ImageView
+    <View
         android:id="@+id/profile_back"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
+        android:background="#4527A0"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/cover_image" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/event_page_photo"

@@ -2,6 +2,9 @@ package com.example.ken.gravitate.Event;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -17,6 +20,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -48,6 +52,7 @@ import com.google.firebase.firestore.Query;
 import com.leinardi.android.speeddial.SpeedDialActionItem;
 import com.leinardi.android.speeddial.SpeedDialView;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -342,7 +347,7 @@ public class ScheduledEvents extends AppCompatActivity
                 holder.context = mContext;
                 holder.stillPending = stillPending;
                 holder.background_img.setImageResource(cardBackground);
-                holder.profile_photo.setImageResource(cardProfilePhoto);
+
                 holder.card_dest.setText(destName);
 
                 if(stillPending) {
@@ -350,7 +355,7 @@ public class ScheduledEvents extends AppCompatActivity
                     holder.card_pending.setText("Pending Ride Request");
                 }
                 else {
-
+                    new DownloadImageTask(holder.profile_photo).execute(profileImages.get(0));
                     holder.card_time.setText("Projected Arrival Time : " + model.getDestTime());
                     holder.card_pending.setText("Orbiting");
                     holder.orbitRef = model.getOrbitRef();
@@ -395,6 +400,31 @@ public class ScheduledEvents extends AppCompatActivity
     protected void onStop() {
         super.onStop();
         adapter.stopListening();
+    }
+
+    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+        ImageView bmImage;
+
+        public DownloadImageTask(ImageView bmImage) {
+            this.bmImage = bmImage;
+        }
+
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Bitmap mIcon11 = null;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return mIcon11;
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            bmImage.setImageBitmap(result);
+        }
     }
 
 

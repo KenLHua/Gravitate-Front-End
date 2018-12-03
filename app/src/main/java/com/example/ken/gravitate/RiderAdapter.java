@@ -1,6 +1,9 @@
 package com.example.ken.gravitate;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,6 +17,7 @@ import android.widget.TextView;
 import com.example.ken.gravitate.Models.Rider;
 import com.example.ken.gravitate.R;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +30,8 @@ public class RiderAdapter extends RecyclerView.Adapter<RiderAdapter.myViewHolder
     List<Rider> rider_list;
     public List<myViewHolder> cards = new ArrayList<myViewHolder>();
     int profile;
+    public boolean stillPending;
+    public ArrayList<String> profileImages;
 
     private OnRiderClickListener mlistener;
 
@@ -40,26 +46,34 @@ public class RiderAdapter extends RecyclerView.Adapter<RiderAdapter.myViewHolder
         this.context = context;
         this.rider_list = rider_list;
     }
+    public void setProfileImages(ArrayList<String> profileImages){
+        this.profileImages = profileImages;
+    }
 
     //create each Card
     @NonNull
     @Override
     public myViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        LayoutInflater inflater = LayoutInflater.from(context);
-        View v = inflater.inflate(R.layout.rider, viewGroup, false);
-        myViewHolder tempViewHolder = new myViewHolder(v);
-        cards.add(tempViewHolder);
-        Log.d("cards", cards.size()+"");
+        if(!stillPending) {
+            LayoutInflater inflater = LayoutInflater.from(context);
+            View v = inflater.inflate(R.layout.rider, viewGroup, false);
+            myViewHolder tempViewHolder = new myViewHolder(v);
+            cards.add(tempViewHolder);
+            Log.d("cards", cards.size() + "");
 
-        return tempViewHolder;
+            return tempViewHolder;
+        }
+        return null;
     }
 
     //set the correct images and text for each Card
     @Override
     public void onBindViewHolder(@NonNull myViewHolder holder, int i) {
-        holder.profile_photo.setImageResource(rider_list.get(i).getProfile_photo());
-        holder.fullname.setText(rider_list.get(i).getFullname());
-        holder.email.setText(rider_list.get(i).getEmail());
+        if(!stillPending) {
+            new DownloadImageTask(holder.profile_photo).execute(profileImages.get(0));
+            holder.fullname.setText(rider_list.get(i).getFullname());
+            holder.email.setText(rider_list.get(i).getEmail());
+        }
     }
 
     //get number of cards
@@ -94,6 +108,30 @@ public class RiderAdapter extends RecyclerView.Adapter<RiderAdapter.myViewHolder
                     }
                 }
             });
+        }
+    }
+    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+        ImageView bmImage;
+
+        public DownloadImageTask(ImageView bmImage) {
+            this.bmImage = bmImage;
+        }
+
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Bitmap mIcon11 = null;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return mIcon11;
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            bmImage.setImageBitmap(result);
         }
     }
 
