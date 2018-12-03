@@ -79,8 +79,7 @@ public class LoginActivity extends AppCompatActivity {
 
         // Floating Action Button Setup
         sign_in_bttn = findViewById(R.id.googleBtn);
-        sign_out_bttn = findViewById(R.id.signout_bttn);            // Testing Purposes
-        testSkip = findViewById(R.id.loginSkip);
+
 
         // Gets Google Button Reference in Login_Activity Layout
         sign_in_bttn.setOnClickListener(new View.OnClickListener() {
@@ -95,28 +94,8 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        sign_out_bttn.setOnClickListener( new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switch(v.getId()) {
-                    case R.id.signout_bttn:
-                    signOut();
-                    break;
-                }
-            }
-        });
-        testSkip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switch(v.getId()){
-                    case R.id.loginSkip:
-                        startActivity(new Intent(LoginActivity.this, ScheduledEvents.class));
-                        break;
 
-                }
 
-            }
-        });
 
     }
 
