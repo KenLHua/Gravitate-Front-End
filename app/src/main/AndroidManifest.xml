@@ -23,12 +23,16 @@
         </activity>
 
         // Simple activities for adding new features
-        <activity android:name=".SimpleActivity1"></activity>
-        <activity android:name=".SimpleActivity3"></activity>
 
         <activity android:name=".Account.LoginActivity"></activity>
 
         <activity android:name=".Event.ScheduledEvents"></activity>
+        <activity android:name=".Event.RideEvent"
+            android:parentActivityName=".Event.ScheduledEvents">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Event.ScheduledEvents" />
+        </activity>
         <activity android:name=".Event.CreatedRequestDetails"></activity>
         <activity android:name=".Event.NewEvent"> </activity>
         <activity android:name=".Account.MyProfile"> </activity>

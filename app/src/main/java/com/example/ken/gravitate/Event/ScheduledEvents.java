@@ -17,13 +17,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.example.ken.gravitate.Account.LoginActivity;
 import com.example.ken.gravitate.Account.MyProfile;
@@ -32,7 +30,7 @@ import com.example.ken.gravitate.Settings.SettingsActivity;
 import com.example.ken.gravitate.Utils.Card;
 import com.example.ken.gravitate.R;
 import com.example.ken.gravitate.Utils.MyViewHolder;
-import com.example.ken.gravitate.Models.RideRequest;
+import com.example.ken.gravitate.Models.EventRequestModule;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -47,7 +45,6 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.leinardi.android.speeddial.SpeedDialActionItem;
 import com.leinardi.android.speeddial.SpeedDialView;
 
@@ -81,7 +78,7 @@ public class ScheduledEvents extends AppCompatActivity
     SwipeRefreshLayout swipeLayout;
     private SwipeRefreshLayout swipeContainer;
 
-    private Context context;
+    private Context mContext;
 
     private FirestoreRecyclerAdapter adapter;
     //
@@ -102,7 +99,7 @@ public class ScheduledEvents extends AppCompatActivity
         //emptyView = findViewById(R.id.empty_list);
         //
 
-        context = ScheduledEvents.this;
+        mContext = ScheduledEvents.this;
 
 
         db = FirebaseFirestore.getInstance();
@@ -303,61 +300,84 @@ public class ScheduledEvents extends AppCompatActivity
 
 
     private void getUserRideRequestList(DocumentReference userRef, RecyclerView display) {
-        Log.d("GettingID", userRef.getId().toString());
         Query rideRequestQuery = userRef.collection("eventSchedules").limit(10);
-        // Have to get mPendingCards to be initialized with all the cards here
-        //
-        //
 
-
-        FirestoreRecyclerOptions<RideRequest> options =
+        FirestoreRecyclerOptions<EventRequestModule> options =
                 new FirestoreRecyclerOptions
-                        .Builder<RideRequest>()
-                        .setQuery(rideRequestQuery,RideRequest.class)
+                        .Builder<EventRequestModule>()
+                        .setQuery(rideRequestQuery,EventRequestModule.class)
                         .build();
 
         
 
-        adapter = new FirestoreRecyclerAdapter<RideRequest, MyViewHolder>(options) {
+        adapter = new FirestoreRecyclerAdapter<EventRequestModule, MyViewHolder>(options) {
+
 
 
             @NonNull
             @Override
             public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
                 // Create the card
-                LayoutInflater inflater = LayoutInflater.from(context);
+                LayoutInflater inflater = LayoutInflater.from(mContext);
                 View v = inflater.inflate(R.layout.card, viewGroup, false);
                 MyViewHolder myViewHolder = new MyViewHolder(v);
 
-                myViewHolder.setOnClickListener(new MyViewHolder.ClickListener(){
-
-                    @Override
-                    public void onItemClick(View view, int position) {
-                        Toast.makeText(context, "Item click" + position, Toast.LENGTH_LONG).show();
-                        //Start new activity to show event details
-                    }
-
-                    @Override
-                    public void onItemLongClick(View view, int position) {
-                        Toast.makeText(context, "Item long" + position, Toast.LENGTH_LONG).show();
-                        // Allow user to delete the ride request
-                    }
-                });
 
                 return myViewHolder;
             }
 
             @Override
-            protected void onBindViewHolder(@NonNull MyViewHolder holder, int i, @NonNull RideRequest model) {
+            protected void onBindViewHolder(@NonNull MyViewHolder holder, int i, @NonNull EventRequestModule model) {
                 int cardBackground = R.drawable.lax;
-                String destName = "LAX";
+                final String destName = "LAX";
                 int cardProfilePhoto = R.drawable.default_profile;
-                String flightTime = model.getFlightLocalTime();
-                //
+                final String flightTime = model.getFlightTime();
+                final boolean stillPending = model.isPending();
+                final DocumentReference orbitRef = model.getOrbitRef();
+                List<String> temp = model.getMemberProfilePhotoUrls();
+                final ArrayList<String> profileImages = new ArrayList<String>();
+                for (String eachURL : temp){
+                    profileImages.add(eachURL);
+                }
+                holder.context = mContext;
+                holder.stillPending = stillPending;
                 holder.background_img.setImageResource(cardBackground);
                 holder.profile_photo.setImageResource(cardProfilePhoto);
                 holder.card_dest.setText(destName);
-                holder.card_time.setText(flightTime);
+
+                if(stillPending) {
+                    holder.card_time.setText("Desired Flight Time : " + flightTime);
+                    holder.card_pending.setText("Pending Ride Request");
+                }
+                else {
+
+                    holder.card_time.setText("Projected Arrival Time : " + model.getDestTime());
+                    holder.card_pending.setText("Orbiting");
+                    holder.orbitRef = model.getOrbitRef();
+                    holder.profileImages = profileImages;
+                }
+
+                holder.setOnClickListener(new MyViewHolder.ClickListener(){
+
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        //Start new activity to show event details
+                        Intent intent = new Intent(mContext, RideEvent.class);
+                        intent.putExtra("destName", destName);
+                        intent.putExtra("flightTime", flightTime);
+                        intent.putExtra("stillPending", stillPending);
+                        if(!stillPending) {
+                            intent.putStringArrayListExtra("profileImages", profileImages);
+                            intent.putExtra("orbitRef",  orbitRef.getPath());
+
+                        }
+                        mContext.startActivity(intent);
+                    }
+
+                    @Override
+                    public void onItemLongClick(View view, int position) {
+                    }
+                });
             }
 
         };
