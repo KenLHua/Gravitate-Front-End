@@ -24,7 +24,7 @@ public class CreatedRequestDetails extends AppCompatActivity {
         setSupportActionBar(toolbar);
         String earliestTime = getIntent().getStringExtra("earliestTime");
         String latestTime = getIntent().getStringExtra("latestTime");
-        String airport = getIntent().getStringExtra("airportAbbr");
+        String airport = getIntent().getStringExtra("airportCode");
         String flightTime = getIntent().getStringExtra("flightTime");
 
 

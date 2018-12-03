@@ -2,7 +2,6 @@ package com.example.ken.gravitate.Event;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -22,7 +21,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.example.ken.gravitate.Account.LoginActivity;
 import com.example.ken.gravitate.Account.MyProfile;
@@ -32,9 +30,8 @@ import com.example.ken.gravitate.SimpleActivity1;
 import com.example.ken.gravitate.SimpleActivity3;
 import com.example.ken.gravitate.Utils.Card;
 import com.example.ken.gravitate.R;
-import com.example.ken.gravitate.Utils.CardAdapter;
 import com.example.ken.gravitate.Utils.MyViewHolder;
-import com.example.module.AirportRideRequest;
+import com.example.ken.gravitate.Models.RideRequest;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -53,12 +50,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.leinardi.android.speeddial.SpeedDialActionItem;
 import com.leinardi.android.speeddial.SpeedDialView;
 
-import org.w3c.dom.Document;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ScheduledEvents extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -85,8 +78,7 @@ public class ScheduledEvents extends AppCompatActivity
 
     private Context context;
 
-    private FirestoreRecyclerAdapter pendingCards;
-    private FirestoreRecyclerAdapter orbitCards;
+    private FirestoreRecyclerAdapter adapter;
     //
 
     GoogleSignInClient mGoogleSignInClient;
@@ -104,6 +96,8 @@ public class ScheduledEvents extends AppCompatActivity
         requestView = findViewById(R.id.pending_list);
         //emptyView = findViewById(R.id.empty_list);
 
+        context = ScheduledEvents.this;
+
 
         db = FirebaseFirestore.getInstance();
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
@@ -112,8 +106,10 @@ public class ScheduledEvents extends AppCompatActivity
         // ACTUAL CODE userDocRef = db.document(user.getUid());
         String userID = "zkenneth_test" ;
         userDocRef = db.collection("users").document(userID);
+        getUserRideRequestList(userDocRef, orbitView);
 
 
+        /*
         userDocRef.collection("eventSchedules")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -126,14 +122,14 @@ public class ScheduledEvents extends AppCompatActivity
                                 allDocs = myListOfDocuments;
                                 //Call Async
 
-                                populateCards(allDocs);
+
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
                     }
                 });
+        */
 
-        CardAdapter
         requestView.setLayoutManager(new LinearLayoutManager(ScheduledEvents.this));
         orbitView.setLayoutManager(new LinearLayoutManager(ScheduledEvents.this));
 
@@ -238,17 +234,6 @@ public class ScheduledEvents extends AppCompatActivity
 
 
     }
-    @Override
-    protected void onStart() {
-        super.onStart();
-        adapter.startListening();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        adapter.startListening();
-    }
 
     // Creates a Fragment Instance of respective menu item
     // TODO: Determine whether to use Fragments or Activites
@@ -352,7 +337,8 @@ public class ScheduledEvents extends AppCompatActivity
         mOrbitCards = new ArrayList<Card>();
         DocumentReference docRef;
         for(  DocumentSnapshot x : docs) {
-            AirportRideRequest currRideRequest = new AirportRideRequest();
+            //AirportRideRequest currRideRequest = new AirportRideRequest(x.get("airportRide")
+                   // , x.get("driverStatus"), x.get("pickupAddress"), x.get("hasCheckedIn"), x);
             if ((boolean) x.get("pending")) {
                 mDestTime = "pending";
                 docRef = (DocumentReference) x.get("airportLocation");
@@ -399,43 +385,59 @@ public class ScheduledEvents extends AppCompatActivity
     }
 
     private void getUserRideRequestList(DocumentReference userRef, RecyclerView display) {
-        // CollectionReference rideRequests = userRef.collection()
+        Log.d("GettingID", userRef.getId().toString());
+        Query rideRequestQuery = userRef.collection("eventSchedules").limit(10);
         // Have to get mPendingCards to be initialized with all the cards here
         //
         //
 
 
-        List<Card> cardRideRequests = new ArrayList<Card>();
-        cardRideRequests.add(new Card("LAX", ))
-
-        FirestoreRecyclerOptions<AirportRideRequest> options =
+        FirestoreRecyclerOptions<RideRequest> options =
                 new FirestoreRecyclerOptions
-                        .Builder<AirportRideRequest>()
-                        .setQuery(rideRequests, AirportRideRequest.class)
+                        .Builder<RideRequest>()
+                        .setQuery(rideRequestQuery,RideRequest.class)
                         .build();
 
         
 
-        pendingCards = new FirestoreRecyclerAdapter<AirportRideRequest, MyViewHolder>(options) {
+        adapter = new FirestoreRecyclerAdapter<RideRequest, MyViewHolder>(options) {
             @NonNull
             @Override
             public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+                // Create the card
                 LayoutInflater inflater = LayoutInflater.from(context);
                 View v = inflater.inflate(R.layout.card, viewGroup, false);
                 return new MyViewHolder(v);
             }
 
             @Override
-            protected void onBindViewHolder(@NonNull MyViewHolder holder, int i, @NonNull AirportRideRequest model) {
-                holder.background_img.setImageResource(card.get(i).getBackground());
-                holder.profile_photo.setImageResource(mPendingCards.get(i).getProfilePhoto());
-                holder.card_dest.setText(mPendingCards.get(i).getDestName());
-                holder.card_time.setText(mPendingCards.get(i).getDestTime());
+            protected void onBindViewHolder(@NonNull MyViewHolder holder, int i, @NonNull RideRequest model) {
+                int cardBackground = R.drawable.lax;
+                String destName = "LAX";
+                int cardProfilePhoto = R.drawable.default_profile;
+                String flightTime = model.getFlightLocalTime();
+
+                holder.background_img.setImageResource(cardBackground);
+                holder.profile_photo.setImageResource(cardProfilePhoto);
+                holder.card_dest.setText(destName);
+                holder.card_time.setText(flightTime);
             }
 
         };
-        pendingCards.notifyDataSetChanged();
-        display.setAdapter(pendingCards);
+        adapter.notifyDataSetChanged();
+        display.setAdapter(adapter);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        adapter.startListening();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        adapter.stopListening();
     }
 
 
