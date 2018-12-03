@@ -33,7 +33,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Event.ScheduledEvents" />
         </activity>
-        <activity android:name=".Event.InputFlight"></activity>
+        <activity android:name=".Event.InputFlight"
+            android:parentActivityName=".Event.ScheduledEvents">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Event.ScheduledEvents" /></activity>
         <activity android:name=".Event.RideEvent"
             android:parentActivityName=".Event.ScheduledEvents">
             <meta-data

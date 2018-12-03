@@ -82,12 +82,7 @@ public class InputFlight extends AppCompatActivity {
         toolbar.setTitle(R.string.input_flight_toolbar);
         toolbar.setNavigationIcon(R.drawable.system_icon_back);
 
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onSupportNavigateUp();
-            }
-        });
+
         setSupportActionBar(toolbar);
 
         //Limit search to addresses in United States only, without the filter the autocomplete will

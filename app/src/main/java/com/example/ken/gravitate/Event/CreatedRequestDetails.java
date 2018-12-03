@@ -5,6 +5,7 @@ import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import com.example.ken.gravitate.R;
@@ -21,6 +22,12 @@ public class CreatedRequestDetails extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Ride Request Details");
         toolbar.setNavigationIcon(R.drawable.system_icon_back);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onSupportNavigateUp();
+            }
+        });
         setSupportActionBar(toolbar);
         String earliestTime = getIntent().getStringExtra("earliestTime");
         String latestTime = getIntent().getStringExtra("latestTime");

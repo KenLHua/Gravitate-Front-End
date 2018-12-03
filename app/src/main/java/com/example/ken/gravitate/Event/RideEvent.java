@@ -47,7 +47,7 @@ public class RideEvent extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.rider_list);
 
         final List<Rider> rider_list = new ArrayList<Rider>();
-        Rider riderCard = new Rider(R.drawable.default_profile, "Kenneth Hua", "example.ucsd.edu");
+        Rider riderCard = new Rider(R.drawable.default_profile, "Bobby Hill", "bobbyHill@ucsd.edu");
         rider_list.add(riderCard);
 
         RiderAdapter adapter = new RiderAdapter(this,rider_list);

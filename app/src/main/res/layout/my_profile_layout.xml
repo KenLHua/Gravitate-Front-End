@@ -79,7 +79,7 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/relativeLayout2"
-        app:srcCompat="@drawable/profile2"
+        app:srcCompat="@drawable/ken_pic"
         tools:ignore="MissingConstraints" />
 
     <TextView
@@ -108,7 +108,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="44dp"
         android:gravity="center"
-        android:text="@string/user_name"
+        android:text="Kenneth Hua"
         android:textColor="@color/colorWhite"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="@+id/toolbar"
@@ -152,7 +152,7 @@
                 android:id="@+id/email"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/email"
+                android:text="kensGravitate@ucsd.edu"
                 android:textColor="@color/colorTextSummary"
                 android:textSize="20sp" />
         </LinearLayout>

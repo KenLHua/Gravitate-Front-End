@@ -61,13 +61,6 @@
                         android:layout_height="wrap_content"
                          />
 
-                    <View
-                        android:id="@+id/divider"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_below="@+id/orbit_list"
-                        android:layout_marginTop = "16dp"
-                        android:background="@color/colorAccent" />
 
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/pending_list"
