@@ -80,6 +80,14 @@ public class InputFlight extends AppCompatActivity {
         setContentView(R.layout.input_flight_information);
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.input_flight_toolbar);
+        toolbar.setNavigationIcon(R.drawable.system_icon_back);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onSupportNavigateUp();
+            }
+        });
         setSupportActionBar(toolbar);
 
         //Limit search to addresses in United States only, without the filter the autocomplete will
@@ -327,5 +335,12 @@ public class InputFlight extends AppCompatActivity {
                 APIRequestSingleton.getInstance(this).addToRequestQueue(jsonObjectRequest, "postRequest");
 
 
+    }
+
+    // Helper function for back button
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 }
