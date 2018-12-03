@@ -79,7 +79,7 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/relativeLayout2"
-        app:srcCompat="@drawable/default_profile"
+        app:srcCompat="@drawable/profile2"
         tools:ignore="MissingConstraints" />
 
     <TextView
