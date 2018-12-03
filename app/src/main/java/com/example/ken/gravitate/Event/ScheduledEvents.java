@@ -232,11 +232,6 @@ public class ScheduledEvents extends AppCompatActivity
                 break;
         }
         switch(menuItem.getItemId()){
-            case R.id.nav_messages:
-                replaceFragment(new MessageFragment());
-                break;
-        }
-        switch(menuItem.getItemId()){
             case R.id.nav_settings:
                 startActivity(new Intent(ScheduledEvents.this, SettingsActivity.class));
                 break;
