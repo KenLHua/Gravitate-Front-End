@@ -32,7 +32,7 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/imageView10"
+                android:id="@+id/profile_pic"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_centerHorizontal="true"
@@ -43,7 +43,7 @@
                 android:id="@+id/ContactInfoText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/imageView10"
+                android:layout_below="@id/profile_pic"
                 android:layout_marginStart="22dp"
                 android:layout_marginTop="17dp"
                 android:text="Contact Information"
@@ -87,7 +87,7 @@
                     android:backgroundTint="@color/colorAccent"
                     android:hint="Phone Number"
                     android:inputType="number"
-                    android:textSize="18dp" />
+                    android:textSize="18sp" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -106,7 +106,7 @@
                     android:backgroundTint="@color/colorAccent"
                     android:hint="Email Address"
                     android:inputType="textEmailAddress"
-                    android:textSize="18dp" />
+                    android:textSize="18sp" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -125,7 +125,7 @@
                     android:backgroundTint="@color/colorAccent"
                     android:hint="Address"
                     android:inputType="textPostalAddress"
-                    android:textSize="18dp" />
+                    android:textSize="18sp" />
             </android.support.design.widget.TextInputLayout>
 
             <TextView
@@ -135,7 +135,7 @@
                 android:layout_below="@id/address_input"
                 android:text="Login Information"
                 android:layout_marginStart="22dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="30dp"
                 android:textColor="@color/colorAccent"
                 tools:layout_editor_absoluteX="16dp"
                 tools:layout_editor_absoluteY="179dp" />
