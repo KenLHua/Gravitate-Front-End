@@ -4,7 +4,6 @@ package com.example.ken.gravitate.Models;
 import com.google.firebase.firestore.DocumentReference;
 
 import java.util.HashMap;
-import java.util.Map;
 
 public class RideRequest {
 
@@ -14,7 +13,7 @@ public class RideRequest {
     private boolean mHasCheckedIn;
     private DocumentReference mEventRef; // TODO change String to DocumentReference
     private DocumentReference mOrbitRef;
-    private Map<String, Object> mTarget;
+    private HashMap<String, Object> mTarget;
     private Object mPricing;
     private String mFlightLocalTime;
     private String mFlightNumber;
@@ -32,7 +31,7 @@ public class RideRequest {
                               boolean hasCheckedIn,
                        DocumentReference eventRef,
                        DocumentReference orbitRef,
-                              Map<String, Object> target,
+                              HashMap<String, Object> target,
                               Object pricing,
                               String flightLocalTime,
                               String flightNumber,
@@ -104,11 +103,11 @@ public class RideRequest {
         this.mOrbitRef = mOrbitRef;
     }
 
-    public Map<String, Object> getTarget() {
+    public HashMap<String, Object> getTarget() {
         return mTarget;
     }
 
-    public void setTarget(Map<String, Object> mTarget) {
+    public void setTarget(HashMap<String, Object> mTarget) {
         this.mTarget = mTarget;
     }
 
@@ -152,7 +151,7 @@ public class RideRequest {
         this.mBaggages = mBaggages;
     }
 
-    public Map<String, Object> getDisabilities() {
+    public HashMap<String, Object> getDisabilities() {
         return mDisabilities;
     }
 

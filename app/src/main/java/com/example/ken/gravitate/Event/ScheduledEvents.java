@@ -21,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.ken.gravitate.Account.LoginActivity;
 import com.example.ken.gravitate.Account.MyProfile;
@@ -104,31 +105,10 @@ public class ScheduledEvents extends AppCompatActivity
         FirebaseUser user = firebaseAuth.getCurrentUser();
 
         // ACTUAL CODE userDocRef = db.document(user.getUid());
-        String userID = "zkenneth_test" ;
-        userDocRef = db.collection("users").document(userID);
+        String userID = user.getUid();
+                userDocRef = db.collection("users").document(userID);
+
         getUserRideRequestList(userDocRef, orbitView);
-
-
-        /*
-        userDocRef.collection("eventSchedules")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        boolean finish = false;
-                        if (task.isSuccessful()) {
-                                List<DocumentSnapshot> myListOfDocuments = task.getResult().getDocuments();
-                                // Getting all the document references
-                                allDocs = myListOfDocuments;
-                                //Call Async
-
-
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
-                        }
-                    }
-                });
-        */
 
         requestView.setLayoutManager(new LinearLayoutManager(ScheduledEvents.this));
         orbitView.setLayoutManager(new LinearLayoutManager(ScheduledEvents.this));
@@ -209,15 +189,6 @@ public class ScheduledEvents extends AppCompatActivity
          */
         final List<Card> card_list = new ArrayList<>();
 
-        /*
-        adapter.setOnCardClickListener(new CardAdapter.OnCardClickListener() {
-            @Override
-            public void onCardClick(int position) {
-                card_list.get(position).setDestName("Clicked");
-                adapter.notifyItemChanged(position);
-            }
-        });
-        */
 
         orbitView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -401,13 +372,32 @@ public class ScheduledEvents extends AppCompatActivity
         
 
         adapter = new FirestoreRecyclerAdapter<RideRequest, MyViewHolder>(options) {
+
+
             @NonNull
             @Override
             public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
                 // Create the card
                 LayoutInflater inflater = LayoutInflater.from(context);
                 View v = inflater.inflate(R.layout.card, viewGroup, false);
-                return new MyViewHolder(v);
+                MyViewHolder myViewHolder = new MyViewHolder(v);
+
+                myViewHolder.setOnClickListener(new MyViewHolder.ClickListener(){
+
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        Toast.makeText(context, "Item click" + position, Toast.LENGTH_LONG).show();
+                        //Start new activity to show event details
+                    }
+
+                    @Override
+                    public void onItemLongClick(View view, int position) {
+                        Toast.makeText(context, "Item long" + position, Toast.LENGTH_LONG).show();
+                        // Allow user to delete the ride request
+                    }
+                });
+
+                return myViewHolder;
             }
 
             @Override
@@ -416,7 +406,7 @@ public class ScheduledEvents extends AppCompatActivity
                 String destName = "LAX";
                 int cardProfilePhoto = R.drawable.default_profile;
                 String flightTime = model.getFlightLocalTime();
-
+                //
                 holder.background_img.setImageResource(cardBackground);
                 holder.profile_photo.setImageResource(cardProfilePhoto);
                 holder.card_dest.setText(destName);

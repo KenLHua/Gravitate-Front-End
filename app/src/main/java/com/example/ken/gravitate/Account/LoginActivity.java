@@ -139,9 +139,9 @@ public class LoginActivity extends AppCompatActivity {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
             firebaseAuthWithGoogle(account);
 
-            // Post User JSON Data to Endpoint
+/*            // Post User JSON Data to Endpoint
             JSONObject userInfo = JSONUtils.retrieveUserInfo(mAuth.getInstance().getCurrentUser());
-            APIUtils.postUser(this, userInfo);
+            APIUtils.postUser(this, userInfo);*/
 
             // updateUI(account);
         } catch (ApiException e) {

@@ -14,25 +14,39 @@ public class MyViewHolder extends  RecyclerView.ViewHolder {
     public ImageView background_img;
     public CircleImageView profile_photo;
     public TextView card_dest, card_time;
-    private CardAdapter.OnCardClickListener mlistener;
+    private MyViewHolder.ClickListener mClickListener;
 
     public MyViewHolder(View itemView) {
         super(itemView);
         view = itemView;
         profile_photo = itemView.findViewById(R.id.profile_image);
-            background_img = itemView.findViewById(R.id.card_back);
-            card_dest = itemView.findViewById(R.id.card_dest);
-            card_time = itemView.findViewById(R.id.card_date);
+        background_img = itemView.findViewById(R.id.card_back);
+        card_dest = itemView.findViewById(R.id.card_dest);
+        card_time = itemView.findViewById(R.id.card_date);
+
         itemView.setOnClickListener(new View.OnClickListener(){
+
             @Override
-            public void onClick(View v){
-                if(mlistener != null){
-                    int position = getAdapterPosition();
-                    if(position != RecyclerView.NO_POSITION){
-                        mlistener.onCardClick(position);
-                    }
-                }
+            public void onClick(View v) {
+                mClickListener.onItemLongClick(v,getAdapterPosition());
             }
         });
+        itemView.setOnLongClickListener(new View.OnLongClickListener(){
+            @Override
+            public boolean onLongClick(View v) {
+                mClickListener.onItemLongClick(v, getAdapterPosition());
+                return true;
+            }
+        });
+
+    }
+
+
+    public interface ClickListener {
+        public void onItemClick(View view, int position);
+        public void onItemLongClick(View view, int position);
+    }
+    public void setOnClickListener(MyViewHolder.ClickListener clickListener){
+        mClickListener = clickListener;
     }
 }
