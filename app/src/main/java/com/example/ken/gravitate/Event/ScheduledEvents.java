@@ -119,19 +119,23 @@ public class ScheduledEvents extends AppCompatActivity
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        boolean finish = false;
                         if (task.isSuccessful()) {
                                 List<DocumentSnapshot> myListOfDocuments = task.getResult().getDocuments();
                                 // Getting all the document references
                                 allDocs = myListOfDocuments;
                                 //Call Async
-                                populateCards(allDocs);
 
+                                populateCards(allDocs);
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
                     }
                 });
 
+        CardAdapter
+        requestView.setLayoutManager(new LinearLayoutManager(ScheduledEvents.this));
+        orbitView.setLayoutManager(new LinearLayoutManager(ScheduledEvents.this));
 
 
 
@@ -233,6 +237,17 @@ public class ScheduledEvents extends AppCompatActivity
         });
 
 
+    }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        adapter.startListening();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        adapter.startListening();
     }
 
     // Creates a Fragment Instance of respective menu item
@@ -337,18 +352,24 @@ public class ScheduledEvents extends AppCompatActivity
         mOrbitCards = new ArrayList<Card>();
         DocumentReference docRef;
         for(  DocumentSnapshot x : docs) {
+            AirportRideRequest currRideRequest = new AirportRideRequest();
             if ((boolean) x.get("pending")) {
                 mDestTime = "pending";
                 docRef = (DocumentReference) x.get("airportLocation");
+                /*
+                    docRefRideRequest.get() -> Task ->
+
+                 */
                 docRef.get()
                         .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                 if (task.isSuccessful()) {
                                     locationSnap = task.getResult();
+
                                     mPendingCards.add(new Card (R.drawable.lax, locationSnap.get("airportCode").toString(), R.drawable.default_profile, "pending"));
-                                    requestView.setAdapter(new CardAdapter(ScheduledEvents.this, mPendingCards ));
-                                    requestView.setLayoutManager(new LinearLayoutManager(ScheduledEvents.this));
+
+
                                 } else {
                                     Log.d("wrong", "Error getting documents: ", task.getException());
                                 }
@@ -366,8 +387,6 @@ public class ScheduledEvents extends AppCompatActivity
                                 if (task.isSuccessful()) {
                                     locationSnap = task.getResult();
                                     mOrbitCards.add(new Card (R.drawable.lax, locationSnap.get("airportCode").toString(), R.drawable.default_profile, mDestTime));
-                                    orbitView.setAdapter(new CardAdapter(ScheduledEvents.this, mOrbitCards));
-                                    orbitView.setLayoutManager(new LinearLayoutManager(ScheduledEvents.this));
                                 } else {
                                     Log.d("wrong", "Error getting documents: ", task.getException());
                                 }
@@ -377,21 +396,17 @@ public class ScheduledEvents extends AppCompatActivity
             }
 
         }
-
-
-
-
-    }
-    private void init(){
-
     }
 
-    private void getUserRideRequestList(DocumentReference userRef) {
-        Query rideRequests = userRef.collection("eventSchedules").orderBy("pending").limit(10);
+    private void getUserRideRequestList(DocumentReference userRef, RecyclerView display) {
+        // CollectionReference rideRequests = userRef.collection()
         // Have to get mPendingCards to be initialized with all the cards here
         //
         //
-        mPendingCards = new ArrayList<Card>();
+
+
+        List<Card> cardRideRequests = new ArrayList<Card>();
+        cardRideRequests.add(new Card("LAX", ))
 
         FirestoreRecyclerOptions<AirportRideRequest> options =
                 new FirestoreRecyclerOptions
@@ -412,17 +427,17 @@ public class ScheduledEvents extends AppCompatActivity
 
             @Override
             protected void onBindViewHolder(@NonNull MyViewHolder holder, int i, @NonNull AirportRideRequest model) {
-                /* mPendingCards is not passed
-                holder.background_img.setImageResource(mPendingCards.get(i).getBackground());
+                holder.background_img.setImageResource(card.get(i).getBackground());
                 holder.profile_photo.setImageResource(mPendingCards.get(i).getProfilePhoto());
                 holder.card_dest.setText(mPendingCards.get(i).getDestName());
                 holder.card_time.setText(mPendingCards.get(i).getDestTime());
-                */
             }
+
         };
         pendingCards.notifyDataSetChanged();
-
+        display.setAdapter(pendingCards);
     }
+
 
 
 

@@ -10,7 +10,7 @@ import com.example.ken.gravitate.R;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MyViewHolder extends  RecyclerView.ViewHolder {
-
+    private View view;
     public ImageView background_img;
     public CircleImageView profile_photo;
     public TextView card_dest, card_time;
@@ -18,10 +18,11 @@ public class MyViewHolder extends  RecyclerView.ViewHolder {
 
     public MyViewHolder(View itemView) {
         super(itemView);
+        view = itemView;
         profile_photo = itemView.findViewById(R.id.profile_image);
-        background_img = itemView.findViewById(R.id.card_back);
-        card_dest = itemView.findViewById(R.id.card_dest);
-        card_time = itemView.findViewById(R.id.card_date);
+            background_img = itemView.findViewById(R.id.card_back);
+            card_dest = itemView.findViewById(R.id.card_dest);
+            card_time = itemView.findViewById(R.id.card_date);
         itemView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
