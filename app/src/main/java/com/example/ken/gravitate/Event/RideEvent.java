@@ -1,5 +1,8 @@
 package com.example.ken.gravitate.Event;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
@@ -10,12 +13,14 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.ken.gravitate.Models.Rider;
 import com.example.ken.gravitate.R;
 import com.example.ken.gravitate.RiderAdapter;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,18 +40,60 @@ public class RideEvent extends AppCompatActivity {
             }
         });
         setSupportActionBar(toolbar);
-        RecyclerView recyclerView = findViewById(R.id.rider_list);
-        final List<Rider> rider_list = new ArrayList<Rider>();
-        rider_list.add(new Rider(R.drawable.default_profile, "Tyler", "test.ucsd.edu"));
-        RiderAdapter adapter = new RiderAdapter(this,rider_list);
 
+        RecyclerView recyclerView = findViewById(R.id.rider_list);
+
+        Boolean stillPending = getIntent().getExtras().getBoolean("stillPending");
+        final List<Rider> rider_list = new ArrayList<Rider>();
+        Rider riderCard = new Rider(R.drawable.default_profile, "Tyler", "test.ucsd.edu");
+        rider_list.add(riderCard);
+
+        RiderAdapter adapter = new RiderAdapter(this,rider_list);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+/*
+        if(!stillPending.booleanValue()){
+            ArrayList<String> profileImages = getIntent().getExtras().getStringArrayList("profileImages");
+            Log.d("profileImagesSize", profileImages.size()+"");
+            int i = 0;
+            for(String url : profileImages){
+
+                ImageView profilePic = adapter.cards.get(i).profile_photo;
+                new DownloadImageTask(profilePic).execute(url);
+                i++;
+
+            }
+        }
+*/
         TextView flightTimeDisplay = findViewById(R.id.flightTime);
         String flightTime = getIntent().getStringExtra("flightTime");
         flightTimeDisplay.setText(flightTime);
 
 
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
+    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+        ImageView bmImage;
+
+        public DownloadImageTask(ImageView bmImage) {
+            this.bmImage = bmImage;
+        }
+
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Bitmap mIcon11 = null;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return mIcon11;
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            bmImage.setImageBitmap(result);
+        }
     }
 
 

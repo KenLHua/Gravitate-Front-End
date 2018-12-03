@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.example.ken.gravitate.Models.Rider;
 import com.example.ken.gravitate.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -23,6 +24,8 @@ public class RiderAdapter extends RecyclerView.Adapter<RiderAdapter.myViewHolder
 
     Context context;
     List<Rider> rider_list;
+    public List<myViewHolder> cards = new ArrayList<myViewHolder>();
+    int profile;
 
     private OnRiderClickListener mlistener;
 
@@ -44,7 +47,11 @@ public class RiderAdapter extends RecyclerView.Adapter<RiderAdapter.myViewHolder
     public myViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View v = inflater.inflate(R.layout.rider, viewGroup, false);
-        return new myViewHolder(v);
+        myViewHolder tempViewHolder = new myViewHolder(v);
+        cards.add(tempViewHolder);
+        Log.d("cards", cards.size()+"");
+
+        return tempViewHolder;
     }
 
     //set the correct images and text for each Card
@@ -65,7 +72,7 @@ public class RiderAdapter extends RecyclerView.Adapter<RiderAdapter.myViewHolder
     //The class that gets the reference to each individual element of the cards
     public class myViewHolder extends  RecyclerView.ViewHolder {
 
-        CircleImageView profile_photo;
+        public CircleImageView profile_photo;
         TextView fullname, email;
 
         public myViewHolder(View itemView) {
