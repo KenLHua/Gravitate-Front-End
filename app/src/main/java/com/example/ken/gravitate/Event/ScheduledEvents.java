@@ -3,6 +3,7 @@ package com.example.ken.gravitate.Event;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -10,6 +11,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -75,6 +77,10 @@ public class ScheduledEvents extends AppCompatActivity
     RecyclerView orbitView;
     RecyclerView requestView;
     RecyclerView emptyView;
+
+    // Swipe to refresh
+    SwipeRefreshLayout swipeLayout;
+    private SwipeRefreshLayout swipeContainer;
 
     private Context context;
 
@@ -231,6 +237,26 @@ public class ScheduledEvents extends AppCompatActivity
                 super.onScrolled(orbitView, dx, dy);
             }
         });
+
+        // Swipe to refresh
+        swipeContainer = findViewById(R.id.swipeContainer);
+
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new Handler().postDelayed(new Runnable() {
+                    @Override public void run() {
+                        // Stop animation (This will be after 3 seconds)
+                        swipeContainer.setRefreshing(false);
+                    }
+                }, 3000); // Delay in millis
+
+            }
+        });
+        // Adding colors for refresh
+        swipeContainer.setColorSchemeResources(
+                R.color.colorDark,
+                R.color.colorAccent);
 
 
     }
@@ -439,7 +465,6 @@ public class ScheduledEvents extends AppCompatActivity
         super.onStop();
         adapter.stopListening();
     }
-
 
 
 
