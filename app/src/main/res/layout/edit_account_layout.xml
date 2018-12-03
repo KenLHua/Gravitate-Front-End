@@ -32,7 +32,7 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/imageView10"
+                android:id="@+id/profile_pic"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_centerHorizontal="true"
@@ -43,7 +43,7 @@
                 android:id="@+id/ContactInfoText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/imageView10"
+                android:layout_below="@id/profile_pic"
                 android:layout_marginStart="22dp"
                 android:layout_marginTop="17dp"
                 android:text="Contact Information"

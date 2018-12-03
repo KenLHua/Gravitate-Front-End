@@ -1,6 +1,11 @@
 package com.example.ken.gravitate.Event;
+import com.example.ken.gravitate.Utils.APIUtils;
 import com.example.ken.gravitate.Utils.DateAndTimePickerAdapter;
 
+<<<<<<< HEAD
+=======
+import android.content.Context;
+>>>>>>> d1885be07f8c1b0b4ef26e0b3f443d93440d0056
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,10 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.ImageButton;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,7 +30,10 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.example.ken.gravitate.Utils.APIRequestSingleton;
 import com.example.ken.gravitate.R;
+<<<<<<< HEAD
 import com.example.ken.gravitate.Utils.JSONUtils;
+=======
+>>>>>>> d1885be07f8c1b0b4ef26e0b3f443d93440d0056
 
 //Necessary libraries for Address Autocomplete functionality
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -45,13 +50,10 @@ public class InputFlight extends AppCompatActivity {
     // Autrocomplete Request Code
     int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
 
-    // Radio Group Filters
-    private RadioGroup inputGroup;
-    private RadioButton flightRadio;
-    private RadioButton manualRadio;
 
     private Button mFlightStats_Bttn;
 
+<<<<<<< HEAD
     private TextInputLayout flightNumberTextDisplay;
     private TextInputLayout manualTimeDisplay;
     private TextInputLayout manualFlightAddress;
@@ -60,12 +62,21 @@ public class InputFlight extends AppCompatActivity {
     private TextInputEditText mflightYear;
     private TextInputEditText mflightMonth;
     private TextInputEditText mflightDay;
+=======
+>>>>>>> d1885be07f8c1b0b4ef26e0b3f443d93440d0056
     private TextInputEditText mPickUpAddress;
     private boolean toEvent = true;
     private RequestQueue mRequestQueue;
+    private TextView mflightCarrier;
+    private TextView mflightNum;
+    private TextView inputDepartureDate;
 
     //The pickupAddress text
     private TextView inputPickup;
+<<<<<<< HEAD
+=======
+    private Context mContext;
+>>>>>>> d1885be07f8c1b0b4ef26e0b3f443d93440d0056
 
     private Calendar cal;
 
@@ -90,6 +101,7 @@ public class InputFlight extends AppCompatActivity {
         });
         setSupportActionBar(toolbar);
 
+<<<<<<< HEAD
         //Limit search to addresses in United States only, without the filter the autocomplete will
         //display results from different countries
         final AutocompleteFilter filter = new AutocompleteFilter.Builder()
@@ -113,17 +125,37 @@ public class InputFlight extends AppCompatActivity {
                 }
             }
         });
+=======
+
+
+        mContext = this;
+        mOutput = findViewById(R.id.outputText);
+>>>>>>> d1885be07f8c1b0b4ef26e0b3f443d93440d0056
 
         // Creating input TextFields
-        inputPickup = findViewById(R.id.inputPickup);
         mflightCarrier = findViewById(R.id.inputFlightCarrier);
         mflightNum = findViewById(R.id.inputFlightNumber);
+<<<<<<< HEAD
         /* TODO: Moving Y/M/D into a single TextView
         mflightYear = findViewById(R.id.inputFlightYear);
         mflightMonth = findViewById(R.id.inputFlightMonth);
         mflightDay = findViewById(R.id.inputFlightDay);
         */
         mPickUpAddress = findViewById(R.id.inputFlightAddress);
+=======
+
+        //Limit search to addresses in United States only, without the filter the autocomplete will
+        //display results from different countries
+        final AutocompleteFilter filter = new AutocompleteFilter.Builder()
+                .setCountry("us")
+                .build();
+
+
+        // Creating input TextFields
+        inputPickup = findViewById(R.id.inputPickup);
+        mflightCarrier = findViewById(R.id.inputFlightCarrier);
+        mflightNum = findViewById(R.id.inputFlightNumber);
+>>>>>>> d1885be07f8c1b0b4ef26e0b3f443d93440d0056
 
         // Clears the pickup Text Box using the X
         final ImageButton pickupClear = findViewById(R.id.clear_pickup_button);
@@ -143,14 +175,13 @@ public class InputFlight extends AppCompatActivity {
         int year, month, day, hour, min;
         cal = Calendar.getInstance();
 
-        TextView inputDepartureTime = findViewById(R.id.inputDepartureTime);
-        TextView inputArrivalTime = findViewById(R.id.inputArrivalTime);
-        // Set a date and time picker to update inputDepartureTime
-        // Once inputDepartureTime is updated, also update inputArrivalTime with a time 4 hours before
-        final DateAndTimePickerAdapter datePicker = new DateAndTimePickerAdapter(cal,inputDepartureTime
-                , inputArrivalTime, -4, InputFlight.this);
+        inputDepartureDate = findViewById(R.id.inputDepartureTime);
+        // Set a date and time picker to update inputDepartureDate
+        // Once inputDepartureDate is updated, also update earlyArrivalTime with a time 4 hours before
+        final DateAndTimePickerAdapter datePicker = new DateAndTimePickerAdapter(cal,inputDepartureDate,
+                InputFlight.this, false);
 
-        inputDepartureTime.setOnClickListener(new View.OnClickListener() {
+        inputDepartureDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Create the datePicker window
@@ -169,7 +200,7 @@ public class InputFlight extends AppCompatActivity {
 
         // Setting Flightstats Bttn
         mFlightStats_Bttn = findViewById(R.id.flightStats_bttn);
-        /*
+
         mFlightStats_Bttn.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -179,34 +210,57 @@ public class InputFlight extends AppCompatActivity {
 /*                        String request_url = APIUtils.getFSScheduleURL("DL", "89",
                                 "2019", "5", "2");*/
 
-                        /****** ACTUAL CODE ****/    /*
-                        String request_url = APIUtils.getFSScheduleURL(
-                        // TODO: Moving Y/M/D into a single TextView
-                                mflightCarrier.getText().toString(),mflightNum.getText().toString(),
-                                mflightYear.getText().toString(),mflightMonth.getText().toString(),
-                                mflightDay.getText().toString());
+                        /****** ACTUAL CODE ****/
+                        String flightDate = inputDepartureDate.getText().toString();
+                        // Checking if all necessary inputs are given, if not return and give a error
+                        if (invalidFlightFields(mflightCarrier.getText().toString(),
+                                mflightNum.getText().toString(),
+                                flightDate,
+                                inputPickup.getText().toString())) return;
 
+                        // Request_URL = ("Carrier", "Flight Number", "YEAR", "MONTH", "DATE")
+                        String request_url = APIUtils.getFSScheduleURL(
+                                mflightCarrier.getText().toString(),mflightNum.getText().toString(),
+                                flightDate.substring(6, flightDate.length())
+                                ,flightDate.substring(0,2)
+                                ,flightDate.substring(3,5));
+
+<<<<<<< HEAD
 
                         getFlightStats(request_url);
+=======
+                        APIUtils.getFlightStats(mContext,request_url, inputPickup.getText().toString(),toEvent,mOutput);
+>>>>>>> d1885be07f8c1b0b4ef26e0b3f443d93440d0056
                         break;
                 }
             }
         });
-        */
 
-
-        // Setting Text Fields
-        flightNumberTextDisplay = (TextInputLayout) findViewById(R.id.flightNumber);
-        manualTimeDisplay = (TextInputLayout) findViewById(R.id.manualTime);
-        manualFlightAddress = (TextInputLayout) findViewById(R.id.manualFlightAddress);
-
-/*        // Initializing Request Components
-        mRequestQueue = getRequestQueue();*/
-
+        // Initializing Request Components
         mRequestQueue = APIRequestSingleton.getInstance(this.getApplicationContext()).
                 getRequestQueue();
     }
-// **************** END OF onCreate **************** //
+
+    // Checks if all flight input fields are filled
+    private boolean invalidFlightFields(String flightCarrier, String flightNum, String flightDate, String pickupAddress) {
+        if(flightCarrier.length() == 0 ){
+            Toast.makeText(mContext, "Error: Please input the flight carrier", Toast.LENGTH_LONG).show();
+            return true;
+        }
+        if(flightNum.length() == 0 ){
+            Toast.makeText(mContext, "Error: Please input the flight number", Toast.LENGTH_LONG).show();
+            return true;
+        }
+        if(flightDate.length() == 0 ){
+            Toast.makeText(mContext, "Error: Please choose a date", Toast.LENGTH_LONG).show();
+            return true;
+        }
+        if(pickupAddress.length() == 0 ){
+            Toast.makeText(mContext, "Error: Please choose a pickup address", Toast.LENGTH_LONG).show();
+            return true;
+        }
+        return false;
+    }
 
     // Calling the PlaceAutoComplete activity
     private void callPlaceAutocompleteActivityIntent( AutocompleteFilter filter){
@@ -244,28 +298,12 @@ public class InputFlight extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.actionbar_menu, menu);
+        getMenuInflater().inflate(R.menu.inputflight_menu, menu);
         return true;
     }
 
-    // TODO: Give behavior to checkmark press
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            // The CheckMark in this case
-            case R.id.send_request_checkmark:
-                //  TODO : Double check that all text boxes are filled before sending the request
-                return true;
 
-            default:
-                // If we got here, the user's action was not recognized.
-                // Invoke the superclass to handle it.
-                return super.onOptionsItemSelected(item);
-
-        }
-    }
-
-
+<<<<<<< HEAD
     // Helper method to make hide more readable
     // TODO: Add all valid textdisplays
     public void hideManualInput() {
@@ -336,11 +374,30 @@ public class InputFlight extends AppCompatActivity {
 
 
     }
+=======
+>>>>>>> d1885be07f8c1b0b4ef26e0b3f443d93440d0056
 
     // Helper function for back button
     @Override
+<<<<<<< HEAD
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
+=======
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // The CheckMark in this case
+            case R.id.send_request_checkmark:
+                //  TODO : Double check that all text boxes are filled before sending the request
+                return true;
+
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+
+        }
+>>>>>>> d1885be07f8c1b0b4ef26e0b3f443d93440d0056
     }
+
 }

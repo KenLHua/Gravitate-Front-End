@@ -29,6 +29,8 @@ public class DateAndTimePickerAdapter {
     private TextView mRelatedView;
     private int mRelatedOffset;
 
+
+    /*
     public DateAndTimePickerAdapter(Calendar cal, TextView textView, android.content.Context context){
         myCal = cal;
         mTextView = textView;
@@ -54,41 +56,53 @@ public class DateAndTimePickerAdapter {
             }
         };
     }
+    */
 
-    public DateAndTimePickerAdapter(Calendar cal, TextView textView, final TextView relatedView, int hourOffset, android.content.Context context){
-        myCal = cal;
-        mTextView = textView;
-        mContext = context;
-        mRelatedView = relatedView;
-        mRelatedOffset = hourOffset;
-        mDateListener = new DatePickerDialog.OnDateSetListener(){
-            @Override
-            public void onDateSet(DatePicker view, int localYear, int monthOfYear, int dayOfMonth) {
-                Log.d("onDateSet", "called");
-                myCal.set(Calendar.YEAR, localYear);
-                myCal.set(Calendar.MONTH, monthOfYear);
-                myCal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                mTimeListener = new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        myCal.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                        myCal.set(Calendar.MINUTE, minute);
-                        // Check if the inputted time is at least |mRelatedOffset| hours in the future
-                        // Say if you offset the hours in -4 hours, you'd have to do something immediately
-                        // If you offset by 4 hour, you'd have to do something in 8 hours
-                        if((myCal.getTimeInMillis()) < Calendar.getInstance().getTimeInMillis()+(Math.abs(mRelatedOffset)*HOUR_IN_MILLISECONDS)){
-                            Toast.makeText(mContext, "Error: Input a Departure Time more than 4 hours away", Toast.LENGTH_LONG).show();
-                            return;
+    public DateAndTimePickerAdapter(Calendar cal, TextView textView, android.content.Context context, final boolean chooseTime){
+        if( chooseTime) {
+            myCal = cal;
+            mTextView = textView;
+            mContext = context;
+            mDateListener = new DatePickerDialog.OnDateSetListener() {
+                @Override
+                public void onDateSet(DatePicker view, int localYear, int monthOfYear, int dayOfMonth) {
+                    Log.d("onDateSet", "called");
+                    myCal.set(Calendar.YEAR, localYear);
+                    myCal.set(Calendar.MONTH, monthOfYear);
+                    myCal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                    mTimeListener = new TimePickerDialog.OnTimeSetListener() {
+                        @Override
+                        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                            myCal.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                            myCal.set(Calendar.MINUTE, minute);
+                            // Check if chosen time is in the future
+                            if ((myCal.getTimeInMillis()) < Calendar.getInstance().getTimeInMillis()) {
+                                return;
+                            }
+                            updateLabel(mTextView, chooseTime);
                         }
-                        updateLabel(mTextView);
-                        updateRelatedLabel(mRelatedView, Calendar.HOUR, mRelatedOffset);
-                    }
-                };
-                mTimePicker = new TimePickerDialog(mContext, mTimeListener,
-                        myCal.get(Calendar.HOUR_OF_DAY), myCal.get(Calendar.MINUTE), false);
-                mTimePicker.show();
-            }
-        };
+                    };
+                    mTimePicker = new TimePickerDialog(mContext, mTimeListener,
+                            myCal.get(Calendar.HOUR_OF_DAY), myCal.get(Calendar.MINUTE), false);
+                    mTimePicker.show();
+                }
+            };
+        }
+        else {
+            myCal = cal;
+            mTextView = textView;
+            mContext = context;
+            mDateListener = new DatePickerDialog.OnDateSetListener() {
+                @Override
+                public void onDateSet(DatePicker view, int localYear, int monthOfYear, int dayOfMonth) {
+                    Log.d("onDateSet", "called");
+                    myCal.set(Calendar.YEAR, localYear);
+                    myCal.set(Calendar.MONTH, monthOfYear);
+                    myCal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                    updateLabel(mTextView, chooseTime);
+                }
+            };
+        }
     }
 
 
@@ -99,21 +113,18 @@ public class DateAndTimePickerAdapter {
 
 
 
-    private void updateLabel(TextView textView) {
-        String myFormat = "MM/dd/yyyy hh:mm a"; //In which you need put here
-        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-        textView.setText(sdf.format(myCal.getTime()));
+    private void updateLabel(TextView textView, boolean chooseTime) {
+        if(chooseTime) {
+            String myFormat = "MM/dd/yyyy hh:mm a";
+            SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+            textView.setText(sdf.format(myCal.getTime()));
+        }
+        else{
+            String myFormat = "MM/dd/yyyy";
+            SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+            textView.setText(sdf.format(myCal.getTime()));
+        }
     }
 
-    // Update a view that is dependent on another's time
-    private void updateRelatedLabel(TextView relatedView, int timeUnit, int timeOffset){
-        String myFormat = "MM/dd/yyyy hh:mm a"; //In which you need put here
-        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-        Calendar relatedCalendar = Calendar.getInstance();
-        relatedCalendar.setTime(myCal.getTime());
-        relatedCalendar.add(Calendar.HOUR, timeOffset);
-        relatedView.setText(sdf.format(relatedCalendar.getTime()));
-
-    }
 
 }

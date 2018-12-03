@@ -19,4 +19,13 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="checkmarkDone">Submit</string>
 
+    <string name="user_name">FirstName LastName</string>
+    <string name="address">12345 MyStreet Ave. San Diego, CA 92122</string>
+    <string name="phone_number">+1 222 333 4444</string>
+    <string name="email">myemail@ucsd.edu</string>
+    <string name="ride_count">0 Rides</string>
+    <string name="edit_account">Edit \nAccount</string>
+
+
+
 </resources>

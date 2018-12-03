@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:text="@string/new_event_toolbar"
+        android:theme="@style/ToolbarTheme" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
+        <TextView
+            android:id="@+id/flightInformation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Flight Information"
+            android:layout_marginTop="16dp"/>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/airportLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/flightInformation"
+            android:layout_marginTop="16dp">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/airportName"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/system_icon_location"
+                android:drawablePadding="5dp"
+                android:clickable="false"
+                android:longClickable="false"
+                android:focusable="false"
+                android:hint="Airport" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/flightTimeLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginLeft = "16dp"
+            android:layout_below="@+id/flightInformation"
+            android:layout_toRightOf="@id/airportLayout">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/flightTime"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable="false"
+                android:longClickable="false"
+                android:focusable="false"
+                android:hint="Flight Time" />
+        </android.support.design.widget.TextInputLayout>
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/airportLayout"
+            android:layout_marginTop = "16dp"
+            android:background="@color/colorAccent" />
+        <TextView
+            android:id="@+id/rideInformation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/divider"
+            android:text="Estimated Orbit Arrival Time"
+            android:layout_marginTop="16dp"/>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/earlyArrivalTimeLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rideInformation"
+            android:layout_alignRight = "@+id/airportLayout"
+            android:layout_alignLeft = "@+id/airportLayout"
+            android:layout_marginTop="16dp">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/earlyArrivalTime"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:singleLine = "true"
+                android:clickable="false"
+                android:longClickable="false"
+                android:focusable="false"
+                android:hint="Earliest " />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/latestArrivalTimeLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_below="@id/rideInformation"
+            android:layout_toRightOf="@id/earlyArrivalTimeLayout"
+            android:layout_alignStart="@id/flightTimeLayout">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/latestArrivalTime"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable="false"
+                android:longClickable="false"
+                android:focusable="false"
+                android:singleLine="true"
+                android:hint="Latest" />
+        </android.support.design.widget.TextInputLayout>
+
+    </RelativeLayout>
+
+</android.support.constraint.ConstraintLayout>
