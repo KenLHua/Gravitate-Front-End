@@ -1,5 +1,6 @@
 package com.example.ken.gravitate.Event;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
@@ -59,5 +60,12 @@ public class CreatedRequestDetails extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(menuItem);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(getApplicationContext(), ScheduledEvents.class);
+        startActivity(intent);
+        super.onBackPressed();
     }
 }
