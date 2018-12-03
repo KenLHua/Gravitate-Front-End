@@ -46,7 +46,7 @@ public class APIRideRequestUtils {
                 });
           APIRequestSingleton.getInstance(inputFlight).addToRequestQueue(jsonObjectRequest, "postRequest");
 
-          if(occuredError){
+          if(!occuredError){
               Intent intent = new Intent(inputFlight, CreatedRequestDetails.class);
               intent.putExtra("flightTime", APIFlightStatsUtils.getFlightTime(Ride_RequestJSON, false, true));
               intent.putExtra("earliestTime", APIFlightStatsUtils.getFlightTime(Ride_RequestJSON, true, false));
