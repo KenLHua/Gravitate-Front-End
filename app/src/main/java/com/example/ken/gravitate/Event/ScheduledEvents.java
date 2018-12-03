@@ -155,11 +155,6 @@ public class ScheduledEvents extends AppCompatActivity
                         .setLabel(getString(R.string.fab_flight))
                         .setLabelClickable(false)
                         .create());
-        speedDialView.addActionItem(
-                new SpeedDialActionItem.Builder(R.id.fab_new_event, R.drawable.system_icon_event)
-                        .setLabel(getString(R.string.fab_event))
-                        .setLabelClickable(false)
-                        .create());
 
 
         // Provide behavior to the secondary FAB buttons
