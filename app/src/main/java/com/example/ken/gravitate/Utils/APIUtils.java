@@ -116,7 +116,7 @@ public class APIUtils {
     private static String getAirportAbbr(JSONObject ride_RequestJSON){
         String abbr = "";
         try{
-            abbr = ride_RequestJSON.getString("airportAbbr");
+            abbr = ride_RequestJSON.getString("airportCode");
         }
         catch(JSONException e){
             final String TAG = "getAirportAbbr";
@@ -151,12 +151,12 @@ public class APIUtils {
                 });
           APIRequestSingleton.getInstance(inputFlight).addToRequestQueue(jsonObjectRequest, "postRequest");
 
-          if(occuredError){
+          if(!occuredError){
               Intent intent = new Intent(inputFlight, CreatedRequestDetails.class);
               intent.putExtra("flightTime", APIUtils.getFlightTime(Ride_RequestJSON, false, true));
               intent.putExtra("earliestTime", APIUtils.getFlightTime(Ride_RequestJSON, true, false));
               intent.putExtra("latestTime", APIUtils.getFlightTime(Ride_RequestJSON, false, false));
-              intent.putExtra("airportAbbr", APIUtils.getAirportAbbr(Ride_RequestJSON));
+              intent.putExtra("airportCode", APIUtils.getAirportAbbr(Ride_RequestJSON));
               inputFlight.startActivity(intent);
           }
 

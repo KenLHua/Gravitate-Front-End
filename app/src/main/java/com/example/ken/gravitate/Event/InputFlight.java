@@ -2,10 +2,7 @@ package com.example.ken.gravitate.Event;
 import com.example.ken.gravitate.Utils.APIUtils;
 import com.example.ken.gravitate.Utils.DateAndTimePickerAdapter;
 
-<<<<<<< HEAD
-=======
 import android.content.Context;
->>>>>>> d1885be07f8c1b0b4ef26e0b3f443d93440d0056
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -30,10 +27,8 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.example.ken.gravitate.Utils.APIRequestSingleton;
 import com.example.ken.gravitate.R;
-<<<<<<< HEAD
 import com.example.ken.gravitate.Utils.JSONUtils;
-=======
->>>>>>> d1885be07f8c1b0b4ef26e0b3f443d93440d0056
+
 
 //Necessary libraries for Address Autocomplete functionality
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -42,9 +37,15 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import org.json.JSONObject;
 
 import java.util.Calendar;
+import java.util.List;
 
 public class InputFlight extends AppCompatActivity {
     // Autrocomplete Request Code
@@ -53,17 +54,6 @@ public class InputFlight extends AppCompatActivity {
 
     private Button mFlightStats_Bttn;
 
-<<<<<<< HEAD
-    private TextInputLayout flightNumberTextDisplay;
-    private TextInputLayout manualTimeDisplay;
-    private TextInputLayout manualFlightAddress;
-    private TextInputEditText mflightNum;
-    private TextInputEditText mflightCarrier;
-    private TextInputEditText mflightYear;
-    private TextInputEditText mflightMonth;
-    private TextInputEditText mflightDay;
-=======
->>>>>>> d1885be07f8c1b0b4ef26e0b3f443d93440d0056
     private TextInputEditText mPickUpAddress;
     private boolean toEvent = true;
     private RequestQueue mRequestQueue;
@@ -73,12 +63,11 @@ public class InputFlight extends AppCompatActivity {
 
     //The pickupAddress text
     private TextView inputPickup;
-<<<<<<< HEAD
-=======
     private Context mContext;
->>>>>>> d1885be07f8c1b0b4ef26e0b3f443d93440d0056
 
     private Calendar cal;
+
+
 
 
     /**** TESTING ****/
@@ -101,61 +90,27 @@ public class InputFlight extends AppCompatActivity {
         });
         setSupportActionBar(toolbar);
 
-<<<<<<< HEAD
         //Limit search to addresses in United States only, without the filter the autocomplete will
         //display results from different countries
         final AutocompleteFilter filter = new AutocompleteFilter.Builder()
                 .setCountry("us")
                 .build();
 
-        // Setting Radio Buttons
-        inputGroup = (RadioGroup) findViewById(R.id.flightRadioGroup);
-        flightRadio = (RadioButton) findViewById(R.id.flightRadio);
-        manualRadio = (RadioButton) findViewById(R.id.manualRadio);
-        // Default have by flight number checked
-        inputGroup.check(R.id.flightRadio);
-        // Setting Radio hide/show behavior
-        flightRadio.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (flightRadio.isChecked()) {
-                    hideManualInput();
-                } else {
-                    showManualInput();
-                }
-            }
-        });
-=======
 
 
         mContext = this;
         mOutput = findViewById(R.id.outputText);
->>>>>>> d1885be07f8c1b0b4ef26e0b3f443d93440d0056
 
         // Creating input TextFields
         mflightCarrier = findViewById(R.id.inputFlightCarrier);
         mflightNum = findViewById(R.id.inputFlightNumber);
-<<<<<<< HEAD
-        /* TODO: Moving Y/M/D into a single TextView
-        mflightYear = findViewById(R.id.inputFlightYear);
-        mflightMonth = findViewById(R.id.inputFlightMonth);
-        mflightDay = findViewById(R.id.inputFlightDay);
-        */
-        mPickUpAddress = findViewById(R.id.inputFlightAddress);
-=======
 
-        //Limit search to addresses in United States only, without the filter the autocomplete will
-        //display results from different countries
-        final AutocompleteFilter filter = new AutocompleteFilter.Builder()
-                .setCountry("us")
-                .build();
 
 
         // Creating input TextFields
         inputPickup = findViewById(R.id.inputPickup);
         mflightCarrier = findViewById(R.id.inputFlightCarrier);
         mflightNum = findViewById(R.id.inputFlightNumber);
->>>>>>> d1885be07f8c1b0b4ef26e0b3f443d93440d0056
 
         // Clears the pickup Text Box using the X
         final ImageButton pickupClear = findViewById(R.id.clear_pickup_button);
@@ -225,12 +180,7 @@ public class InputFlight extends AppCompatActivity {
                                 ,flightDate.substring(0,2)
                                 ,flightDate.substring(3,5));
 
-<<<<<<< HEAD
-
-                        getFlightStats(request_url);
-=======
                         APIUtils.getFlightStats(mContext,request_url, inputPickup.getText().toString(),toEvent,mOutput);
->>>>>>> d1885be07f8c1b0b4ef26e0b3f443d93440d0056
                         break;
                 }
             }
@@ -240,6 +190,8 @@ public class InputFlight extends AppCompatActivity {
         mRequestQueue = APIRequestSingleton.getInstance(this.getApplicationContext()).
                 getRequestQueue();
     }
+
+
 
     // Checks if all flight input fields are filled
     private boolean invalidFlightFields(String flightCarrier, String flightNum, String flightDate, String pickupAddress) {
@@ -303,87 +255,8 @@ public class InputFlight extends AppCompatActivity {
     }
 
 
-<<<<<<< HEAD
-    // Helper method to make hide more readable
-    // TODO: Add all valid textdisplays
-    public void hideManualInput() {
-        flightNumberTextDisplay.setVisibility(View.VISIBLE);
-        manualTimeDisplay.setVisibility(View.GONE);
-        manualFlightAddress.setVisibility(View.GONE);
 
-    }
-
-    // Helper method to make show more readable
-    // TODO: Add all valid textdisplays
-    public void showManualInput() {
-        flightNumberTextDisplay.setVisibility(View.GONE);
-        manualTimeDisplay.setVisibility(View.VISIBLE);
-        manualFlightAddress.setVisibility(View.VISIBLE);
-    }
-
-    /* Sends a GET Request to Flightstats API
-     *  RETURNS: String in JSON format that contains flight information
-     * */
-    private void getFlightStats(String request_url) {
-
-        final String TAG = "FlightStatsAPI";
-        // Formulate the request and handle the response.
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, request_url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        // Do something with the response
-                        JSONObject Ride_Request = JSONUtils.retrieveFSInfo(response, mPickUpAddress.getText().toString(),toEvent);
-                        postRideRequest(Ride_Request);
-                        mOutput.setText(Ride_Request.toString());
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // Handle error
-                        Log.w(TAG, "GET_REQUEST: FlightStatsAPI failure");
-                    }
-                });
-        APIRequestSingleton.getInstance(this).addToRequestQueue(stringRequest,"getRequest");
-    }
-
-    private void postRideRequest(JSONObject Ride_RequestJSON) {
-        final String server_url = "https://gravitate-e5d01.appspot.com/rideRequests";
-        final String TAG = "Ride_Request";
-        // Formulate the request and handle the response.
-        Log.w(TAG, "REQUEST:Attempt to create jsonObjectRequest");
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                (Request.Method.POST, server_url, Ride_RequestJSON, new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        // Do something with the response
-                        Log.w(TAG, "POST_REQUEST:Create Ride Request success");
-                        Toast.makeText(InputFlight.this,"Success", Toast.LENGTH_SHORT).show();
-                    }
-                }, new Response.ErrorListener() {
-
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // TODO: Handle error
-                        Toast.makeText(InputFlight.this,"Error...", Toast.LENGTH_SHORT).show();
-                        error.printStackTrace();
-                    }
-                });
-                APIRequestSingleton.getInstance(this).addToRequestQueue(jsonObjectRequest, "postRequest");
-
-
-    }
-=======
->>>>>>> d1885be07f8c1b0b4ef26e0b3f443d93440d0056
-
-    // Helper function for back button
     @Override
-<<<<<<< HEAD
-    public boolean onSupportNavigateUp() {
-        onBackPressed();
-        return true;
-=======
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             // The CheckMark in this case
@@ -397,7 +270,6 @@ public class InputFlight extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
 
         }
->>>>>>> d1885be07f8c1b0b4ef26e0b3f443d93440d0056
     }
 
 }

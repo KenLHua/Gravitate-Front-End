@@ -45,10 +45,10 @@ public class JSONUtils {
 
             flightJSON.put("flightNumber",flightNumber);
             flightJSON.put("flightLocalTime",departureTime);
-            flightJSON.put("airportLocation",airport_address);
-            flightJSON.put("pickUpAddress",pickUpAddress);
+/*            flightJSON.put("airportLocation",airport_address);*/
+            flightJSON.put("pickupAddress",pickUpAddress);
             flightJSON.put("toEvent",String.valueOf(toEvent));
-            flightJSON.put("airportAbbr", departureAirportFsCode);
+            flightJSON.put("airportCode", departureAirportFsCode);
 
 
         } catch (JSONException e) {

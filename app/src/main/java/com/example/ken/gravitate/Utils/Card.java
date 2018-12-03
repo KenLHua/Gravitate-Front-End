@@ -16,8 +16,8 @@ public class Card {
     public Card(int background, String destName, int profilePhoto, String destTime) {
         this.background = background;
         this.destName = destName;
-        this.profilePhoto = profilePhoto;
         this.destTime = destTime;
+        this.profilePhoto = profilePhoto;
     }
 
     //getters

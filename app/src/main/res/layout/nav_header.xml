@@ -19,7 +19,7 @@
         app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/cover_image" />
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/nav_profile"
         android:layout_width="75dp"
         android:layout_height="80dp"
@@ -36,7 +36,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/default_profile" />
+        app:srcCompat="@drawable/default_profile"
+        android:src="@drawable/default_profile" />
 
 
 </android.support.constraint.ConstraintLayout>
