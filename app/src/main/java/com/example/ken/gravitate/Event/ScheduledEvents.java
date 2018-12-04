@@ -101,8 +101,6 @@ public class ScheduledEvents extends AppCompatActivity
         //Recycler view with adapter to display cards
         orbitView = findViewById(R.id.orbit_list);
         requestView = findViewById(R.id.pending_list);
-        //emptyView = findViewById(R.id.empty_list);
-        //
 
         mContext = ScheduledEvents.this;
 
@@ -113,7 +111,7 @@ public class ScheduledEvents extends AppCompatActivity
 
         // ACTUAL CODE userDocRef = db.document(user.getUid());
         // String userID = user.getUid();
-        String userID = "zkenneth_test";
+        String userID = user.getUid();
                 userDocRef = db.collection("users").document(userID);
 
         getUserRideRequestList(userDocRef, orbitView);
