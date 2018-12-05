@@ -3,9 +3,8 @@ apply plugin: 'com.android.application'
 android {
     signingConfigs {
         config {
-            keyAlias 'gravitate_key'
+            keyAlias 'gravitate'
             keyPassword 'gravitate123'
-            storeFile file('gravitate_key.jks')
             storeFile file('../gravitate_key.jks')
             storePassword 'gravitate123'
         }
@@ -18,6 +17,7 @@ android {
         versionCode 1
         versionName '0.1.1'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        signingConfig signingConfigs.config
     }
     buildTypes {
         release {
