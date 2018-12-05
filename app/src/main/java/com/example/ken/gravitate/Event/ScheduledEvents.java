@@ -2,9 +2,6 @@ package com.example.ken.gravitate.Event;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -29,10 +26,9 @@ import android.widget.ImageView;
 
 import com.example.ken.gravitate.Account.LoginActivity;
 import com.example.ken.gravitate.Account.MyProfile;
-import com.example.ken.gravitate.Messaging.MessageFragment;
 import com.example.ken.gravitate.Settings.SettingsActivity;
-import com.example.ken.gravitate.Utils.Card;
 import com.example.ken.gravitate.R;
+import com.example.ken.gravitate.Utils.DownloadImageTask;
 import com.example.ken.gravitate.Utils.MyViewHolder;
 import com.example.ken.gravitate.Models.EventRequestModule;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
@@ -44,15 +40,12 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.leinardi.android.speeddial.SpeedDialActionItem;
 import com.leinardi.android.speeddial.SpeedDialView;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,28 +58,17 @@ public class ScheduledEvents extends AppCompatActivity
     private View header;
     private SpeedDialView fab;
 
-    private List<DocumentSnapshot> allDocs;
-    CollectionReference eventsSchedules;
     DocumentReference userDocRef;
-    private List<Card> mPendingCards;
-    private List<Card> mOrbitCards;
-    private String mDestTime;
-    private DocumentSnapshot locationSnap;
     FirebaseFirestore db;
 
-    // Kenneth's spagetti code
     RecyclerView orbitView;
-    RecyclerView requestView;
-    RecyclerView emptyView;
 
-    // Swipe to refresh
-    SwipeRefreshLayout swipeLayout;
     private SwipeRefreshLayout swipeContainer;
 
     private Context mContext;
 
     private FirestoreRecyclerAdapter adapter;
-    //
+
 
     GoogleSignInClient mGoogleSignInClient;
     private static final String web_client_id = "1070051773756-o6l5r1l6v7m079r1oua2lo0rsfeu8m9i.apps.googleusercontent.com";
@@ -100,7 +82,6 @@ public class ScheduledEvents extends AppCompatActivity
         final String TAG = "documentLOOKUP";
         //Recycler view with adapter to display cards
         orbitView = findViewById(R.id.orbit_list);
-        requestView = findViewById(R.id.pending_list);
 
         mContext = ScheduledEvents.this;
 
@@ -108,15 +89,12 @@ public class ScheduledEvents extends AppCompatActivity
         db = FirebaseFirestore.getInstance();
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser user = firebaseAuth.getCurrentUser();
+        String userProfileUrl = user.getPhotoUrl().toString();
 
-        // ACTUAL CODE userDocRef = db.document(user.getUid());
-        // String userID = user.getUid();
+        // Getting ride requests from the user's collection
         String userID = user.getUid();
-                userDocRef = db.collection("users").document(userID);
-
+        userDocRef = db.collection("users").document(userID);
         getUserRideRequestList(userDocRef, orbitView);
-
-        requestView.setLayoutManager(new LinearLayoutManager(ScheduledEvents.this));
         orbitView.setLayoutManager(new LinearLayoutManager(ScheduledEvents.this));
 
 
@@ -141,6 +119,13 @@ public class ScheduledEvents extends AppCompatActivity
         drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        // Get the only header
+        View navHeader = navigationView.getHeaderView(0);
+        ImageView navProfilePic = navHeader.findViewById(R.id.nav_profile);
+        new DownloadImageTask(navProfilePic).execute(userProfileUrl);
+
+
+
 
         // Side-Navigation Menu Setup
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
@@ -222,7 +207,6 @@ public class ScheduledEvents extends AppCompatActivity
     }
 
     // Creates a Fragment Instance of respective menu item
-    // TODO: Determine whether to use Fragments or Activites
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
@@ -285,6 +269,7 @@ public class ScheduledEvents extends AppCompatActivity
         }
     }
 
+    // Sign out of google account
     public void signOut() {
         mGoogleSignInClient.signOut()
                 .addOnCompleteListener(this, new OnCompleteListener<Void>() {
@@ -395,30 +380,6 @@ public class ScheduledEvents extends AppCompatActivity
         adapter.stopListening();
     }
 
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        ImageView bmImage;
-
-        public DownloadImageTask(ImageView bmImage) {
-            this.bmImage = bmImage;
-        }
-
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }
-            return mIcon11;
-        }
-
-        protected void onPostExecute(Bitmap result) {
-            bmImage.setImageBitmap(result);
-        }
-    }
 
 
 

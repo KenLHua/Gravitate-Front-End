@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.example.ken.gravitate.Models.Rider;
 import com.example.ken.gravitate.R;
+import com.example.ken.gravitate.Utils.DownloadImageTask;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -110,30 +111,7 @@ public class RiderAdapter extends RecyclerView.Adapter<RiderAdapter.myViewHolder
             });
         }
     }
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        ImageView bmImage;
 
-        public DownloadImageTask(ImageView bmImage) {
-            this.bmImage = bmImage;
-        }
-
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }
-            return mIcon11;
-        }
-
-        protected void onPostExecute(Bitmap result) {
-            bmImage.setImageBitmap(result);
-        }
-    }
 
 
 
