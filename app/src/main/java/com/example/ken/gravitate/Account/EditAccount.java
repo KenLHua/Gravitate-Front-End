@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,12 +19,15 @@ import com.android.volley.RequestQueue;
 import com.example.ken.gravitate.R;
 import com.example.ken.gravitate.Utils.APIRequestSingleton;
 import com.example.ken.gravitate.Utils.APIUtils;
+import com.example.ken.gravitate.Utils.AuthSingleton;
+import com.example.ken.gravitate.Utils.DownloadImageTask;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
+import com.google.firebase.auth.FirebaseUser;
 
 public class EditAccount extends AppCompatActivity {
 
@@ -60,12 +64,24 @@ public class EditAccount extends AppCompatActivity {
                 .beginTransaction()
                 .replace(R.id.edit_account_fragment, new EditAccountFragment())
                 .commit();
+        FirebaseUser user = AuthSingleton.getInstance().getCurrentUser();
+
+        String userEmail = user.getEmail();
+        String userFullName = user.getDisplayName();
+        String userPhoneNumber = user.getPhoneNumber();
+        String userProfilePic  = user.getPhotoUrl().toString();
 
         mContext = EditAccount.this;
         mFullName = findViewById(R.id.inputFullName);
         mPhoneNumber = findViewById(R.id.inputPhoneNumber);
         mEmailAddress = findViewById(R.id.inputEmailAddress);
         mPostalAddress = findViewById(R.id.inputPostalAddress);
+
+        // Display profile pic and autofill user info
+        mFullName.setText(userFullName);
+        mEmailAddress.setText(userEmail);
+        mPhoneNumber.setText(userPhoneNumber);
+        new DownloadImageTask((ImageView)findViewById(R.id.profile_pic)).execute(userProfilePic);
 
         //Limit search to addresses in United States only, without the filter the autocomplete will
         //display results from different countries
