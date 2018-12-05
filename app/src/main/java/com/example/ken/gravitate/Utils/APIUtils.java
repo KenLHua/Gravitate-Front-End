@@ -203,6 +203,8 @@ public class APIUtils {
         return flightTime;
     }
 
+    public static void postUserInfo(final Context editAccount, JSONObject User_InfoJSON) {
 
+    }
 
 }

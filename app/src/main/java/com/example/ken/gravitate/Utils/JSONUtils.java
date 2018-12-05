@@ -81,4 +81,9 @@ public class JSONUtils {
 
         return userJSON;
     }
+
+    public static JSONObject postUserInfo () {
+        JSONObject userJSON = new JSONObject();
+        return userJSON;
+    }
 }
