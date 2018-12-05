@@ -79,7 +79,11 @@
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
-            android:resource="@drawable/gravitate_logo" />
+            android:resource="@drawable/gravitate_notif" />
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorAccent" />
 
 
         //API Key for Google Maps
