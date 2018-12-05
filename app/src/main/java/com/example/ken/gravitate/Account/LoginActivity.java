@@ -80,6 +80,7 @@ public class LoginActivity extends AppCompatActivity {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if ( user != null ) {
                     startActivity(new Intent(LoginActivity.this, ScheduledEvents.class));
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 }
             }
         };
