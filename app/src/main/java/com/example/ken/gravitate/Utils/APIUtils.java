@@ -15,6 +15,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.example.ken.gravitate.Event.CreatedRequestDetails;
 import com.example.ken.gravitate.Event.InputFlight;
+import com.example.ken.gravitate.Models.User;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -52,13 +53,13 @@ public class APIUtils {
     public static String getUserURL( String uid ) {
         Uri.Builder builder = new Uri.Builder();
         builder.scheme("https")
-                .path("https://gravitate-e5d01.appspot.com/users")
+                .path("gravitate-e5d01.appspot.com/users")
                 .appendPath(uid);
 
         return builder.toString();
     }
 
-    public static void postUser(final Context loginScreen, JSONObject userJSON) {
+/*    public static void postUser(final Context loginScreen, JSONObject userJSON) {
         final String server_url = "https://gravitate-e5d01.appspot.com/user";
         final String TAG = "User";
         // Formulate the request and handle the response.
@@ -81,6 +82,30 @@ public class APIUtils {
                     }
                 });
         APIRequestSingleton.getInstance(loginScreen).addToRequestQueue(jsonObjectRequest, "postRequest");
+    }*/
+
+    /* Sends a GET Request to Flightstats API
+     *  RETURNS: String in JSON format that contains flight information
+     * */
+    public static void getUser(final Context myProfile, String request_url, final VolleyCallback callback) {
+
+        final String TAG = "User";
+        // Formulate the request and handle the response.
+        StringRequest jsonObjectRequest = new StringRequest
+                (Request.Method.GET, request_url, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        callback.onSuccessResponse(response);
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO: Handle error
+                        Toast.makeText(myProfile, error + "error", Toast.LENGTH_LONG).show();
+                    }
+                });
+        APIRequestSingleton.getInstance(myProfile).addToRequestQueue(jsonObjectRequest, "getUserRequest");
     }
 
     /* Sends a GET Request to Flightstats API

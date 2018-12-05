@@ -8,11 +8,17 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.ken.gravitate.Models.User;
 import com.example.ken.gravitate.R;
+import com.example.ken.gravitate.Utils.APIUtils;
 import com.example.ken.gravitate.Utils.AuthSingleton;
 import com.example.ken.gravitate.Utils.DownloadImageTask;
+import com.example.ken.gravitate.Utils.VolleyCallback;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class MyProfile extends AppCompatActivity {
     private FirebaseAuth mAuth;
@@ -27,11 +33,12 @@ public class MyProfile extends AppCompatActivity {
 
         // Getting current user's information
         FirebaseUser user = AuthSingleton.getInstance().getCurrentUser();
+        populateUserInfo(user);
 
-        String userEmail = user.getEmail();
-        String userFullName = user.getDisplayName();
-        String userPhoneNumber = user.getPhoneNumber();
-        String userProfilePic  = user.getPhotoUrl().toString();
+//        String userEmail = user.getEmail();
+//        String userFullName = user.getDisplayName();
+//        String userPhoneNumber = user.getPhoneNumber();
+//        String userProfilePic  = user.getPhotoUrl().toString();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.my_profile_layout);
@@ -41,12 +48,12 @@ public class MyProfile extends AppCompatActivity {
         mEmailDisplay = (TextView) findViewById(R.id.email);
         mPhoneDisplay = (TextView) findViewById(R.id.phone_number);
         mProfileImageDisplay = (ImageView) findViewById(R.id.profile_pic);
-        // Setting UI fields to represent the current user's information
-        mNameDisplay.setText(userFullName);
-        mEmailDisplay.setText(userEmail);
-        mPhoneDisplay.setText(userPhoneNumber);
-        new DownloadImageTask(mProfileImageDisplay).execute(userProfilePic);
 
+        // Setting UI fields to represent the current user's information
+//        mNameDisplay.setText(userFullName);
+//        mEmailDisplay.setText(userEmail);
+//        mPhoneDisplay.setText(userPhoneNumber);
+//        new DownloadImageTask(mProfileImageDisplay).execute(userProfilePic);
 
 
 
@@ -72,7 +79,27 @@ public class MyProfile extends AppCompatActivity {
             }
         });
 
+    }
 
+    public void populateUserInfo( FirebaseUser user ) {
+
+        String request_url = APIUtils.getUserURL(user.getUid());
+        APIUtils.getUser(this, request_url,
+                new VolleyCallback() {
+                    @Override
+                    public void onSuccessResponse(String result) {
+                        try {
+                            JSONObject response = new JSONObject(result);
+                            mNameDisplay.setText(response.getString("display_name"));
+                            mEmailDisplay.setText(response.getString("email"));
+                            mPhoneDisplay.setText(response.getString("phone_number"));
+                            new DownloadImageTask(mProfileImageDisplay).execute(response.getString("photo_url"));
+
+                        } catch (JSONException e ) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
     }
 
 
