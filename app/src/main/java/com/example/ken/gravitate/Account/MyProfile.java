@@ -5,10 +5,12 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.RelativeLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.ken.gravitate.R;
+import com.example.ken.gravitate.Utils.AuthSingleton;
+import com.example.ken.gravitate.Utils.DownloadImageTask;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -19,11 +21,13 @@ public class MyProfile extends AppCompatActivity {
     private TextView mNameDisplay;
     private TextView mEmailDisplay;
     private TextView mPhoneDisplay;
+    private ImageView mProfileImageDisplay;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         // Getting current user's information
-        FirebaseUser user=FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseUser user = AuthSingleton.getInstance().getCurrentUser();
+
         String userEmail = user.getEmail();
         String userFullName = user.getDisplayName();
         String userPhoneNumber = user.getPhoneNumber();
@@ -36,10 +40,12 @@ public class MyProfile extends AppCompatActivity {
         mNameDisplay = (TextView) findViewById(R.id.username);
         mEmailDisplay = (TextView) findViewById(R.id.email);
         mPhoneDisplay = (TextView) findViewById(R.id.phone_number);
+        mProfileImageDisplay = (ImageView) findViewById(R.id.profile_pic);
         // Setting UI fields to represent the current user's information
         mNameDisplay.setText(userFullName);
         mEmailDisplay.setText(userEmail);
         mPhoneDisplay.setText(userPhoneNumber);
+        new DownloadImageTask(mProfileImageDisplay).execute(userProfilePic);
 
 
 

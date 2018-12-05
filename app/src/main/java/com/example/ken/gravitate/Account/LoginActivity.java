@@ -34,8 +34,6 @@ import org.json.JSONObject;
 public class LoginActivity extends AppCompatActivity {
 
     SignInButton sign_in_bttn;
-    Button sign_out_bttn;
-    Button testSkip;
     FirebaseAuth mAuth;
     private final static int RC_SIGN_IN = 2; // Request Code for starting new activity
     GoogleSignInClient mGoogleSignInClient;
@@ -98,7 +96,6 @@ public class LoginActivity extends AppCompatActivity {
                     case R.id.googleBtn:
                         signIn();
                         break;
-                    // ...
                 }
             }
         });
@@ -127,16 +124,8 @@ public class LoginActivity extends AppCompatActivity {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
             firebaseAuthWithGoogle(account);
 
-/*            // Post User JSON Data to Endpoint
-            JSONObject userInfo = JSONUtils.retrieveUserInfo(mAuth.getInstance().getCurrentUser());
-            APIUtils.postUser(this, userInfo);*/
-
-            // updateUI(account);
         } catch (ApiException e) {
-            // The ApiException status code indicates the detailed failure reason.
-            // Please refer to the GoogleSignInStatusCodes class reference for more information.
             Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
-            // updateUI(null);
         }
     }
 
@@ -158,10 +147,7 @@ public class LoginActivity extends AppCompatActivity {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
                             Snackbar.make(findViewById(R.id.login_layout), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
-                            // updateUI(null);
                         }
-
-                        // ...
                     }
                 });
     }
@@ -176,7 +162,6 @@ public class LoginActivity extends AppCompatActivity {
                 .addOnCompleteListener(this, new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        // ...
                     }
                 });
     }
