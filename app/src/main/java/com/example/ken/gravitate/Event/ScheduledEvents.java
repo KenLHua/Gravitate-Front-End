@@ -23,6 +23,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.ken.gravitate.Account.LoginActivity;
 import com.example.ken.gravitate.Account.MyProfile;
@@ -43,6 +44,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.leinardi.android.speeddial.SpeedDialActionItem;
 import com.leinardi.android.speeddial.SpeedDialView;
 
@@ -76,19 +79,23 @@ public class ScheduledEvents extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         fragmentManager = getSupportFragmentManager();
         setContentView(R.layout.scheduled_events);
         final String TAG = "documentLOOKUP";
         //Recycler view with adapter to display cards
         orbitView = findViewById(R.id.orbit_list);
-
         mContext = ScheduledEvents.this;
 
 
         db = FirebaseFirestore.getInstance();
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser user = firebaseAuth.getCurrentUser();
+        if( user == null){
+            startActivity(new Intent(ScheduledEvents.this, LoginActivity.class));
+            finishAndRemoveTask();
+        }
         String userProfileUrl = user.getPhotoUrl().toString();
 
         // Getting ride requests from the user's collection
@@ -119,7 +126,7 @@ public class ScheduledEvents extends AppCompatActivity
         drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        // Get the only header
+        // Get the only header and set the profile's picture
         View navHeader = navigationView.getHeaderView(0);
         ImageView navProfilePic = navHeader.findViewById(R.id.nav_profile);
         new DownloadImageTask(navProfilePic).execute(userProfileUrl);
@@ -238,7 +245,6 @@ public class ScheduledEvents extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         }
         else {
-            super.onBackPressed();
         }
     }
 
@@ -276,7 +282,10 @@ public class ScheduledEvents extends AppCompatActivity
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         FirebaseAuth.getInstance().signOut();
-                        startActivity(new Intent(ScheduledEvents.this, LoginActivity.class));
+                        Intent intent = new Intent(mContext, LoginActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                        ScheduledEvents.this.finishAndRemoveTask();
                     }
                 });
     }
