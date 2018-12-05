@@ -23,6 +23,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ken.gravitate.Account.LoginActivity;
@@ -60,6 +61,7 @@ public class ScheduledEvents extends AppCompatActivity
     private ImageView profile;
     private View header;
     private SpeedDialView fab;
+    private TextView emptyRequests;
 
     DocumentReference userDocRef;
     FirebaseFirestore db;
@@ -70,6 +72,7 @@ public class ScheduledEvents extends AppCompatActivity
 
     private Context mContext;
 
+    private boolean hasRide;
     private FirestoreRecyclerAdapter adapter;
 
 
@@ -79,6 +82,7 @@ public class ScheduledEvents extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        hasRide = false;
 
         super.onCreate(savedInstanceState);
         fragmentManager = getSupportFragmentManager();
@@ -99,7 +103,8 @@ public class ScheduledEvents extends AppCompatActivity
         String userProfileUrl = user.getPhotoUrl().toString();
 
         // Getting ride requests from the user's collection
-        String userID = user.getUid();
+         String userID = user.getUid();
+        //String userID = "zkenneth_test2";
         userDocRef = db.collection("users").document(userID);
         getUserRideRequestList(userDocRef, orbitView);
         orbitView.setLayoutManager(new LinearLayoutManager(ScheduledEvents.this));
@@ -130,6 +135,9 @@ public class ScheduledEvents extends AppCompatActivity
         View navHeader = navigationView.getHeaderView(0);
         ImageView navProfilePic = navHeader.findViewById(R.id.nav_profile);
         new DownloadImageTask(navProfilePic).execute(userProfileUrl);
+
+        // Displaying that the user has no ride requests
+        emptyRequests = findViewById(R.id.no_rides);
 
 
 
@@ -336,6 +344,8 @@ public class ScheduledEvents extends AppCompatActivity
                 holder.background_img.setImageResource(cardBackground);
 
                 holder.card_dest.setText(destName);
+                hasRide = true;
+
 
                 if(stillPending) {
                     holder.card_time.setText("Desired Flight Time : " + flightTime);
@@ -372,8 +382,20 @@ public class ScheduledEvents extends AppCompatActivity
                 });
             }
 
+            @Override
+            public void onDataChanged() {
+                if (adapter.getItemCount() == 0){
+                    hasRide = false;
+                    emptyRequests.setText("You have no requests!");
+                }
+                else{
+                    hasRide = true;
+                }
+            }
+
         };
         adapter.notifyDataSetChanged();
+
         display.setAdapter(adapter);
     }
 
