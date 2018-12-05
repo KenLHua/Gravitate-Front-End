@@ -3,9 +3,8 @@ apply plugin: 'com.android.application'
 android {
     signingConfigs {
         config {
-            keyAlias 'gravitate_key'
+            keyAlias 'gravitate'
             keyPassword 'gravitate123'
-            storeFile file('gravitate_key.jks')
             storeFile file('../gravitate_key.jks')
             storePassword 'gravitate123'
         }
