@@ -158,7 +158,7 @@ public class APIUtils {
     }
 
     public static void getUser(final Context myProfile, String request_url, final VolleyCallback callback) {
-        
+
         final String TAG = "User";
         // Formulate the request and handle the response.
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
