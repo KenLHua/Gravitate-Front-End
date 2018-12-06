@@ -27,6 +27,8 @@ public class MyProfile extends AppCompatActivity {
     private TextView mEmailDisplay;
     private TextView mPhoneDisplay;
     private ImageView mProfileImageDisplay;
+    final String token = FirebaseAuth.getInstance().getAccessToken(false).getResult().getToken();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -96,7 +98,7 @@ public class MyProfile extends AppCompatActivity {
                             e.printStackTrace();
                         }
                     }
-                });
+                },token);
     }
 
 

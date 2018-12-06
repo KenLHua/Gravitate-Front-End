@@ -47,6 +47,8 @@ public class ConfirmProfile extends AppCompatActivity {
     private Context mContext;
     private RequestQueue mRequestQueue;
 
+    final String token = FirebaseAuth.getInstance().getAccessToken(false).getResult().getToken();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -177,7 +179,7 @@ public class ConfirmProfile extends AppCompatActivity {
                         )) break;
 
                 FirebaseUser user = mAuth.getCurrentUser();
-                APIUtils.postUser(this,user, pickupAddress);
+                APIUtils.postUser(this,user, pickupAddress, token);
                 return true;
         }
         return super.onOptionsItemSelected(button);
@@ -190,7 +192,7 @@ public class ConfirmProfile extends AppCompatActivity {
                     public void onSuccessResponse(JSONObject result) {
                         startActivity(new Intent (ConfirmProfile.this, ScheduledEvents.class));
                     }
-                });
+                },token);
     }
 }
 

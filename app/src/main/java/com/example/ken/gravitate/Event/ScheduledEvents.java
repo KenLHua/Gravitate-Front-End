@@ -84,6 +84,7 @@ public class ScheduledEvents extends AppCompatActivity
     GoogleSignInClient mGoogleSignInClient;
     private static final String web_client_id = "1070051773756-o6l5r1l6v7m079r1oua2lo0rsfeu8m9i.apps.googleusercontent.com";
     private static final String DOMAIN = "ucsd.edu";
+    final String token = FirebaseAuth.getInstance().getAccessToken(false).getResult().getToken();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,8 +101,6 @@ public class ScheduledEvents extends AppCompatActivity
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-
-
         db = FirebaseFirestore.getInstance();
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser user = firebaseAuth.getCurrentUser();
@@ -116,9 +115,6 @@ public class ScheduledEvents extends AppCompatActivity
         userDocRef = db.collection("users").document(userID);
         getUserRideRequestList(userDocRef, orbitView);
         orbitView.setLayoutManager(new LinearLayoutManager(ScheduledEvents.this));
-        
-
-
 
         // Configure sign-in to request the user's ID, email address, and basic profile.
         // ID and basic profile are included in DEFAULT_SIGN_IN.
@@ -149,7 +145,7 @@ public class ScheduledEvents extends AppCompatActivity
                     e.printStackTrace();
                 }
             }
-        });
+        }, token);
 
         // Displaying that the user has no ride requests
         emptyRequests = findViewById(R.id.no_rides);
