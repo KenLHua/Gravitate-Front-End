@@ -111,7 +111,7 @@ public class MyProfile extends AppCompatActivity {
                     public void onSuccessResponse(JSONObject result) {
                         try {
                             mNameDisplay.setText(result.getString("display_name"));
-                            mEmailDisplay.setText(result.getString("email"));
+//                            mEmailDisplay.setText(result.getString("email"));
                             mPhoneDisplay.setText(result.getString("phone_number"));
                             new DownloadImageTask(mProfileImageDisplay).execute(result.getString("photo_url"));
 
