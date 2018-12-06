@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.ken.gravitate.Models.User;
 import com.example.ken.gravitate.R;
 import com.example.ken.gravitate.Utils.APIUtils;
 import com.example.ken.gravitate.Utils.AuthSingleton;
@@ -47,7 +46,7 @@ public class MyProfile extends AppCompatActivity {
         mNameDisplay = (TextView) findViewById(R.id.username);
         mEmailDisplay = (TextView) findViewById(R.id.email);
         mPhoneDisplay = (TextView) findViewById(R.id.phone_number);
-        mProfileImageDisplay = (ImageView) findViewById(R.id.profile_pic);
+        mProfileImageDisplay = (ImageView) findViewById(R.id.c_profile_pic);
 
         // Setting UI fields to represent the current user's information
 //        mNameDisplay.setText(userFullName);
@@ -81,31 +80,8 @@ public class MyProfile extends AppCompatActivity {
 
     }
 
-//    public void populateUserInfo( FirebaseUser user ) {
-//
-//        String request_url = APIUtils.getUserURL(user.getUid());
-//        APIUtils.getUser(this, request_url,
-//                new VolleyCallback() {
-//                    @Override
-//                    public void onSuccessResponse(String result) {
-//                        try {
-//                            JSONObject response = new JSONObject(result);
-//                            mNameDisplay.setText(response.getString("display_name"));
-//                            mEmailDisplay.setText(response.getString("email"));
-//                            mPhoneDisplay.setText(response.getString("phone_number"));
-//                            new DownloadImageTask(mProfileImageDisplay).execute(response.getString("photo_url"));
-//
-//                        } catch (JSONException e ) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                });
-//    }
-
     public void populateUserInfo( FirebaseUser user ) {
-
-        String request_url = APIUtils.getUserURL(user.getUid());
-        APIUtils.getUser(this, request_url,
+        APIUtils.getUser(this, user,
                 new VolleyCallback() {
                     @Override
                     public void onSuccessResponse(JSONObject result) {

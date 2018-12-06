@@ -17,6 +17,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.example.ken.gravitate.Event.CreatedRequestDetails;
 import com.example.ken.gravitate.Event.InputFlight;
 import com.example.ken.gravitate.Models.User;
+import com.google.firebase.auth.FirebaseUser;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -89,7 +90,8 @@ public class APIUtils {
         return builder.toString();
     }
 
-    public static String getUserURL( String uid ) {
+    public static String getUserURL( FirebaseUser user ) {
+        String uid = user.getUid();
         Uri.Builder builder = new Uri.Builder();
         builder.scheme("https")
                 .path("gravitate-e5d01.appspot.com/users")
@@ -98,56 +100,35 @@ public class APIUtils {
         return builder.toString();
     }
 
-/*    public static void postUser(final Context loginScreen, JSONObject userJSON) {
-        final String server_url = "https://gravitate-e5d01.appspot.com/user";
+    public static void postUser(final Context confirmProfile, FirebaseUser user, String pickupAddress) {
+        final String server_url = getUserURL(user);
+        final JSONObject userJSON = JSONUtils.retrieveUserInfo(user, pickupAddress);
         final String TAG = "User";
+        Log.w(TAG, userJSON.toString());
         // Formulate the request and handle the response.
-        Log.w(TAG, "REQUEST:Attempt to create User Object");
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.POST, server_url, userJSON, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         // Do something with the response
                         Log.w(TAG, "POST_REQUEST: User JSON Sent");
-                        Toast.makeText(loginScreen,"Registration Success", Toast.LENGTH_LONG).show();
+                        Toast.makeText(confirmProfile,"Registration Success", Toast.LENGTH_LONG).show();
                     }
                 }, new Response.ErrorListener() {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // TODO: Handle error
-                        Toast.makeText(loginScreen,"Registration Failed", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(confirmProfile,"Registration Failed", Toast.LENGTH_SHORT).show();
                         error.printStackTrace();
                     }
                 });
-        APIRequestSingleton.getInstance(loginScreen).addToRequestQueue(jsonObjectRequest, "postRequest");
-    }*/
+        APIRequestSingleton.getInstance(confirmProfile).addToRequestQueue(jsonObjectRequest, "postRequest");
+    }
 
-    /* Sends a GET Request to server to retrieve User Profile
-     * */
-//    public static void getUser(final Context myProfile, String request_url, final VolleyCallback callback) {
-//
-//        final String TAG = "User";
-//        // Formulate the request and handle the response.
-//        StringRequest jsonObjectRequest = new StringRequest
-//                (Request.Method.GET, request_url, new Response.Listener<String>() {
-//                    @Override
-//                    public void onResponse(String response) {
-//                        callback.onSuccessResponse(response);
-//                    }
-//                }, new Response.ErrorListener() {
-//
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        // TODO: Handle error
-//                        Toast.makeText(myProfile, error + "error", Toast.LENGTH_LONG).show();
-//                    }
-//                });
-//        APIRequestSingleton.getInstance(myProfile).addToRequestQueue(jsonObjectRequest, "getUserRequest");
-//    }
+    public static void getUser(final Context myProfile, FirebaseUser user, final VolleyCallback callback) {
 
-    public static void getUser(final Context myProfile, String request_url, final VolleyCallback callback) {
-
+        String request_url = getUserURL(user);
         final String TAG = "User";
         // Formulate the request and handle the response.
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
@@ -221,8 +202,6 @@ public class APIUtils {
     public static void postRideRequest(final Context inputFlight, final JSONObject Ride_RequestJSON) {
         final String server_url = "https://gravitate-e5d01.appspot.com/rideRequests";
         final String TAG = "Ride_Request";
-
-
 
         // Formulate the request and handle the response.
         Log.w(TAG, "REQUEST:Attempt to create jsonObjectRequest");
@@ -303,10 +282,6 @@ public class APIUtils {
             return null;
         }
         return flightTime;
-    }
-
-    public static void postUserInfo(final Context editAccount, JSONObject User_InfoJSON) {
-
     }
 
 }

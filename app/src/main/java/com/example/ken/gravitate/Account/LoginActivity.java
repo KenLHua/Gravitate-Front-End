@@ -1,6 +1,8 @@
 package com.example.ken.gravitate.Account;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -35,6 +37,7 @@ public class LoginActivity extends AppCompatActivity {
 
     SignInButton sign_in_bttn;
     FirebaseAuth mAuth;
+    Context mCtx;
     private final static int RC_SIGN_IN = 2; // Request Code for starting new activity
     GoogleSignInClient mGoogleSignInClient;
     FirebaseAuth.AuthStateListener mAuthListener;
@@ -52,6 +55,8 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        mCtx = this;
 
         ImageView logo = findViewById(R.id.logoView);
         logo.setOnClickListener(new View.OnClickListener() {
@@ -100,10 +105,6 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
-
-
-
-
     }
 
     @Override
@@ -130,7 +131,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
+    private void firebaseAuthWithGoogle(final GoogleSignInAccount acct) {
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
@@ -141,9 +142,12 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            startActivity(new Intent(LoginActivity.this, ScheduledEvents.class));
-                            // updateUI(user);
+                            String display_name = acct.getDisplayName();
+                            String photo_url = acct.getPhotoUrl().toString();
+                            Intent intent = new Intent(LoginActivity.this, ConfirmProfile.class);
+                            intent.putExtra("display_name", display_name);
+                            intent.putExtra("photo_url", photo_url);
+                            startActivity(intent);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());

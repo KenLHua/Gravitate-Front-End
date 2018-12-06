@@ -60,49 +60,21 @@ public class JSONUtils {
         return flightJSON;
     }
 
-    /* Parse FlightStats API JSON String */
-    public static JSONObject getUserProfile( String JSONString ) {
-        JSONObject profileJSON = new JSONObject();
-        final String TAG = "getProfile";
-
-        try {
-            JSONObject reader = new JSONObject(JSONString);
-
-
-
-        } catch (JSONException e) {
-            Log.w(TAG, "failed: User Profile JSON");
-            e.printStackTrace();
-        }
-
-        return profileJSON;
-    }
-
-
-    public static JSONObject retrieveUserInfo (FirebaseUser user ) {
-        String uid = user.getUid();
-        String fullName = user.getDisplayName();
-        String email = user.getEmail();
-        Uri photoUrl = user.getPhotoUrl();
-
+    public static JSONObject retrieveUserInfo (FirebaseUser user, String pickupAddress) {
         JSONObject userJSON = new JSONObject();
         try {
             userJSON.put("uid", user.getUid());
-            userJSON.put("fullName", user.getUid());
-            userJSON.put("pictureURL", user.getUid());
-
+            userJSON.put("display_name", user.getDisplayName());
+            userJSON.put("phone_number", user.getDisplayName());
+            userJSON.put("photo_url", user.getPhotoUrl());
+            userJSON.put("membership", "rider");
+            userJSON.put("pickupAddress", pickupAddress);
         } catch (JSONException e) {
             final String TAG = "toJSON";
             Log.w(TAG, "failed: User JSON");
             e.printStackTrace();
-
         }
 
-        return userJSON;
-    }
-
-    public static JSONObject postUserInfo () {
-        JSONObject userJSON = new JSONObject();
         return userJSON;
     }
 }
