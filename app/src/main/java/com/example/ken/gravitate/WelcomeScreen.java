@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.view.View;
@@ -37,16 +38,7 @@ public class WelcomeScreen extends AppCompatActivity {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if ( user != null ) {
                     startActivity(new Intent(WelcomeScreen.this, ScheduledEvents.class));
-                }else{
-
-                    topL = (LinearLayoutCompat) findViewById(R.id.topL);
-                    botL = (LinearLayoutCompat) findViewById(R.id.botL);
-                    upDown = AnimationUtils.loadAnimation(WelcomeScreen.this,R.anim.updown);
-                    upDown.setDuration(800);
-                    downUp = AnimationUtils.loadAnimation(WelcomeScreen.this, R.anim.downup);
-                    downUp.setDuration(800);
-                    topL.setAnimation(upDown);
-                    botL.setAnimation(downUp);
+                } else{
 
 
                 }
@@ -55,7 +47,7 @@ public class WelcomeScreen extends AppCompatActivity {
 
         setContentView(R.layout.activity_welcome_screen);
 
-        LinearLayout welcomeScreen = findViewById(R.id.welcomeScreen);
+        ConstraintLayout welcomeScreen = findViewById(R.id.welcomeScreen);
         AnimationDrawable colorgradient = (AnimationDrawable) welcomeScreen.getBackground();
         colorgradient.setEnterFadeDuration(2000);
         colorgradient.setExitFadeDuration(4000);
@@ -82,8 +74,11 @@ public class WelcomeScreen extends AppCompatActivity {
                 }
             }
         });
+
+        //Setup gradient animation
         ImageView logo = (ImageView) findViewById(R.id.logo);
-        logo.setImageResource(R.drawable.logo);
+        logo.setImageResource(R.drawable.gravitate_logo);
+
 
     }
     public void openOnBoard(){
