@@ -100,7 +100,7 @@ public class ScheduledEvents extends AppCompatActivity
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-
+        final String token = FirebaseAuth.getInstance().getAccessToken(false).getResult().getToken();
 
         db = FirebaseFirestore.getInstance();
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
@@ -149,7 +149,7 @@ public class ScheduledEvents extends AppCompatActivity
                     e.printStackTrace();
                 }
             }
-        });
+        }, token);
 
         // Displaying that the user has no ride requests
         emptyRequests = findViewById(R.id.no_rides);

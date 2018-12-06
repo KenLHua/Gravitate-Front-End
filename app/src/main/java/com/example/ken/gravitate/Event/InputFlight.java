@@ -91,7 +91,7 @@ public class InputFlight extends AppCompatActivity {
                 .build();
 
         final String token = FirebaseAuth.getInstance().getAccessToken(false).getResult().getToken();
-        APIUtils.testAuthEndpoint(this,token);
+//        APIUtils.testAuthEndpoint(this,token);
 
         mContext = this;
         mOutput = findViewById(R.id.outputText);

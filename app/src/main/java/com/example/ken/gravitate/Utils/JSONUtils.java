@@ -60,13 +60,14 @@ public class JSONUtils {
         return flightJSON;
     }
 
-    public static JSONObject retrieveUserInfo (FirebaseUser user, String pickupAddress) {
+    public static JSONObject retrieveUserInfo (String uid, String display_name, String photo_url,
+                                               String pickupAddress, String phone_number) {
         JSONObject userJSON = new JSONObject();
         try {
-            userJSON.put("uid", user.getUid());
-            userJSON.put("display_name", user.getDisplayName());
-            userJSON.put("phone_number", user.getDisplayName());
-            userJSON.put("photo_url", user.getPhotoUrl());
+            userJSON.put("uid", uid);
+            userJSON.put("display_name", display_name);
+            userJSON.put("phone_number", phone_number);
+            userJSON.put("photo_url", photo_url);
             userJSON.put("membership", "rider");
             userJSON.put("pickupAddress", pickupAddress);
         } catch (JSONException e) {

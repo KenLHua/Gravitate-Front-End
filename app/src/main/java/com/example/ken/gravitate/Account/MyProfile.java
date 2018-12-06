@@ -27,14 +27,17 @@ public class MyProfile extends AppCompatActivity {
     private TextView mEmailDisplay;
     private TextView mPhoneDisplay;
     private ImageView mProfileImageDisplay;
+    private String token;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        final String token = FirebaseAuth.getInstance().getAccessToken(false).getResult().getToken();
 
         // Getting current user's information
         FirebaseUser user = AuthSingleton.getInstance().getCurrentUser();
         populateUserInfo(user);
 
-          String userEmail = user.getEmail();
+        String userEmail = user.getEmail();
 //        String userFullName = user.getDisplayName();
 //        String userPhoneNumber = user.getPhoneNumber();
 //        String userProfilePic  = user.getPhotoUrl().toString();
@@ -80,7 +83,6 @@ public class MyProfile extends AppCompatActivity {
 
     }
 
-
     public void populateUserInfo( FirebaseUser user ) {
         APIUtils.getUser(this, user,
                 new VolleyCallback() {
@@ -96,7 +98,7 @@ public class MyProfile extends AppCompatActivity {
                             e.printStackTrace();
                         }
                     }
-                });
+                }, token );
     }
 
 

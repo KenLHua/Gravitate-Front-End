@@ -17,6 +17,7 @@ import com.example.ken.gravitate.Utils.DownloadImageTask;
 import com.example.ken.gravitate.Utils.VolleyCallback;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -41,7 +42,7 @@ public class RiderAdapter extends RecyclerView.Adapter<RiderAdapter.RiderViewHol
     public boolean stillPending;
     private DocumentReference mOrbitRef;
     public ArrayList<String> profileImages;
-
+    private String token;
     private OnRiderClickListener mlistener;
 
     public interface OnRiderClickListener{
@@ -97,7 +98,7 @@ public class RiderAdapter extends RecyclerView.Adapter<RiderAdapter.RiderViewHol
         public RiderViewHolder(View itemView, DocumentReference orbitRef, Context context) {
             super(itemView);
             mContext = context;
-
+            final String token = FirebaseAuth.getInstance().getAccessToken(false).getResult().getToken();
             profile_photo = itemView.findViewById(R.id.profile_photo);
             fullname = itemView.findViewById(R.id.rider_name);
             email = itemView.findViewById(R.id.rider_email);
@@ -133,7 +134,7 @@ public class RiderAdapter extends RecyclerView.Adapter<RiderAdapter.RiderViewHol
                                                 }
 
                                             }
-                                        });
+                                        }, token);
 
 
                             }

@@ -46,12 +46,15 @@ public class ConfirmProfile extends AppCompatActivity {
     private TextView mPostalAddress;
     private Context mContext;
     private RequestQueue mRequestQueue;
+    private String token;
+    String photo_url;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.confirm_account_layout);
         mAuth = FirebaseAuth.getInstance();
+        token = FirebaseAuth.getInstance().getAccessToken(false).getResult().getToken();
         FirebaseUser user = mAuth.getCurrentUser();
         checkUserExists(user);
 
@@ -77,7 +80,7 @@ public class ConfirmProfile extends AppCompatActivity {
 
         // Display profile pic and autofill user info
         String display_name = getIntent().getStringExtra("display_name");
-        String photo_url = getIntent().getStringExtra("photo_url");
+        photo_url = getIntent().getStringExtra("photo_url");
         mFullName.setText(display_name);
         new DownloadImageTask((ImageView)findViewById(R.id.c_profile_pic)).execute(photo_url);
 
@@ -177,7 +180,9 @@ public class ConfirmProfile extends AppCompatActivity {
                         )) break;
 
                 FirebaseUser user = mAuth.getCurrentUser();
-                APIUtils.postUser(this,user, pickupAddress);
+                String uid = user.getUid();
+                Log.d("phonenumberstring", phone_number);
+                APIUtils.postUser(this, uid, display_name, photo_url, pickupAddress,phone_number, token);
                 return true;
         }
         return super.onOptionsItemSelected(button);
@@ -190,7 +195,7 @@ public class ConfirmProfile extends AppCompatActivity {
                     public void onSuccessResponse(JSONObject result) {
                         startActivity(new Intent (ConfirmProfile.this, ScheduledEvents.class));
                     }
-                });
+                },token);
     }
 }
 

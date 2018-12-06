@@ -60,7 +60,7 @@ public class APIUtils {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String>  params = new HashMap<String, String>();
                 params.put("Authorization", token);
-                return super.getHeaders();
+                return params;
             }
         };
         APIRequestSingleton.getInstance(inputFlight).addToRequestQueue(stringRequest,"getRequest");
@@ -109,9 +109,11 @@ public class APIUtils {
         return builder.toString();
     }
 
-    public static void postUser(final Context confirmProfile, FirebaseUser user, String pickupAddress) {
-        final String server_url = getUserURL(user);
-        final JSONObject userJSON = JSONUtils.retrieveUserInfo(user, pickupAddress);
+    public static void postUser(final Context confirmProfile, String uid, String display_name, String phone_number, String photo_url, String pickupAddress
+    , final String token) {
+        final String server_url = getUserURL(uid);
+        final JSONObject userJSON = JSONUtils.retrieveUserInfo(uid, display_name, phone_number, photo_url, pickupAddress);
+        Log.w("USERJSON", userJSON.toString());
         final String TAG = "User";
         Log.w(TAG, userJSON.toString());
         // Formulate the request and handle the response.
@@ -131,11 +133,19 @@ public class APIUtils {
                         Toast.makeText(confirmProfile,"Registration Failed", Toast.LENGTH_SHORT).show();
                         error.printStackTrace();
                     }
-                });
+                }){
+                    @Override
+                    public Map<String, String> getHeaders() throws AuthFailureError {
+                        Map<String, String>  params = new HashMap<String, String>();
+                        params.put("Authorization", token);
+                        return params;
+                    }
+        };
         APIRequestSingleton.getInstance(confirmProfile).addToRequestQueue(jsonObjectRequest, "postRequest");
     }
 
-    public static void getUser(final Context myProfile, FirebaseUser user, final VolleyCallback callback) {
+    public static void getUser(final Context myProfile, FirebaseUser user, final VolleyCallback callback,
+                               final String token) {
 
         String request_url = getUserURL(user);
         final String TAG = "User";
@@ -153,11 +163,19 @@ public class APIUtils {
                         // TODO: Handle error
                         Toast.makeText(myProfile, error + "error", Toast.LENGTH_LONG).show();
                     }
-                });
+                }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String>  params = new HashMap<String, String>();
+                params.put("Authorization", token);
+                return params;
+            }
+        };
         APIRequestSingleton.getInstance(myProfile).addToRequestQueue(jsonObjectRequest, "getUserRequest");
     }
 
-    public static void getUser(final Context myProfile, String request_url, final VolleyCallback callback) {
+    public static void getUser(final Context myProfile, String request_url, final VolleyCallback callback,
+                               final String token) {
 
         final String TAG = "User";
         // Formulate the request and handle the response.
@@ -174,7 +192,14 @@ public class APIUtils {
                         // TODO: Handle error
                         Toast.makeText(myProfile, error + "error", Toast.LENGTH_LONG).show();
                     }
-                });
+                }){
+                    @Override
+                    public Map<String, String> getHeaders() throws AuthFailureError {
+                        Map<String, String>  params = new HashMap<String, String>();
+                        params.put("Authorization", token);
+                        return params;
+                    }
+        };
         APIRequestSingleton.getInstance(myProfile).addToRequestQueue(jsonObjectRequest, "getUserRequest");
     }
 
@@ -196,7 +221,8 @@ public class APIUtils {
                     public void onResponse(String response) {
                         // Do something with the response
                         JSONObject Ride_Request = JSONUtils.retrieveFSInfo(response, pickupAddress, toEvent);
-                        APIUtils.postRideRequest(inputFlight,Ride_Request);
+                        Log.w(TAG, Ride_Request.toString());
+                        APIUtils.postRideRequest(inputFlight,Ride_Request, token);
                         //output.setText(Ride_Request.toString());
                     }
                 },
@@ -211,7 +237,7 @@ public class APIUtils {
                     public Map<String, String> getHeaders() throws AuthFailureError {
                         Map<String, String>  params = new HashMap<String, String>();
                         params.put("Authorization", token);
-                        return super.getHeaders();
+                        return params;
                     }
         };
         APIRequestSingleton.getInstance(inputFlight).addToRequestQueue(stringRequest,"getRequest");
@@ -229,7 +255,7 @@ public class APIUtils {
         }
         return abbr;
     }
-    public static void postRideRequest(final Context inputFlight, final JSONObject Ride_RequestJSON) {
+    public static void postRideRequest(final Context inputFlight, final JSONObject Ride_RequestJSON, final String token) {
         final String server_url = "https://gravitate-e5d01.appspot.com/rideRequests";
         final String TAG = "Ride_Request";
 
@@ -259,7 +285,14 @@ public class APIUtils {
                         Toast.makeText(inputFlight,"Error: Flight Request not made", Toast.LENGTH_SHORT).show();
                         error.printStackTrace();
                     }
-                });
+                }){
+                    @Override
+                    public Map<String, String> getHeaders() throws AuthFailureError {
+                        Map<String, String>  params = new HashMap<String, String>();
+                        params.put("Authorization", token);
+                        return params;
+                    }
+        };
           APIRequestSingleton.getInstance(inputFlight).addToRequestQueue(jsonObjectRequest, "postRequest");
 
         Intent intent = new Intent(inputFlight, CreatedRequestDetails.class);
