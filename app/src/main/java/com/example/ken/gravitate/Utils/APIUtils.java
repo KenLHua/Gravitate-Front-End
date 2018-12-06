@@ -253,8 +253,17 @@ public class APIUtils {
                 });
           APIRequestSingleton.getInstance(inputFlight).addToRequestQueue(jsonObjectRequest, "postRequest");
 
+        Intent intent = new Intent(inputFlight, CreatedRequestDetails.class);
+        intent.putExtra("flightTime", APIUtils.getFlightTime(Ride_RequestJSON, false, true));
+        intent.putExtra("earliestTime", APIUtils.getFlightTime(Ride_RequestJSON, true, false));
+        intent.putExtra("latestTime", APIUtils.getFlightTime(Ride_RequestJSON, false, false));
+        // The airport abbreviation should be LAX, since we do not support other airports
+        if(getAirportAbbr(Ride_RequestJSON) != "LAX") {
+            return;
+        }
 
-
+        intent.putExtra("airportCode", APIUtils.getAirportAbbr(Ride_RequestJSON));
+        inputFlight.startActivity(intent);
 
     }
 
