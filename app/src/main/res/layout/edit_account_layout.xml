@@ -92,55 +92,11 @@
                     android:textSize="18sp" />
             </android.support.design.widget.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/emailAddress"
-                android:layout_width="match_parent"
-                android:layout_marginTop="20dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/phoneNumber"
-                android:layout_marginStart="22dp">
-
-                <android.support.design.widget.TextInputEditText
-                    android:id="@+id/inputEmailAddress"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginStart="-4dp"
-                    android:singleLine="true"
-                    android:backgroundTint="@color/colorAccent"
-                    android:hint="Email Address"
-                    android:inputType="textEmailAddress"
-                    android:textSize="18sp" />
-            </android.support.design.widget.TextInputLayout>
-
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/postalAddress"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_below="@+id/emailAddress"
-                android:layout_marginStart="22dp">
-
-                <android.support.design.widget.TextInputEditText
-                    android:id="@+id/inputPostalAddress"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginStart="-4dp"
-                    android:clickable="true"
-                    android:focusable="false"
-                    android:singleLine="true"
-                    android:backgroundTint="@color/colorAccent"
-                    android:hint="Address"
-                    android:inputType="textPostalAddress"
-                    android:textSize="18sp" />
-            </android.support.design.widget.TextInputLayout>
-
             <TextView
                 android:id="@+id/login_info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/postalAddress"
+                android:layout_below="@id/phoneNumber"
                 android:text="Login Information"
                 android:layout_marginStart="22dp"
                 android:layout_marginTop="30dp"

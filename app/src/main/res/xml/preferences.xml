@@ -16,7 +16,7 @@
             android:defaultValue="false"
             android:key="switch_preference_3"
             android:summary="Receive notifications about delayed flights"
-            android:title="Incoming Driver Notifications"
+            android:title="Incoming Flight Notifications"
             android:icon="@drawable/baseline_airplanemode_active_black_18dp" />
         <android.support.v7.preference.SwitchPreferenceCompat
             android:layout_width="wrap_content"
