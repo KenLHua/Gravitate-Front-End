@@ -53,7 +53,7 @@ public class APIUtils {
                     public void onErrorResponse(VolleyError error) {
                         // Handle error
                         Log.w(TAG, "GET_REQUEST: Auth failure");
-                        Toast.makeText(inputFlight, "failure", Toast.LENGTH_LONG).show();
+                        /*Toast.makeText(inputFlight, "failure", Toast.LENGTH_LONG).show();*/
                     }
                 }){
             @Override
@@ -128,7 +128,7 @@ public class APIUtils {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // TODO: Handle error
-                        Toast.makeText(confirmProfile,"Registration Failed", Toast.LENGTH_SHORT).show();
+                        /*Toast.makeText(confirmProfile,"Registration Failed", Toast.LENGTH_SHORT).show();*/
                         error.printStackTrace();
                     }
                 });
@@ -151,7 +151,7 @@ public class APIUtils {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // TODO: Handle error
-                        Toast.makeText(myProfile, error + "error", Toast.LENGTH_LONG).show();
+                        /*Toast.makeText(myProfile, error + "error", Toast.LENGTH_LONG).show();*/
                     }
                 });
         APIRequestSingleton.getInstance(myProfile).addToRequestQueue(jsonObjectRequest, "getUserRequest");
