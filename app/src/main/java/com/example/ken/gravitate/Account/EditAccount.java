@@ -3,7 +3,7 @@ package com.example.ken.gravitate.Account;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.view.GravityCompat;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -17,30 +17,38 @@ import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.example.ken.gravitate.R;
-import com.example.ken.gravitate.Utils.APIRequestSingleton;
-import com.example.ken.gravitate.Utils.APIUtils;
 import com.example.ken.gravitate.Utils.AuthSingleton;
 import com.example.ken.gravitate.Utils.DownloadImageTask;
+import com.example.ken.gravitate.Utils.JSONUtils;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseException;
+import com.google.firebase.FirebaseTooManyRequestsException;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.PhoneAuthCredential;
+import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.auth.UserProfileChangeRequest;
+
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class EditAccount extends AppCompatActivity {
 
     int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
-
-    private Button mSaveEditAccountBtn;
 
     private TextView mFullName;
     private TextView mPhoneNumber;
     private TextView mEmailAddress;
     private TextView mPostalAddress;
     private Context mContext;
-    private RequestQueue mRequestQueue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,42 +102,6 @@ public class EditAccount extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 callPlaceAutocompleteActivityIntent(filter); }});
-
-        
-        /*mSaveEditAccountBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switch (v.getId()) {
-                    case R.id.send_request_save:
-                        String fullName = mFullName.getText().toString();
-                        String phoneNumber = mPhoneNumber.getText().toString();
-                        String emailAddress = mEmailAddress.getText().toString();
-                        String postalAddress = mPostalAddress.getText().toString();
-                    
-                        // Checking if all necessary inputs are given, if not return and give a error
-                        if (invalidAccountFields(fullName,
-                                phoneNumber,
-                                emailAddress,
-                                postalAddress)) return;
-
-                        // Request_URL = ("Full Name", "Phone Number", "Email Address", "Address")
-                        *//*String request_url = APIUtils.getFSScheduleURL(
-                                mflightCarrier.getText().toString(),mflightNum.getText().toString(),
-                                flightDate.substring(6, flightDate.length())
-                                ,flightDate.substring(0,2)
-                                ,flightDate.substring(3,5));
-
-                        APIUtils.getFlightStats(mContext,request_url, inputPickup.getText().toString(),toEvent,mOutput);
-                        break;*//*
-                        break;
-                }
-            }
-        });*/
-
-        /*// Initializing Request Components
-        mRequestQueue = APIRequestSingleton.getInstance(this.getApplicationContext()).
-                getRequestQueue();
-*/
 
     }
 
@@ -202,9 +174,26 @@ public class EditAccount extends AppCompatActivity {
         return false;
     }
 
+    // Will not update if information is the same
+    private boolean sameAccountFields(String checkFullName, String checkPhoneNumber, String checkEmailAddress, String checkPostalAddress) {
+        if (checkFullName == mFullName.getText().toString()) {
+            return true;
+        }
+        if (checkPhoneNumber == mPhoneNumber.getText().toString()) {
+            return true;
+        }
+        if (checkEmailAddress == mEmailAddress.getText().toString()) {
+            return true;
+        }
+        if (checkPostalAddress == mPostalAddress.getText().toString()) {
+            return true;
+        }
+        return false;
+    }
+
     @Override
-    public boolean onOptionsItemSelected(MenuItem button){
-        switch(button.getItemId()){
+    public boolean onOptionsItemSelected(MenuItem saveButton){
+        switch(saveButton.getItemId()){
             case R.id.send_request_save:
 
                 String fullName = mFullName.getText().toString();
@@ -218,21 +207,34 @@ public class EditAccount extends AppCompatActivity {
                         emailAddress,
                         postalAddress)) break;
 
-                // Request_URL = ("Full Name", "Phone Number", "Email Address", "Address")
-                /*String request_url = APIUtils.getFSScheduleURL(
-                mflightCarrier.getText().toString(),mflightNum.getText().toString(),
-                        flightDate.substring(6, flightDate.length())
-                        ,flightDate.substring(0,2)
-                        ,flightDate.substring(3,5));
+                // Check if user saves already existing information
+                if (sameAccountFields(fullName,
+                        phoneNumber,
+                        emailAddress,
+                        postalAddress)) break;
 
-                APIUtils.getFlightStats(mContext,request_url, inputPickup.getText().toString(),toEvent,mOutput);
-*/
-                // Initializing Request Components
-                mRequestQueue = APIRequestSingleton.getInstance(this.getApplicationContext()).getRequestQueue();
+                // Request_URL = ("Full Name", "Phone Number", "Email Address", "Address")
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+                //JSONUtils.getEditUserInfo(user.getUid(),fullName, phoneNumber,user.getPhotoUrl(), postalAddress);
+
+                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                        .setDisplayName(fullName)
+                        .build();
+
+                user.updateProfile(profileUpdates)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    Log.d("updateUserSuccessful", "User profile updated.");
+                                }
+                            }
+                        });
 
                 Toast.makeText(mContext, "Account Information Saved!", Toast.LENGTH_SHORT).show();
                 return true;
         }
-        return super.onOptionsItemSelected(button);
+        return super.onOptionsItemSelected(saveButton);
     }
 }

@@ -82,8 +82,23 @@ public class JSONUtils {
         return userJSON;
     }
 
-    public static JSONObject postUserInfo () {
+    public static JSONObject getEditUserInfo(String uid, String fullName, String phoneNumber,
+                                             Uri photoUrl, String pickUpAddress) {
+
         JSONObject userJSON = new JSONObject();
+        try {
+            userJSON.put("uid", uid);
+            userJSON.put("membership", "membership");
+            userJSON.put("display_name", fullName);
+            userJSON.put("phone_number", phoneNumber);
+            userJSON.put("photo_url", photoUrl);
+            userJSON.put("pickupAddress", pickUpAddress);
+
+        } catch (JSONException e) {
+            final String TAG = "toJSON";
+            Log.w(TAG, "failed: User JSON");
+            e.printStackTrace();
+        }
         return userJSON;
     }
 }
