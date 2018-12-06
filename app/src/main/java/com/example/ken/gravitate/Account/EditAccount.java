@@ -19,7 +19,6 @@ import com.android.volley.RequestQueue;
 import com.example.ken.gravitate.R;
 import com.example.ken.gravitate.Utils.AuthSingleton;
 import com.example.ken.gravitate.Utils.DownloadImageTask;
-import com.example.ken.gravitate.Utils.JSONUtils;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.Status;
@@ -31,10 +30,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.FirebaseTooManyRequestsException;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.PhoneAuthCredential;
-import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
 import java.util.Map;
@@ -74,6 +70,7 @@ public class EditAccount extends AppCompatActivity {
                 .commit();
         FirebaseUser user = AuthSingleton.getInstance().getCurrentUser();
 
+
         String userFullName = user.getDisplayName();
         String userPhoneNumber = user.getPhoneNumber();
         String userProfilePic  = user.getPhotoUrl().toString();
@@ -81,11 +78,24 @@ public class EditAccount extends AppCompatActivity {
         mContext = EditAccount.this;
         mFullName = findViewById(R.id.inputFullName);
         mPhoneNumber = findViewById(R.id.inputPhoneNumber);
+        mPostalAddress = findViewById(R.id.inputPostalAddress);
 
         // Display profile pic and autofill user info
         mFullName.setText(userFullName);
         mPhoneNumber.setText(userPhoneNumber);
         new DownloadImageTask((ImageView)findViewById(R.id.profile_pic)).execute(userProfilePic);
+
+        //Limit search to addresses in United States only, without the filter the autocomplete will
+        //display results from different countries
+        final AutocompleteFilter filter = new AutocompleteFilter.Builder()
+                .setCountry("us")
+                .build();
+
+
+        mPostalAddress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                callPlaceAutocompleteActivityIntent(filter); }});
 
     }
 
@@ -118,8 +128,27 @@ public class EditAccount extends AppCompatActivity {
         }
     }
 
+    // The deal with the actions done at the autocomplete activity
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                Place place = PlaceAutocomplete.getPlace(this, data);
+                mPostalAddress.setText(place.getAddress());
+            } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
+                Status status = PlaceAutocomplete.getStatus(this, data);
+                // TODO: Handle the error.
+                mPostalAddress.setText("");
+                Log.i("Autocomplete Error", status.getStatusMessage());
+
+            } else if (resultCode == RESULT_CANCELED) {
+                // The user canceled the operation.
+            }
+        }
+    }
+
     // Checks if all flight input fields are filled
-    private boolean invalidAccountFields(String checkFullName, String checkPhoneNumber) {
+    private boolean invalidAccountFields(String checkFullName, String checkPhoneNumber, String checkPostalAddress) {
         if(checkFullName.length() == 0 ){
             Toast.makeText(mContext, "Error: Please input your full name", Toast.LENGTH_LONG).show();
             return true;
@@ -128,15 +157,22 @@ public class EditAccount extends AppCompatActivity {
             Toast.makeText(mContext, "Error: Please input your phone number", Toast.LENGTH_LONG).show();
             return true;
         }
+        if(checkPostalAddress.length() == 0 ){
+            Toast.makeText(mContext, "Error: Please input your address", Toast.LENGTH_LONG).show();
+            return true;
+        }
         return false;
     }
 
     // Will not update if information is the same
-    private boolean sameAccountFields(String checkFullName, String checkPhoneNumber) {
+    private boolean sameAccountFields(String checkFullName, String checkPhoneNumber, String checkPostalAddress) {
         if (checkFullName == mFullName.getText().toString()) {
             return true;
         }
         if (checkPhoneNumber == mPhoneNumber.getText().toString()) {
+            return true;
+        }
+        if (checkPostalAddress == mPostalAddress.getText().toString()) {
             return true;
         }
         return false;
@@ -149,12 +185,17 @@ public class EditAccount extends AppCompatActivity {
 
                 String fullName = mFullName.getText().toString();
                 String phoneNumber = mPhoneNumber.getText().toString();
+                String postalAddress = mPostalAddress.getText().toString();
 
                 // Checking if all necessary inputs are given, if not return and give a error
-                if (invalidAccountFields(fullName, phoneNumber)) break;
+                if (invalidAccountFields(fullName,
+                        phoneNumber,
+                        postalAddress)) break;
 
                 // Check if user saves already existing information
-                if (sameAccountFields(fullName, phoneNumber)) break;
+                if (sameAccountFields(fullName,
+                        phoneNumber,
+                        postalAddress)) break;
 
                 // Request_URL = ("Full Name", "Phone Number", "Email Address", "Address")
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();

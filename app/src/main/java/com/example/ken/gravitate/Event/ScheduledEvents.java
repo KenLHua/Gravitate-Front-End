@@ -28,6 +28,7 @@ import android.widget.Toast;
 
 import com.example.ken.gravitate.Account.LoginActivity;
 import com.example.ken.gravitate.Account.MyProfile;
+import com.example.ken.gravitate.Messaging.MessageActivity;
 import com.example.ken.gravitate.Settings.SettingsActivity;
 import com.example.ken.gravitate.R;
 import com.example.ken.gravitate.Utils.DownloadImageTask;
@@ -228,6 +229,11 @@ public class ScheduledEvents extends AppCompatActivity
         switch(menuItem.getItemId()){
             case R.id.nav_profile:
                 startActivity(new Intent(ScheduledEvents.this, MyProfile.class));
+                break;
+        }
+        switch(menuItem.getItemId()) {
+            case R.id.nav_messages:
+                startActivity(new Intent(ScheduledEvents.this, MessageActivity.class));
                 break;
         }
         switch(menuItem.getItemId()){

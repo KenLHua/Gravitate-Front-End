@@ -8,6 +8,10 @@
             android:icon="@drawable/system_icon_profile"
             android:title="My Profile" />
         <item
+            android:id="@+id/nav_messages"
+            android:icon="@drawable/system_icon_messages"
+            android:title="Messages" />
+        <item
             android:id="@+id/nav_settings"
             android:icon="@drawable/system_icon_settings_grey"
             android:title="Settings" />

@@ -35,10 +35,10 @@ public class MyProfile extends AppCompatActivity {
         FirebaseUser user = AuthSingleton.getInstance().getCurrentUser();
         populateUserInfo(user);
 
-//        String userEmail = user.getEmail();
-//        String userFullName = user.getDisplayName();
+        String userEmail = user.getEmail();
+        String userFullName = user.getDisplayName();
 //        String userPhoneNumber = user.getPhoneNumber();
-//        String userProfilePic  = user.getPhotoUrl().toString();
+        String userProfilePic  = user.getPhotoUrl().toString();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.my_profile_layout);
@@ -50,10 +50,10 @@ public class MyProfile extends AppCompatActivity {
         mProfileImageDisplay = (ImageView) findViewById(R.id.profile_pic);
 
         // Setting UI fields to represent the current user's information
-//        mNameDisplay.setText(userFullName);
-//        mEmailDisplay.setText(userEmail);
+        mNameDisplay.setText(userFullName);
+        mEmailDisplay.setText(userEmail);
 //        mPhoneDisplay.setText(userPhoneNumber);
-//        new DownloadImageTask(mProfileImageDisplay).execute(userProfilePic);
+        new DownloadImageTask(mProfileImageDisplay).execute(userProfilePic);
 
 
 
