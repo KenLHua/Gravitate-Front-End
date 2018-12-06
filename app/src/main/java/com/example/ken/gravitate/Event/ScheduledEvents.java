@@ -315,7 +315,7 @@ public class ScheduledEvents extends AppCompatActivity
 
 
     private void getUserRideRequestList(DocumentReference userRef, RecyclerView display) {
-        Query rideRequestQuery = userRef.collection("eventSchedules").limit(10);
+        Query rideRequestQuery = userRef.collection("eventSchedules").orderBy("pending").limit(10);
 
         FirestoreRecyclerOptions<EventRequestModule> options =
                 new FirestoreRecyclerOptions
@@ -345,12 +345,13 @@ public class ScheduledEvents extends AppCompatActivity
             protected void onBindViewHolder(@NonNull MyViewHolder holder, int i, @NonNull EventRequestModule model) {
                 int cardBackground = R.drawable.lax;
                 final String destName = "LAX";
-                int cardProfilePhoto = R.drawable.default_profile;
                 final String flightTime = model.getFlightTime();
                 final boolean stillPending = model.isPending();
                 final DocumentReference orbitRef = model.getOrbitRef();
+                final String pickupAddress = model.getPickupAddress();
                 List<String> temp = model.getMemberProfilePhotoUrls();
                 final ArrayList<String> profileImages = new ArrayList<String>();
+                final String destTime = model.getDestTime();
                 for (String eachURL : temp){
                     profileImages.add(eachURL);
                 }
@@ -363,12 +364,12 @@ public class ScheduledEvents extends AppCompatActivity
 
 
                 if(stillPending) {
-                    holder.card_time.setText("Desired Flight Time : " + flightTime);
+                    holder.card_time.setText("Flight Time : " + flightTime);
                     holder.card_pending.setText("Pending Ride Request");
                 }
                 else {
                     new DownloadImageTask(holder.profile_photo).execute(profileImages.get(0));
-                    holder.card_time.setText("Projected Arrival Time : " + model.getDestTime());
+                    holder.card_time.setText("Arrival Time : " + model.getDestTime());
                     holder.card_pending.setText("Orbiting");
                     holder.orbitRef = model.getOrbitRef();
                     holder.profileImages = profileImages;
@@ -383,9 +384,11 @@ public class ScheduledEvents extends AppCompatActivity
                         intent.putExtra("destName", destName);
                         intent.putExtra("flightTime", flightTime);
                         intent.putExtra("stillPending", stillPending);
+                        intent.putExtra("pickupAddress", pickupAddress);
                         if(!stillPending) {
                             intent.putStringArrayListExtra("profileImages", profileImages);
                             intent.putExtra("orbitRef",  orbitRef.getPath());
+                            intent.putExtra("destTime", destTime );
 
 
                         }

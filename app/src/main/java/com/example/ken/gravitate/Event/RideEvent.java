@@ -52,11 +52,7 @@ public class RideEvent extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         Boolean stillPending = getIntent().getExtras().getBoolean("stillPending");
-        String orbitPath = getIntent().getStringExtra("orbitRef");
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference orbitRef = db.document(orbitPath);
-        FirebaseUser user = AuthSingleton.getInstance().getCurrentUser();
-        String currUserID = user.getUid();
 
 
         RecyclerView recyclerView = findViewById(R.id.rider_list);
@@ -64,33 +60,23 @@ public class RideEvent extends AppCompatActivity {
         final List<Rider> rider_list = new ArrayList<Rider>();
         Rider riderCard = new Rider(R.drawable.default_profile, "Name", "Email");
         rider_list.add(riderCard);
+        ;
 
-        RiderAdapter adapter = new RiderAdapter(this,orbitRef,rider_list);
-        // Tester code
-        /*
-        adapter.stillPending = stillPending.booleanValue();
-        JSONObject orbitSnapshot = new JSONObject();
-        HashMap<String, HashMap<String, Object>> userTicketPairs = new HashMap<String, HashMap<String, Object>>();
-        HashMap<String, Object> userID = new HashMap<String,Object>();
-        userID.put("hasCheckedIn", new Boolean(false));
-        userID.put("inChat", new Boolean(false));
-        userID.put("pickupAddress", "Pickup Address Hi!");
-        userID.put("rideRequestRef", null);
-        userID.put("userWillDrive", false);
-        try{
-            orbitSnapshot.put("ASLDKASLDKASDLK!L:#@K!#K!L:KA:LKDAL:SDKSA", userID);
-            orbitSnapshot.put(currUserID, null);
-        }
-        catch(JSONException e){
-            final String TAG = "RideEventJSON";
-            Log.w(TAG, " Failed reading JSON object");
-            e.printStackTrace();
-        }
-        */
-
-        // End of tester Code
+        TextView destTimeDisplay = findViewById(R.id.departureTime);
+        TextView flightTimeDisplay = findViewById(R.id.flightTime);
+        TextView pickupAddressDisplay = findViewById(R.id.pickupAddress);
+        String pickupAddress = getIntent().getStringExtra("pickupAddress");
+        String flightTime = getIntent().getStringExtra("flightTime");
+        flightTimeDisplay.setText("Flight Time : " + flightTime);
+        pickupAddressDisplay.setText("Pickup Address : " + pickupAddress);
 
         if(!stillPending.booleanValue()){
+
+            String orbitPath = getIntent().getStringExtra("orbitRef");
+            DocumentReference orbitRef = db.document(orbitPath);
+            RiderAdapter adapter = new RiderAdapter(this,orbitRef,rider_list);
+            String destTime = getIntent().getStringExtra("destTime");
+            destTimeDisplay.setText("Arrival Time : "+ destTime);
             ArrayList<String> profileImages = getIntent().getExtras().getStringArrayList("profileImages");
             adapter.setProfileImages(profileImages);
             recyclerView.setAdapter(adapter);
@@ -98,6 +84,8 @@ public class RideEvent extends AppCompatActivity {
 
         }
         else{
+            RiderAdapter adapter = new RiderAdapter(this,null,rider_list);
+            destTimeDisplay.setVisibility(View.GONE);
             recyclerView.setAdapter(null);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
         }
@@ -105,9 +93,7 @@ public class RideEvent extends AppCompatActivity {
 
 
 
-        TextView flightTimeDisplay = findViewById(R.id.flightTime);
-        String flightTime = getIntent().getStringExtra("flightTime");
-        flightTimeDisplay.setText(flightTime);
+
 
 
     }

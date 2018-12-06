@@ -102,45 +102,46 @@ public class RiderAdapter extends RecyclerView.Adapter<RiderAdapter.RiderViewHol
             fullname = itemView.findViewById(R.id.rider_name);
             email = itemView.findViewById(R.id.rider_email);
             phone_number = itemView.findViewById(R.id.phone_number);
-            orbitRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    HashMap<String, Object> userTicketPairs = (HashMap<String, Object>) task.getResult().get("userTicketPairs");
-                    Object[] pairedUserIDs = userTicketPairs.keySet().toArray();
-                    for ( Object currID : pairedUserIDs){
-                        String currIDString = (String) currID;
-                        if(currIDString.equals(currUser.getUid())){
-                            // Do nothing
-                        }
-                        else{
-                            String request_url = APIUtils.getUserURL((String) currID);
-                            Log.d("taggyBoi", (String) currID);
-                            APIUtils.getUser(mContext, request_url,
-                                    new VolleyCallback() {
-                                        @Override
-                                        public void onSuccessResponse(JSONObject result) {
-                                            try {
-                                                JSONObject response = result;
-                                                fullname.setText(response.getString("display_name"));
-                                                Log.d("emailBoi", response.getString("email"));
-                                                email.setText(response.getString("email"));
-                                                new DownloadImageTask(profile_photo).execute(response.getString("photo_url"));
-                                                Log.d("photoBoi", response.getString("photo_url"));
-                                                phone_number.setText(response.getString("phone_number"));
+            if (orbitRef != null) {
+                orbitRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        HashMap<String, Object> userTicketPairs = (HashMap<String, Object>) task.getResult().get("userTicketPairs");
+                        Object[] pairedUserIDs = userTicketPairs.keySet().toArray();
+                        for (Object currID : pairedUserIDs) {
+                            String currIDString = (String) currID;
+                            if (currIDString.equals(currUser.getUid())) {
+                                // Do nothing
+                            } else {
+                                String request_url = APIUtils.getUserURL((String) currID);
+                                Log.d("taggyBoi", (String) currID);
+                                APIUtils.getUser(mContext, request_url,
+                                        new VolleyCallback() {
+                                            @Override
+                                            public void onSuccessResponse(JSONObject result) {
+                                                try {
+                                                    JSONObject response = result;
+                                                    fullname.setText(response.getString("display_name"));
+                                                    Log.d("emailBoi", response.getString("email"));
+                                                    email.setText(response.getString("email"));
+                                                    new DownloadImageTask(profile_photo).execute(response.getString("photo_url"));
+                                                    Log.d("photoBoi", response.getString("photo_url"));
+                                                    phone_number.setText(response.getString("phone_number"));
 
-                                            } catch (JSONException e) {
-                                                e.printStackTrace();
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                }
+
                                             }
-
-                                        }
-                                    });
+                                        });
 
 
+                            }
                         }
-                    }
 
-                }
-            });
+                    }
+                });
+            }
 
             itemView.setOnClickListener(new View.OnClickListener(){
                 @Override
