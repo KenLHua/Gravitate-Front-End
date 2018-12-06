@@ -1,6 +1,7 @@
 package com.example.ken.gravitate.Settings;
 
 import android.os.Bundle;
+import android.preference.PreferenceScreen;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.support.v7.widget.Toolbar;
@@ -32,6 +33,7 @@ public class SettingsActivity extends AppCompatActivity {
                 .beginTransaction()
                 .replace(R.id.settings_fragment, new SettingsFragment())
                 .commit();
+
     }
 
     // Helper method for back button

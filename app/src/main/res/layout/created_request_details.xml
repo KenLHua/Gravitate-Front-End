@@ -19,6 +19,8 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="12dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
@@ -68,11 +70,47 @@
                 android:focusable="false"
                 android:hint="Flight Time" />
         </android.support.design.widget.TextInputLayout>
+
+        <View
+            android:id="@+id/pickupDetails"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/airportLayout"
+            android:layout_marginTop = "16dp"
+            android:background="@color/colorAccent" />
+        <TextView
+            android:id="@+id/pickupText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/pickupDetails"
+            android:text="Pickup Address"
+            android:layout_marginTop="16dp"/>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/pickupAddressLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/pickupText"
+            android:layout_alignLeft = "@+id/airportLayout"
+            android:layout_marginTop="16dp">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/pickupAddress"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:singleLine = "true"
+                android:clickable="false"
+                android:longClickable="false"
+                android:focusable="false"
+                android:hint="Pickup Address " />
+        </android.support.design.widget.TextInputLayout>
+
         <View
             android:id="@+id/divider"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_below="@+id/airportLayout"
+            android:layout_below="@+id/pickupAddressLayout"
             android:layout_marginTop = "16dp"
             android:background="@color/colorAccent" />
         <TextView
@@ -123,6 +161,41 @@
                 android:focusable="false"
                 android:singleLine="true"
                 android:hint="Latest" />
+        </android.support.design.widget.TextInputLayout>
+
+        <View
+            android:id="@+id/DateField"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/earlyArrivalTimeLayout"
+            android:layout_marginTop = "16dp"
+            android:background="@color/colorAccent" />
+        <TextView
+            android:id="@+id/DateText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/DateField"
+            android:text="Date"
+            android:layout_marginTop="16dp"/>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/DateLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/DateText"
+            android:layout_alignLeft = "@+id/airportLayout"
+            android:layout_marginTop="16dp">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/Date"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:singleLine = "true"
+                android:clickable="false"
+                android:longClickable="false"
+                android:focusable="false"
+                android:hint="Date" />
         </android.support.design.widget.TextInputLayout>
 
     </RelativeLayout>
