@@ -39,7 +39,7 @@ public class LoginActivity extends AppCompatActivity {
     GoogleSignInClient mGoogleSignInClient;
     FirebaseAuth.AuthStateListener mAuthListener;
     private static final String TAG = "GoogleActivity";
-    private static final String web_client_id = "1070051773756-o6l5r1l6v7m079r1oua2lo0rsfeu8m9i.apps.googleusercontent.com";
+    private static final String web_client_id = "452147414499-qn5voddbjjtovdqac1hhll8kikhsvh9g.apps.googleusercontent.com";
     private static final String DOMAIN = "ucsd.edu";
 
     @Override

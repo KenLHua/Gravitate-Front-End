@@ -53,7 +53,7 @@ public class APIUtils {
     public static String getUserURL( String uid ) {
         Uri.Builder builder = new Uri.Builder();
         builder.scheme("https")
-                .path("gravitate-dev.appspot.com/users")
+                .path("gravitate-e5d01.appspot.com/users")
                 .appendPath(uid);
 
         return builder.toString();
@@ -173,7 +173,7 @@ public class APIUtils {
         return abbr;
     }
     public static void postRideRequest(final Context inputFlight, JSONObject Ride_RequestJSON) {
-        final String server_url = "https://gravitate-dev.appspot.com/rideRequests";
+        final String server_url = "https://gravitate-e5d01.appspot.com/rideRequests";
         final String TAG = "Ride_Request";
 
 
