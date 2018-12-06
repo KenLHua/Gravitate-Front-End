@@ -38,6 +38,9 @@ public class WelcomeScreen extends AppCompatActivity {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if ( user != null ) {
                     startActivity(new Intent(WelcomeScreen.this, ScheduledEvents.class));
+                } else{
+
+
                 }
             }
         };
@@ -75,14 +78,6 @@ public class WelcomeScreen extends AppCompatActivity {
         //Setup gradient animation
         ImageView logo = (ImageView) findViewById(R.id.logo);
         logo.setImageResource(R.drawable.gravitate_logo);
-        topL = (LinearLayoutCompat) findViewById(R.id.topL);
-        botL = (LinearLayoutCompat) findViewById(R.id.botL);
-        upDown = AnimationUtils.loadAnimation(this,R.anim.updown);
-        upDown.setDuration(800);
-        downUp = AnimationUtils.loadAnimation(this, R.anim.downup);
-        downUp.setDuration(800);
-        topL.setAnimation(upDown);
-        botL.setAnimation(downUp);
 
 
     }

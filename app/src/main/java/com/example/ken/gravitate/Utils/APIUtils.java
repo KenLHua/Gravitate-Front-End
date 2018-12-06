@@ -8,6 +8,7 @@ import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -21,10 +22,48 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class APIUtils {
 
+    /* Sends a GET Request to Flightstats API
+     *  RETURNS: String in JSON format that contains flight information
+     * */
+    public static void testAuthEndpoint(final Context inputFlight, final String token) {
+
+        final String url = "https://gravitate-e5d01.appspot.com/endpointTest";
+        final String TAG = "Auth Test";
+        Log.w(TAG, token);
+        // Formulate the request and handle the response.
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // Do something with the response
+                        //output.setText(Ride_Request.toString());
+                        Log.w(TAG, "GET_REQUEST: Auth success");
+                        Toast.makeText(inputFlight,response, Toast.LENGTH_LONG).show();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Handle error
+                        Log.w(TAG, "GET_REQUEST: Auth failure");
+                        Toast.makeText(inputFlight, "failure", Toast.LENGTH_LONG).show();
+                    }
+                }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String>  params = new HashMap<String, String>();
+                params.put("Authorization", token);
+                return super.getHeaders();
+            }
+        };
+        APIRequestSingleton.getInstance(inputFlight).addToRequestQueue(stringRequest,"getRequest");
+    }
 
     /* Gets the correct Endpoint for FlightStats Schedule API
      *  Builds through URI Builder
@@ -84,17 +123,37 @@ public class APIUtils {
         APIRequestSingleton.getInstance(loginScreen).addToRequestQueue(jsonObjectRequest, "postRequest");
     }*/
 
-    /* Sends a GET Request to Flightstats API
-     *  RETURNS: String in JSON format that contains flight information
+    /* Sends a GET Request to server to retrieve User Profile
      * */
+//    public static void getUser(final Context myProfile, String request_url, final VolleyCallback callback) {
+//
+//        final String TAG = "User";
+//        // Formulate the request and handle the response.
+//        StringRequest jsonObjectRequest = new StringRequest
+//                (Request.Method.GET, request_url, new Response.Listener<String>() {
+//                    @Override
+//                    public void onResponse(String response) {
+//                        callback.onSuccessResponse(response);
+//                    }
+//                }, new Response.ErrorListener() {
+//
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//                        // TODO: Handle error
+//                        Toast.makeText(myProfile, error + "error", Toast.LENGTH_LONG).show();
+//                    }
+//                });
+//        APIRequestSingleton.getInstance(myProfile).addToRequestQueue(jsonObjectRequest, "getUserRequest");
+//    }
+
     public static void getUser(final Context myProfile, String request_url, final VolleyCallback callback) {
 
         final String TAG = "User";
         // Formulate the request and handle the response.
-        StringRequest jsonObjectRequest = new StringRequest
-                (Request.Method.GET, request_url, new Response.Listener<String>() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.GET, request_url, null, new Response.Listener<JSONObject>() {
                     @Override
-                    public void onResponse(String response) {
+                    public void onResponse(JSONObject response) {
                         callback.onSuccessResponse(response);
                     }
                 }, new Response.ErrorListener() {
@@ -108,11 +167,13 @@ public class APIUtils {
         APIRequestSingleton.getInstance(myProfile).addToRequestQueue(jsonObjectRequest, "getUserRequest");
     }
 
+
+
     /* Sends a GET Request to Flightstats API
      *  RETURNS: String in JSON format that contains flight information
      * */
     public static void getFlightStats(final Context inputFlight, String request_url, final String pickupAddress,
-                                              final boolean toEvent, final TextView output) {
+                                              final boolean toEvent, final TextView output, final String token) {
 
         final String TAG = "FlightStatsAPI";
         String earliestTime = null;
@@ -134,7 +195,14 @@ public class APIUtils {
                         // Handle error
                         Log.w(TAG, "GET_REQUEST: FlightStatsAPI failure");
                     }
-                });
+                }){
+                    @Override
+                    public Map<String, String> getHeaders() throws AuthFailureError {
+                        Map<String, String>  params = new HashMap<String, String>();
+                        params.put("Authorization", token);
+                        return super.getHeaders();
+                    }
+        };
         APIRequestSingleton.getInstance(inputFlight).addToRequestQueue(stringRequest,"getRequest");
     }
 
@@ -150,7 +218,7 @@ public class APIUtils {
         }
         return abbr;
     }
-    public static void postRideRequest(final Context inputFlight, JSONObject Ride_RequestJSON) {
+    public static void postRideRequest(final Context inputFlight, final JSONObject Ride_RequestJSON) {
         final String server_url = "https://gravitate-e5d01.appspot.com/rideRequests";
         final String TAG = "Ride_Request";
 
@@ -166,19 +234,25 @@ public class APIUtils {
                         // Do something with the response
                         Log.w(TAG, "POST_REQUEST:Create Ride Request success");
                         Toast.makeText(inputFlight,"Success", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(inputFlight, CreatedRequestDetails.class);
+                        intent.putExtra("flightTime", APIUtils.getFlightTime(Ride_RequestJSON, false, true));
+                        intent.putExtra("earliestTime", APIUtils.getFlightTime(Ride_RequestJSON, true, false));
+                        intent.putExtra("latestTime", APIUtils.getFlightTime(Ride_RequestJSON, false, false));
+                        intent.putExtra("airportCode", APIUtils.getAirportAbbr(Ride_RequestJSON));
+                        inputFlight.startActivity(intent);
+
 
                     }
                 }, new Response.ErrorListener() {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        /*
                         Toast.makeText(inputFlight,"Error: Flight Request not made", Toast.LENGTH_SHORT).show();
                         error.printStackTrace();
-                        */
                     }
                 });
           APIRequestSingleton.getInstance(inputFlight).addToRequestQueue(jsonObjectRequest, "postRequest");
+
         Intent intent = new Intent(inputFlight, CreatedRequestDetails.class);
         intent.putExtra("flightTime", APIUtils.getFlightTime(Ride_RequestJSON, false, true));
         intent.putExtra("earliestTime", APIUtils.getFlightTime(Ride_RequestJSON, true, false));
@@ -190,8 +264,6 @@ public class APIUtils {
 
         intent.putExtra("airportCode", APIUtils.getAirportAbbr(Ride_RequestJSON));
         inputFlight.startActivity(intent);
-
-
 
     }
 
