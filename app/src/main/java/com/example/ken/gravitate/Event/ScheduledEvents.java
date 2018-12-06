@@ -109,7 +109,7 @@ public class ScheduledEvents extends AppCompatActivity
             startActivity(new Intent(ScheduledEvents.this, LoginActivity.class));
             finishAndRemoveTask();
         }
-        String user_url = APIUtils.getUserURL(user.getUid());
+        String user_url = APIUtils.getUserURL(user);
 
         // Getting ride requests from the user's collection
         String userID = user.getUid();
@@ -139,7 +139,7 @@ public class ScheduledEvents extends AppCompatActivity
         // Get the only header and set the profile's picture
         View navHeader = navigationView.getHeaderView(0);
         navProfilePic = navHeader.findViewById(R.id.nav_profile);
-        APIUtils.getUser(mContext, user_url, new VolleyCallback() {
+        APIUtils.getUser(mContext, user, new VolleyCallback() {
             @Override
             public void onSuccessResponse(JSONObject result) {
                 try {

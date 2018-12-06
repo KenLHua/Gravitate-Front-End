@@ -90,6 +90,15 @@ public class APIUtils {
         return builder.toString();
     }
 
+    public static String getUserURL( String uid ) {
+        Uri.Builder builder = new Uri.Builder();
+        builder.scheme("https")
+                .path("gravitate-e5d01.appspot.com/users")
+                .appendPath(uid);
+
+        return builder.toString();
+    }
+
     public static String getUserURL( FirebaseUser user ) {
         String uid = user.getUid();
         Uri.Builder builder = new Uri.Builder();
@@ -129,6 +138,27 @@ public class APIUtils {
     public static void getUser(final Context myProfile, FirebaseUser user, final VolleyCallback callback) {
 
         String request_url = getUserURL(user);
+        final String TAG = "User";
+        // Formulate the request and handle the response.
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.GET, request_url, null, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        callback.onSuccessResponse(response);
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO: Handle error
+                        Toast.makeText(myProfile, error + "error", Toast.LENGTH_LONG).show();
+                    }
+                });
+        APIRequestSingleton.getInstance(myProfile).addToRequestQueue(jsonObjectRequest, "getUserRequest");
+    }
+
+    public static void getUser(final Context myProfile, String request_url, final VolleyCallback callback) {
+        
         final String TAG = "User";
         // Formulate the request and handle the response.
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
