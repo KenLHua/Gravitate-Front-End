@@ -84,17 +84,37 @@ public class APIUtils {
         APIRequestSingleton.getInstance(loginScreen).addToRequestQueue(jsonObjectRequest, "postRequest");
     }*/
 
-    /* Sends a GET Request to Flightstats API
-     *  RETURNS: String in JSON format that contains flight information
+    /* Sends a GET Request to server to retrieve User Profile
      * */
+//    public static void getUser(final Context myProfile, String request_url, final VolleyCallback callback) {
+//
+//        final String TAG = "User";
+//        // Formulate the request and handle the response.
+//        StringRequest jsonObjectRequest = new StringRequest
+//                (Request.Method.GET, request_url, new Response.Listener<String>() {
+//                    @Override
+//                    public void onResponse(String response) {
+//                        callback.onSuccessResponse(response);
+//                    }
+//                }, new Response.ErrorListener() {
+//
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//                        // TODO: Handle error
+//                        Toast.makeText(myProfile, error + "error", Toast.LENGTH_LONG).show();
+//                    }
+//                });
+//        APIRequestSingleton.getInstance(myProfile).addToRequestQueue(jsonObjectRequest, "getUserRequest");
+//    }
+
     public static void getUser(final Context myProfile, String request_url, final VolleyCallback callback) {
 
         final String TAG = "User";
         // Formulate the request and handle the response.
-        StringRequest jsonObjectRequest = new StringRequest
-                (Request.Method.GET, request_url, new Response.Listener<String>() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.GET, request_url, null, new Response.Listener<JSONObject>() {
                     @Override
-                    public void onResponse(String response) {
+                    public void onResponse(JSONObject response) {
                         callback.onSuccessResponse(response);
                     }
                 }, new Response.ErrorListener() {
@@ -107,6 +127,8 @@ public class APIUtils {
                 });
         APIRequestSingleton.getInstance(myProfile).addToRequestQueue(jsonObjectRequest, "getUserRequest");
     }
+
+
 
     /* Sends a GET Request to Flightstats API
      *  RETURNS: String in JSON format that contains flight information

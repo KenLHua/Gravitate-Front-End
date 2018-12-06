@@ -81,19 +81,39 @@ public class MyProfile extends AppCompatActivity {
 
     }
 
+//    public void populateUserInfo( FirebaseUser user ) {
+//
+//        String request_url = APIUtils.getUserURL(user.getUid());
+//        APIUtils.getUser(this, request_url,
+//                new VolleyCallback() {
+//                    @Override
+//                    public void onSuccessResponse(String result) {
+//                        try {
+//                            JSONObject response = new JSONObject(result);
+//                            mNameDisplay.setText(response.getString("display_name"));
+//                            mEmailDisplay.setText(response.getString("email"));
+//                            mPhoneDisplay.setText(response.getString("phone_number"));
+//                            new DownloadImageTask(mProfileImageDisplay).execute(response.getString("photo_url"));
+//
+//                        } catch (JSONException e ) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                });
+//    }
+
     public void populateUserInfo( FirebaseUser user ) {
 
         String request_url = APIUtils.getUserURL(user.getUid());
         APIUtils.getUser(this, request_url,
                 new VolleyCallback() {
                     @Override
-                    public void onSuccessResponse(String result) {
+                    public void onSuccessResponse(JSONObject result) {
                         try {
-                            JSONObject response = new JSONObject(result);
-                            mNameDisplay.setText(response.getString("display_name"));
-                            mEmailDisplay.setText(response.getString("email"));
-                            mPhoneDisplay.setText(response.getString("phone_number"));
-                            new DownloadImageTask(mProfileImageDisplay).execute(response.getString("photo_url"));
+                            mNameDisplay.setText(result.getString("display_name"));
+                            mEmailDisplay.setText(result.getString("email"));
+                            mPhoneDisplay.setText(result.getString("phone_number"));
+                            new DownloadImageTask(mProfileImageDisplay).execute(result.getString("photo_url"));
 
                         } catch (JSONException e ) {
                             e.printStackTrace();
@@ -101,7 +121,6 @@ public class MyProfile extends AppCompatActivity {
                     }
                 });
     }
-
 
 
     // Helper method for back button
