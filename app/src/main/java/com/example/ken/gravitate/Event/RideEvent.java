@@ -19,12 +19,22 @@ import android.widget.TextView;
 import com.example.ken.gravitate.Models.Rider;
 import com.example.ken.gravitate.R;
 import com.example.ken.gravitate.RiderAdapter;
+import com.example.ken.gravitate.Utils.AuthSingleton;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class RideEvent extends AppCompatActivity {
+    private TextView mPartnerName;
+    private TextView mPartnerEmail;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,22 +52,50 @@ public class RideEvent extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         Boolean stillPending = getIntent().getExtras().getBoolean("stillPending");
+        String orbitPath = getIntent().getStringExtra("orbitRef");
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference orbitRef = db.document(orbitPath);
+        FirebaseUser user = AuthSingleton.getInstance().getCurrentUser();
+        String currUserID = user.getUid();
 
 
         RecyclerView recyclerView = findViewById(R.id.rider_list);
 
         final List<Rider> rider_list = new ArrayList<Rider>();
-        Rider riderCard = new Rider(R.drawable.default_profile, "Bobby Hill", "bobbyHill@ucsd.edu");
+        Rider riderCard = new Rider(R.drawable.default_profile, "Name", "Email");
         rider_list.add(riderCard);
 
-        RiderAdapter adapter = new RiderAdapter(this,rider_list);
+        RiderAdapter adapter = new RiderAdapter(this,orbitRef,rider_list);
+        // Tester code
+        /*
         adapter.stillPending = stillPending.booleanValue();
+        JSONObject orbitSnapshot = new JSONObject();
+        HashMap<String, HashMap<String, Object>> userTicketPairs = new HashMap<String, HashMap<String, Object>>();
+        HashMap<String, Object> userID = new HashMap<String,Object>();
+        userID.put("hasCheckedIn", new Boolean(false));
+        userID.put("inChat", new Boolean(false));
+        userID.put("pickupAddress", "Pickup Address Hi!");
+        userID.put("rideRequestRef", null);
+        userID.put("userWillDrive", false);
+        try{
+            orbitSnapshot.put("ASLDKASLDKASDLK!L:#@K!#K!L:KA:LKDAL:SDKSA", userID);
+            orbitSnapshot.put(currUserID, null);
+        }
+        catch(JSONException e){
+            final String TAG = "RideEventJSON";
+            Log.w(TAG, " Failed reading JSON object");
+            e.printStackTrace();
+        }
+        */
+
+        // End of tester Code
 
         if(!stillPending.booleanValue()){
             ArrayList<String> profileImages = getIntent().getExtras().getStringArrayList("profileImages");
             adapter.setProfileImages(profileImages);
             recyclerView.setAdapter(adapter);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
         }
         else{
             recyclerView.setAdapter(null);

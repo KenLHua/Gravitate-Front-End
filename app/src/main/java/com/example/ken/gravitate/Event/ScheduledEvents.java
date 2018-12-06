@@ -103,8 +103,7 @@ public class ScheduledEvents extends AppCompatActivity
         String userProfileUrl = user.getPhotoUrl().toString();
 
         // Getting ride requests from the user's collection
-         String userID = user.getUid();
-        //String userID = "zkenneth_test2";
+        String userID = user.getUid();
         userDocRef = db.collection("users").document(userID);
         getUserRideRequestList(userDocRef, orbitView);
         orbitView.setLayoutManager(new LinearLayoutManager(ScheduledEvents.this));
@@ -371,6 +370,7 @@ public class ScheduledEvents extends AppCompatActivity
                         if(!stillPending) {
                             intent.putStringArrayListExtra("profileImages", profileImages);
                             intent.putExtra("orbitRef",  orbitRef.getPath());
+
 
                         }
                         mContext.startActivity(intent);
