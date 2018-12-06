@@ -60,6 +60,25 @@ public class JSONUtils {
         return flightJSON;
     }
 
+    /* Parse FlightStats API JSON String */
+    public static JSONObject getUserProfile( String JSONString ) {
+        JSONObject profileJSON = new JSONObject();
+        final String TAG = "getProfile";
+
+        try {
+            JSONObject reader = new JSONObject(JSONString);
+
+
+
+        } catch (JSONException e) {
+            Log.w(TAG, "failed: User Profile JSON");
+            e.printStackTrace();
+        }
+
+        return profileJSON;
+    }
+
+
     public static JSONObject retrieveUserInfo (FirebaseUser user ) {
         String uid = user.getUid();
         String fullName = user.getDisplayName();

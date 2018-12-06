@@ -68,8 +68,6 @@ public class InputFlight extends AppCompatActivity {
     private Calendar cal;
 
 
-
-
     /**** TESTING ****/
     private TextView mOutput;
 
@@ -83,6 +81,7 @@ public class InputFlight extends AppCompatActivity {
         toolbar.setNavigationIcon(R.drawable.system_icon_back);
 
 
+
         setSupportActionBar(toolbar);
 
         //Limit search to addresses in United States only, without the filter the autocomplete will
@@ -91,7 +90,8 @@ public class InputFlight extends AppCompatActivity {
                 .setCountry("us")
                 .build();
 
-
+        final String token = FirebaseAuth.getInstance().getAccessToken(false).getResult().getToken();
+        APIUtils.testAuthEndpoint(this,token);
 
         mContext = this;
         mOutput = findViewById(R.id.outputText);
@@ -175,7 +175,8 @@ public class InputFlight extends AppCompatActivity {
                                 ,flightDate.substring(0,2)
                                 ,flightDate.substring(3,5));
 
-                        APIUtils.getFlightStats(mContext,request_url, inputPickup.getText().toString(),toEvent,mOutput);
+                        APIUtils.getFlightStats(mContext,request_url, inputPickup.getText().toString(),toEvent,
+                                mOutput, token);
                         break;
                 }
             }
