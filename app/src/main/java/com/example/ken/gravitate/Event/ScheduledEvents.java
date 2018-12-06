@@ -30,9 +30,11 @@ import com.example.ken.gravitate.Account.LoginActivity;
 import com.example.ken.gravitate.Account.MyProfile;
 import com.example.ken.gravitate.Settings.SettingsActivity;
 import com.example.ken.gravitate.R;
+import com.example.ken.gravitate.Utils.APIUtils;
 import com.example.ken.gravitate.Utils.DownloadImageTask;
 import com.example.ken.gravitate.Utils.MyViewHolder;
 import com.example.ken.gravitate.Models.EventRequestModule;
+import com.example.ken.gravitate.Utils.VolleyCallback;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -50,11 +52,16 @@ import com.google.firebase.iid.InstanceIdResult;
 import com.leinardi.android.speeddial.SpeedDialActionItem;
 import com.leinardi.android.speeddial.SpeedDialView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class ScheduledEvents extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    final String TAG = "documentLOOKUP";
 
     public static FragmentManager fragmentManager;
     private DrawerLayout drawer;
@@ -62,16 +69,14 @@ public class ScheduledEvents extends AppCompatActivity
     private View header;
     private SpeedDialView fab;
     private TextView emptyRequests;
+    private ImageView navProfilePic;
 
     DocumentReference userDocRef;
     FirebaseFirestore db;
 
-    RecyclerView orbitView;
-
+    private RecyclerView orbitView;
     private SwipeRefreshLayout swipeContainer;
-
     private Context mContext;
-
     private boolean hasRide;
     private FirestoreRecyclerAdapter adapter;
 
@@ -87,10 +92,14 @@ public class ScheduledEvents extends AppCompatActivity
         super.onCreate(savedInstanceState);
         fragmentManager = getSupportFragmentManager();
         setContentView(R.layout.scheduled_events);
-        final String TAG = "documentLOOKUP";
         //Recycler view with adapter to display cards
         orbitView = findViewById(R.id.orbit_list);
         mContext = ScheduledEvents.this;
+        // Side-Navigation Setup
+        drawer = findViewById(R.id.drawer_layout);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
 
 
         db = FirebaseFirestore.getInstance();
@@ -100,13 +109,14 @@ public class ScheduledEvents extends AppCompatActivity
             startActivity(new Intent(ScheduledEvents.this, LoginActivity.class));
             finishAndRemoveTask();
         }
-        String userProfileUrl = user.getPhotoUrl().toString();
+        String user_url = APIUtils.getUserURL(user.getUid());
 
         // Getting ride requests from the user's collection
         String userID = user.getUid();
         userDocRef = db.collection("users").document(userID);
         getUserRideRequestList(userDocRef, orbitView);
         orbitView.setLayoutManager(new LinearLayoutManager(ScheduledEvents.this));
+        
 
 
 
@@ -126,14 +136,20 @@ public class ScheduledEvents extends AppCompatActivity
         setSupportActionBar(toolbar);
 
 
-        // Side-Navigation Setup
-        drawer = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
         // Get the only header and set the profile's picture
         View navHeader = navigationView.getHeaderView(0);
-        ImageView navProfilePic = navHeader.findViewById(R.id.nav_profile);
-        new DownloadImageTask(navProfilePic).execute(userProfileUrl);
+        navProfilePic = navHeader.findViewById(R.id.nav_profile);
+        APIUtils.getUser(mContext, user_url, new VolleyCallback() {
+            @Override
+            public void onSuccessResponse(JSONObject result) {
+                try {
+                    new DownloadImageTask(navProfilePic).execute(result.getString("photo_url"));
+
+                } catch (JSONException e ) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
         // Displaying that the user has no ride requests
         emptyRequests = findViewById(R.id.no_rides);
