@@ -17,6 +17,9 @@ public class CreatedRequestDetails extends AppCompatActivity {
     TextView mLatestTime;
     TextView mAirport;
     TextView mFlightTime;
+    TextView mPickupAddress;
+    TextView mDate;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.created_request_details);
@@ -34,17 +37,22 @@ public class CreatedRequestDetails extends AppCompatActivity {
         String latestTime = getIntent().getStringExtra("latestTime");
         String airport = getIntent().getStringExtra("airportCode");
         String flightTime = getIntent().getStringExtra("flightTime");
-
+        String pickupAddress = getIntent().getStringExtra("pickupAddress");
+        String date = getIntent().getStringExtra("date");
 
         mEarliestTime = findViewById(R.id.earlyArrivalTime);
         mLatestTime = findViewById(R.id.latestArrivalTime);
         mAirport = findViewById(R.id.airportName);
         mFlightTime = findViewById(R.id.flightTime);
+        mPickupAddress = findViewById(R.id.pickupAddress);
+        mDate = findViewById(R.id.Date);
 
         mEarliestTime.setText(earliestTime);
         mLatestTime.setText(latestTime);
         mAirport.setText(airport);
         mFlightTime.setText(flightTime);
+        mPickupAddress.setText(pickupAddress);
+        mDate.setText(date);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

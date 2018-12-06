@@ -34,7 +34,7 @@ public class MyProfile extends AppCompatActivity {
         FirebaseUser user = AuthSingleton.getInstance().getCurrentUser();
         populateUserInfo(user);
 
-//        String userEmail = user.getEmail();
+          String userEmail = user.getEmail();
 //        String userFullName = user.getDisplayName();
 //        String userPhoneNumber = user.getPhoneNumber();
 //        String userProfilePic  = user.getPhotoUrl().toString();
@@ -50,7 +50,7 @@ public class MyProfile extends AppCompatActivity {
 
         // Setting UI fields to represent the current user's information
 //        mNameDisplay.setText(userFullName);
-//        mEmailDisplay.setText(userEmail);
+       mEmailDisplay.setText(userEmail);
 //        mPhoneDisplay.setText(userPhoneNumber);
 //        new DownloadImageTask(mProfileImageDisplay).execute(userProfilePic);
 
@@ -80,6 +80,7 @@ public class MyProfile extends AppCompatActivity {
 
     }
 
+
     public void populateUserInfo( FirebaseUser user ) {
         APIUtils.getUser(this, user,
                 new VolleyCallback() {
@@ -87,7 +88,7 @@ public class MyProfile extends AppCompatActivity {
                     public void onSuccessResponse(JSONObject result) {
                         try {
                             mNameDisplay.setText(result.getString("display_name"));
-//                            mEmailDisplay.setText(result.getString("email"));
+                            mEmailDisplay.setText(result.getString("email"));
                             mPhoneDisplay.setText(result.getString("phone_number"));
                             new DownloadImageTask(mProfileImageDisplay).execute(result.getString("photo_url"));
 
