@@ -118,19 +118,22 @@ public class RiderAdapter extends RecyclerView.Adapter<RiderAdapter.RiderViewHol
                             APIUtils.getUser(mContext, request_url,
                                     new VolleyCallback() {
                                         @Override
-                                        public void onSuccessResponse(String result) {
+                                        public void onSuccessResponse(JSONObject result) {
                                             try {
-                                                JSONObject response = new JSONObject(result);
+                                                JSONObject response = result;
                                                 fullname.setText(response.getString("display_name"));
                                                 email.setText(response.getString("email"));
                                                 phone_number.setText(response.getString("phone_number"));
                                                 new DownloadImageTask(profile_photo).execute(response.getString("photo_url"));
 
-                                            } catch (JSONException e ) {
+                                            } catch (JSONException e) {
                                                 e.printStackTrace();
                                             }
+
                                         }
                                     });
+
+
                         }
                     }
 
