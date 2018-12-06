@@ -16,6 +16,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.example.ken.gravitate.Event.CreatedRequestDetails;
 import com.example.ken.gravitate.Event.InputFlight;
+import com.example.ken.gravitate.Event.ScheduledEvents;
 import com.example.ken.gravitate.Models.User;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -124,6 +125,7 @@ public class APIUtils {
                         // Do something with the response
                         Log.w(TAG, "POST_REQUEST: User JSON Sent");
                         Toast.makeText(confirmProfile,"Registration Success", Toast.LENGTH_LONG).show();
+                        confirmProfile.startActivity(new Intent(confirmProfile, ScheduledEvents.class));
                     }
                 }, new Response.ErrorListener() {
 

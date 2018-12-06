@@ -181,7 +181,6 @@ public class ConfirmProfile extends AppCompatActivity {
 
                 FirebaseUser user = mAuth.getCurrentUser();
                 String uid = user.getUid();
-                Log.d("phonenumberstring", phone_number);
                 APIUtils.postUser(this, uid, display_name, photo_url, pickupAddress,phone_number, token);
                 return true;
         }
