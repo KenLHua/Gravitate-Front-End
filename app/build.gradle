@@ -8,6 +8,9 @@ android {
             storeFile file('../gravitate_key.jks')
             storePassword 'gravitate123'
         }
+        debug {
+            storeFile file('../debug.keystore')
+        }
     }
     compileSdkVersion 28
     defaultConfig {
@@ -25,7 +28,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    flavorDimensions "gravitate_firebase_dev"
     productFlavors {
+        firebase_gravitate_dev {
+            applicationId "com.example.ken.gravitate_firebase_dev"
+            versionCode 1
+        }
     }
     dataBinding {
         enabled = true

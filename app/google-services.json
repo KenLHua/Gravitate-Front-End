@@ -1,35 +1,35 @@
 {
   "project_info": {
-    "project_number": "1070051773756",
-    "firebase_url": "https://gravitate-e5d01.firebaseio.com",
-    "project_id": "gravitate-e5d01",
-    "storage_bucket": "gravitate-e5d01.appspot.com"
+    "project_number": "452147414499",
+    "firebase_url": "https://gravitate-dev.firebaseio.com",
+    "project_id": "gravitate-dev",
+    "storage_bucket": "gravitate-dev.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1070051773756:android:6b6b75e34f6eca1b",
+        "mobilesdk_app_id": "1:452147414499:android:d6c3ea06116eed1b",
         "android_client_info": {
-          "package_name": "com.example.ken.gravitate"
+          "package_name": "com.example.ken.gravitate_firebase_dev"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1070051773756-j9qo6bj02ekpfb84bgp5oup7chqn1mpr.apps.googleusercontent.com",
+          "client_id": "452147414499-j7u98psbom2l09h33ji1tjtee9dk31rf.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.ken.gravitate",
-            "certificate_hash": "ddf3edb2697112c1eb1a4caa1f6c13f866c524cc"
+            "package_name": "com.example.ken.gravitate_firebase_dev",
+            "certificate_hash": "15891b3a510071435167d44b16c52162de00e62f"
           }
         },
         {
-          "client_id": "1070051773756-2ute425s4nr9hc3hiv1t8ccdte1rmpia.apps.googleusercontent.com",
+          "client_id": "452147414499-qn5voddbjjtovdqac1hhll8kikhsvh9g.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBcCP3GrOv5zPhecxMBrhUwLI4E-X-I1nQ"
+          "current_key": "AIzaSyCeYahzrCzuMlx5-m6G6Cj0X2VzoTyxH7o"
         }
       ],
       "services": {
@@ -40,7 +40,7 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "1070051773756-o6l5r1l6v7m079r1oua2lo0rsfeu8m9i.apps.googleusercontent.com",
+              "client_id": "452147414499-qn5voddbjjtovdqac1hhll8kikhsvh9g.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
