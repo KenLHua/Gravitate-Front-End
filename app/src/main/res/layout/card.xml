@@ -58,6 +58,7 @@
         android:layout_marginBottom="8dp"
         android:textColor="#ffffff"
         android:text="TextView"
+        android:gravity="center"
         app:layout_constraintBottom_toBottomOf="@+id/imageView2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.461"

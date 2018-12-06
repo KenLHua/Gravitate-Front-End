@@ -18,6 +18,25 @@
         android:layout_centerHorizontal="true"
         app:srcCompat="@drawable/gravitate_logo_transparent"
         tools:ignore="HardcodedText" />
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_alignLeft="@id/googleBtn"
+        android:layout_below="@id/logoView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:layout_centerInParent="true"
+        android:layout_margin="15dp"
+        />
+    <TextView
+        android:id="@+id/progress_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Signing In"
+        android:layout_alignBottom="@id/progress_bar"
+        android:layout_marginBottom="8dp"
+        android:visibility="invisible"
+        android:layout_toRightOf="@id/progress_bar"/>
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/googleBtn"

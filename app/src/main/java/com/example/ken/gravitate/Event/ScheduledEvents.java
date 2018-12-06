@@ -371,6 +371,7 @@ public class ScheduledEvents extends AppCompatActivity
                             intent.putStringArrayListExtra("profileImages", profileImages);
                             intent.putExtra("orbitRef",  orbitRef.getPath());
 
+
                         }
                         mContext.startActivity(intent);
                     }
