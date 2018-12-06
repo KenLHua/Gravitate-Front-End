@@ -1,5 +1,6 @@
 package com.example.ken.gravitate.Account;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -35,6 +36,7 @@ public class LoginActivity extends AppCompatActivity {
 
     SignInButton sign_in_bttn;
     FirebaseAuth mAuth;
+    Context mCtx;
     private final static int RC_SIGN_IN = 2; // Request Code for starting new activity
     GoogleSignInClient mGoogleSignInClient;
     FirebaseAuth.AuthStateListener mAuthListener;
@@ -52,6 +54,8 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        mCtx = this;
 
         ImageView logo = findViewById(R.id.logoView);
         logo.setOnClickListener(new View.OnClickListener() {
@@ -142,6 +146,8 @@ public class LoginActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+                            JSONObject userJSON = JSONUtils.retrieveUserInfo(user);
+                            APIUtils.postUser(mCtx, userJSON);
                             startActivity(new Intent(LoginActivity.this, ScheduledEvents.class));
                             // updateUI(user);
                         } else {

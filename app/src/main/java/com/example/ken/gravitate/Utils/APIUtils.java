@@ -59,8 +59,8 @@ public class APIUtils {
         return builder.toString();
     }
 
-/*    public static void postUser(final Context loginScreen, JSONObject userJSON) {
-        final String server_url = "https://gravitate-e5d01.appspot.com/user";
+    public static void postUser(final Context loginScreen, JSONObject userJSON) {
+        final String server_url = "https://gravitate-dev.appspot.com/users";
         final String TAG = "User";
         // Formulate the request and handle the response.
         Log.w(TAG, "REQUEST:Attempt to create User Object");
@@ -82,7 +82,7 @@ public class APIUtils {
                     }
                 });
         APIRequestSingleton.getInstance(loginScreen).addToRequestQueue(jsonObjectRequest, "postRequest");
-    }*/
+    }
 
     /* Sends a GET Request to server to retrieve User Profile
      * */

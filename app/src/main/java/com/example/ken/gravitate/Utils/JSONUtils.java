@@ -88,8 +88,11 @@ public class JSONUtils {
         JSONObject userJSON = new JSONObject();
         try {
             userJSON.put("uid", user.getUid());
-            userJSON.put("fullName", user.getUid());
-            userJSON.put("pictureURL", user.getUid());
+            userJSON.put("display_name", user.getDisplayName());
+            userJSON.put("phone_number", user.getPhoneNumber());
+            userJSON.put("membership", "rider");
+            userJSON.put("photo_url", user.getPhotoUrl());
+
 
         } catch (JSONException e) {
             final String TAG = "toJSON";
