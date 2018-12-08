@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.example.ken.gravitate.Models.Rider;
@@ -98,7 +99,18 @@ public class RiderAdapter extends RecyclerView.Adapter<RiderAdapter.RiderViewHol
         public RiderViewHolder(View itemView, DocumentReference orbitRef, Context context) {
             super(itemView);
             mContext = context;
-            final String token = FirebaseAuth.getInstance().getAccessToken(false).getResult().getToken();
+            Task<com.google.firebase.auth.GetTokenResult> tokenTask = FirebaseAuth.getInstance().getAccessToken(false);
+
+            if(!tokenTask.isComplete()){
+                try{
+                    tokenTask.wait(500);
+                }
+                catch (InterruptedException e){
+                    e.getStackTrace();
+                    Toast.makeText(mContext, "Error: Could not get Access Token", Toast.LENGTH_LONG).show();
+                }
+            }
+            final String token = tokenTask.getResult().getToken();
             profile_photo = itemView.findViewById(R.id.profile_photo);
             fullname = itemView.findViewById(R.id.rider_name);
             email = itemView.findViewById(R.id.rider_email);

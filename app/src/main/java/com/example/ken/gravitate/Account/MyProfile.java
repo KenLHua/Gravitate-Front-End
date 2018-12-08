@@ -1,5 +1,6 @@
 package com.example.ken.gravitate.Account;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -8,14 +9,17 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.ken.gravitate.R;
 import com.example.ken.gravitate.Utils.APIUtils;
 import com.example.ken.gravitate.Utils.AuthSingleton;
 import com.example.ken.gravitate.Utils.DownloadImageTask;
 import com.example.ken.gravitate.Utils.VolleyCallback;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,11 +32,25 @@ public class MyProfile extends AppCompatActivity {
     private TextView mEmailDisplay;
     private TextView mPhoneDisplay;
     private ImageView mProfileImageDisplay;
+    private Context mContext;
     private String token;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        mContext = MyProfile.this;
 
-        final String token = FirebaseAuth.getInstance().getAccessToken(false).getResult().getToken();
+        String token = null;
+        Task<GetTokenResult> tokenTask = FirebaseAuth.getInstance().getAccessToken(false);
+
+        if(!tokenTask.isComplete()){
+            try{
+                tokenTask.wait(500);
+            }
+            catch (InterruptedException e){
+                e.getStackTrace();
+                Toast.makeText(mContext, "Error: Could not get Access Token", Toast.LENGTH_LONG).show();
+            }
+        }
+        token = tokenTask.getResult().getToken();
 
         // Getting current user's information
         FirebaseUser user = AuthSingleton.getInstance().getCurrentUser();

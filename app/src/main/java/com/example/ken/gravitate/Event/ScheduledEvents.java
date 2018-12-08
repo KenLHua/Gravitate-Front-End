@@ -15,6 +15,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -104,7 +105,19 @@ public class ScheduledEvents extends AppCompatActivity
         View toolbarShadow = findViewById(R.id.toolbar_shadow);
         toolbarShadow.bringToFront();
 
-        final String token = FirebaseAuth.getInstance().getAccessToken(false).getResult().getToken();
+        String token = null;
+        Task<com.google.firebase.auth.GetTokenResult> tokenTask = FirebaseAuth.getInstance().getAccessToken(false);
+
+        if(!tokenTask.isComplete()){
+            try{
+                tokenTask.wait(500);
+            }
+            catch (InterruptedException e){
+                e.getStackTrace();
+                Toast.makeText(mContext, "Error: Could not get Access Token", Toast.LENGTH_LONG).show();
+            }
+        }
+        token = tokenTask.getResult().getToken();
 
         db = FirebaseFirestore.getInstance();
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
@@ -203,8 +216,6 @@ public class ScheduledEvents extends AppCompatActivity
                 }
             }
         });
-
-
 
         orbitView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -339,6 +350,7 @@ public class ScheduledEvents extends AppCompatActivity
                 // Create the card
                 LayoutInflater inflater = LayoutInflater.from(mContext);
                 View v = inflater.inflate(R.layout.card, viewGroup, false);
+                registerForContextMenu(v);
                 MyViewHolder myViewHolder = new MyViewHolder(v);
 
 
@@ -426,14 +438,28 @@ public class ScheduledEvents extends AppCompatActivity
                             intent.putStringArrayListExtra("profileImages", profileImages);
                             intent.putExtra("orbitRef",  orbitRef.getPath());
                             intent.putExtra("destTime", destTime );
-
-
                         }
                         mContext.startActivity(intent);
                     }
 
                     @Override
                     public void onItemLongClick(View view, int position) {
+                        // Show options menu when long pressing a card
+                        PopupMenu popup = new PopupMenu(mContext, view);
+                        popup.inflate(R.menu.request_menu);
+                        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                            @Override
+                            public boolean onMenuItemClick(MenuItem menuItem) {
+                                switch(menuItem.getItemId()){
+                                    case R.id.cancel_request:
+                                        // Handle cancel button
+                                        return true;
+                                    default:
+                                        return false;
+                                }
+                            }
+                        });
+                        popup.show();
                     }
                 });
             }
