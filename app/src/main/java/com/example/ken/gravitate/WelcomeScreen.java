@@ -38,9 +38,6 @@ public class WelcomeScreen extends AppCompatActivity {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if ( user != null ) {
                     startActivity(new Intent(WelcomeScreen.this, ScheduledEvents.class));
-                } else{
-
-
                 }
             }
         };

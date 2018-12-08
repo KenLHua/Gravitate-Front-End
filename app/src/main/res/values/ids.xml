@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item name="fab_input_flight_number" type="id" />
-    <item name="fab_new_event" type="id" />
+    <item name="fab_force_match" type="id" />
+
 </resources>

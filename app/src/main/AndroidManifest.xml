@@ -52,7 +52,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Event.ScheduledEvents"/>
         </activity>
-
+        <activity android:name=".forcematch2"></activity>
 
         <activity android:name=".Account.EditAccount"
             android:label="Edit Account">

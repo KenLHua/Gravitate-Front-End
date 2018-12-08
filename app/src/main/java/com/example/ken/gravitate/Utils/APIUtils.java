@@ -212,6 +212,43 @@ public class APIUtils {
 
     }
 
+    public static void postForceMatch(final Context forceMatch, JSONObject Ride_RequestJSON) {
+        final String server_url = "https://gravitate-e5d01.appspot.com/devForceMatch";
+        final String TAG = "ForceMatch";
+
+
+
+        // Formulate the request and handle the response.
+        Log.w(TAG, "REQUEST:Attempt to create jsonObjectRequest");
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.POST, server_url, Ride_RequestJSON, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        // Do something with the response
+                        Log.w(TAG, "POST_REQUEST:Force Match success");
+                        Toast.makeText(forceMatch,"Success", Toast.LENGTH_SHORT).show();
+
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.w(TAG, "POST_REQUEST:Force Match failed");
+                        /*
+                        Toast.makeText(inputFlight,"Error: Flight Request not made", Toast.LENGTH_SHORT).show();
+                        */
+
+                        error.printStackTrace();
+
+                    }
+                });
+        APIRequestSingleton.getInstance(forceMatch).addToRequestQueue(jsonObjectRequest, "postRequest");
+
+
+
+    }
+
     public static String getFlightTime(JSONObject ride_RequestJSON, boolean earlyTime, boolean actualTime){
         String flightTime = null;
         int flightHour = 0;

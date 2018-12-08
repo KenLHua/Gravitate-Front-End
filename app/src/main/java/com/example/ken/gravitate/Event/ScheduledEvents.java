@@ -33,6 +33,7 @@ import com.example.ken.gravitate.R;
 import com.example.ken.gravitate.Utils.DownloadImageTask;
 import com.example.ken.gravitate.Utils.MyViewHolder;
 import com.example.ken.gravitate.Models.EventRequestModule;
+import com.example.ken.gravitate.forcematch2;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -49,6 +50,9 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.leinardi.android.speeddial.SpeedDialActionItem;
 import com.leinardi.android.speeddial.SpeedDialView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -158,26 +162,24 @@ public class ScheduledEvents extends AppCompatActivity
                         .setLabelClickable(false)
                         .create());
 
+        speedDialView.addActionItem(
+                new SpeedDialActionItem.Builder(R.id.fab_force_match, R.drawable.cover_image)
+                        .setLabel("FORCE MATCH")
+                        .setLabelClickable(false)
+                        .create());
 
-        // Provide behavior to the secondary FAB buttons
+
         speedDialView.setOnActionSelectedListener(new SpeedDialView.OnActionSelectedListener() {
             @Override
             public boolean onActionSelected(SpeedDialActionItem speedDialActionItem) {
                 switch (speedDialActionItem.getId()) {
                     case R.id.fab_input_flight_number:
+
                         startActivity(new Intent(ScheduledEvents.this, InputFlight.class));
                         return false; // true to keep the Speed Dial open
-                    default:
-                        return false;
-                }
-            }
-        });
-        speedDialView.setOnActionSelectedListener(new SpeedDialView.OnActionSelectedListener() {
-            @Override
-            public boolean onActionSelected(SpeedDialActionItem speedDialActionItem) {
-                switch (speedDialActionItem.getId()) {
-                    case R.id.fab_input_flight_number:
-                        startActivity(new Intent(ScheduledEvents.this, InputFlight.class));
+                    case R.id.fab_force_match:
+
+                        startActivity(new Intent(ScheduledEvents.this, forcematch2.class));
                         return false; // true to keep the Speed Dial open
                     default:
                         return false;
