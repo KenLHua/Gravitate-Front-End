@@ -11,24 +11,14 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.example.ken.gravitate.Utils.APIRequestSingleton;
 import com.example.ken.gravitate.R;
-import com.example.ken.gravitate.Utils.JSONUtils;
-
 
 //Necessary libraries for Address Autocomplete functionality
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -38,14 +28,8 @@ import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import org.json.JSONObject;
 
 import java.util.Calendar;
-import java.util.List;
 
 public class InputFlight extends AppCompatActivity {
     // Autrocomplete Request Code
@@ -68,8 +52,6 @@ public class InputFlight extends AppCompatActivity {
     private Calendar cal;
 
 
-
-
     /**** TESTING ****/
     private TextView mOutput;
 
@@ -83,6 +65,7 @@ public class InputFlight extends AppCompatActivity {
         toolbar.setNavigationIcon(R.drawable.system_icon_back);
 
 
+
         setSupportActionBar(toolbar);
 
         //Limit search to addresses in United States only, without the filter the autocomplete will
@@ -91,7 +74,8 @@ public class InputFlight extends AppCompatActivity {
                 .setCountry("us")
                 .build();
 
-
+        final String token = FirebaseAuth.getInstance().getAccessToken(false).getResult().getToken();
+//        APIUtils.testAuthEndpoint(this,token);
 
         mContext = this;
         mOutput = findViewById(R.id.outputText);
@@ -156,11 +140,7 @@ public class InputFlight extends AppCompatActivity {
             public void onClick(View v) {
                 switch(v.getId()) {
                     case R.id.flightStats_bttn:
-                        /*** TEST CODE ****/
-/*                        String request_url = APIUtils.getFSScheduleURL("DL", "89",
-                                "2019", "5", "2");*/
 
-                        /****** ACTUAL CODE ****/
                         String flightDate = inputDepartureDate.getText().toString();
                         // Checking if all necessary inputs are given, if not return and give a error
                         if (invalidFlightFields(mflightCarrier.getText().toString(),
@@ -168,14 +148,14 @@ public class InputFlight extends AppCompatActivity {
                                 flightDate,
                                 inputPickup.getText().toString())) return;
 
-                        // Request_URL = ("Carrier", "Flight Number", "YEAR", "MONTH", "DATE")
+                        // Request_URL takes in ("Carrier", "Flight Number", "YEAR", "MONTH", "DATE")
                         String request_url = APIUtils.getFSScheduleURL(
                                 mflightCarrier.getText().toString(),mflightNum.getText().toString(),
                                 flightDate.substring(6, flightDate.length())
                                 ,flightDate.substring(0,2)
                                 ,flightDate.substring(3,5));
 
-                        APIUtils.getFlightStats(mContext,request_url, inputPickup.getText().toString(),toEvent,mOutput);
+                        APIUtils.getFlightStats(mContext, request_url,inputPickup.getText().toString() , toEvent, flightDate, mOutput, token);
                         break;
                 }
             }
@@ -217,9 +197,7 @@ public class InputFlight extends AppCompatActivity {
                     .build(this);
             startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
         } catch (GooglePlayServicesRepairableException e) {
-            // TODO: Handle the error.
         } catch (GooglePlayServicesNotAvailableException e) {
-            // TODO: Handle the error.
         }
     }
     // The deal with the actions done at the autocomplete activity
@@ -231,7 +209,6 @@ public class InputFlight extends AppCompatActivity {
                 inputPickup.setText(place.getAddress());
             } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
                 Status status = PlaceAutocomplete.getStatus(this, data);
-                // TODO: Handle the error.
                 inputPickup.setText("");
                 Log.i("Autocomplete Error", status.getStatusMessage());
 

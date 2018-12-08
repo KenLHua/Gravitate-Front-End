@@ -25,7 +25,8 @@
     <string name="email">myemail@ucsd.edu</string>
     <string name="ride_count">0 Rides</string>
     <string name="edit_account">Edit \nAccount</string>
-    <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
+    <string name="orbit_notif_channel" translatable="false">orbit</string>
+    <string name="flight_notif_channel" translatable="false">flight</string>
     <string name="notification_title" translatable="false">Gravitate Notification</string>
 
 

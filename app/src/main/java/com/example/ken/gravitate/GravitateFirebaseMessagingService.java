@@ -17,6 +17,7 @@ package com.example.ken.gravitate;
 
 
 import android.app.NotificationChannel;
+import android.app.NotificationChannelGroup;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -57,10 +58,10 @@ public class GravitateFirebaseMessagingService extends FirebaseMessagingService 
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
                 PendingIntent.FLAG_ONE_SHOT);
 
-        String channelId = getString(R.string.default_notification_channel_id);
+        String channelId1 = getString(R.string.orbit_notif_channel);
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder =
-                new NotificationCompat.Builder(this, channelId)
+                new NotificationCompat.Builder(this, channelId1)
                         .setContentTitle(getString(R.string.notification_title))
                         .setContentText(messageBody)
                         .setAutoCancel(true)
@@ -71,11 +72,19 @@ public class GravitateFirebaseMessagingService extends FirebaseMessagingService 
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         // Since android Oreo notification channel is needed.
+        String channelId2 = getString(R.string.flight_notif_channel);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(channelId,
-                    "Channel human readable title",
+            NotificationChannel orbitChannel = new NotificationChannel(channelId2,
+                    "Orbit Confirmed",
                     NotificationManager.IMPORTANCE_DEFAULT);
-            notificationManager.createNotificationChannel(channel);
+            notificationManager.createNotificationChannel(orbitChannel);
+
+            NotificationChannel flightChannel = new NotificationChannel("2",
+                    "Flight Updates",
+                    NotificationManager.IMPORTANCE_DEFAULT);
+            notificationManager.createNotificationChannel(flightChannel);
+            notificationManager.createNotificationChannelGroup(new NotificationChannelGroup(channelId2, "Flight"));
+
         }
 
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());

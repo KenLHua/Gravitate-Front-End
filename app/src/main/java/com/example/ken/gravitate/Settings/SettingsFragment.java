@@ -2,7 +2,10 @@ package com.example.ken.gravitate.Settings;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.preference.PreferenceCategory;
 import android.support.v7.preference.PreferenceFragmentCompat;
+import android.support.v7.preference.PreferenceScreen;
+
 import com.example.ken.gravitate.R;
 
 

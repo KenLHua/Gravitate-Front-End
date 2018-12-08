@@ -1,16 +1,10 @@
 package com.example.ken.gravitate.Utils;
 
-import android.net.Uri;
 import android.util.Log;
-
-import com.google.firebase.auth.FirebaseUser;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class JSONUtils {
 
@@ -43,9 +37,9 @@ public class JSONUtils {
                     + departureAirport.getString("stateCode")+ ","
                     + departureAirport.getString("postalCode");
 
+
             flightJSON.put("flightNumber",flightNumber);
             flightJSON.put("flightLocalTime",departureTime);
-/*            flightJSON.put("airportLocation",airport_address);*/
             flightJSON.put("pickupAddress",pickUpAddress);
             flightJSON.put("toEvent",String.valueOf(toEvent));
             flightJSON.put("airportCode", departureAirportFsCode);
@@ -60,49 +54,35 @@ public class JSONUtils {
         return flightJSON;
     }
 
-    /* Parse FlightStats API JSON String */
-    public static JSONObject getUserProfile( String JSONString ) {
-        JSONObject profileJSON = new JSONObject();
-        final String TAG = "getProfile";
-
-        try {
-            JSONObject reader = new JSONObject(JSONString);
-
-
-
-        } catch (JSONException e) {
-            Log.w(TAG, "failed: User Profile JSON");
-            e.printStackTrace();
-        }
-
-        return profileJSON;
-    }
-
-
-    public static JSONObject retrieveUserInfo (FirebaseUser user ) {
-        String uid = user.getUid();
-        String fullName = user.getDisplayName();
-        String email = user.getEmail();
-        Uri photoUrl = user.getPhotoUrl();
-
+    public static JSONObject retrieveUserInfo (String uid, String display_name, String photo_url,
+                                               String pickupAddress, String phone_number) {
         JSONObject userJSON = new JSONObject();
         try {
-            userJSON.put("uid", user.getUid());
-            userJSON.put("fullName", user.getUid());
-            userJSON.put("pictureURL", user.getUid());
-
+            userJSON.put("uid", uid);
+            userJSON.put("display_name", display_name);
+            userJSON.put("phone_number", phone_number);
+            userJSON.put("photo_url", photo_url);
+            userJSON.put("membership", "rider");
+            userJSON.put("pickupAddress", pickupAddress);
         } catch (JSONException e) {
             final String TAG = "toJSON";
             Log.w(TAG, "failed: User JSON");
             e.printStackTrace();
-
         }
 
         return userJSON;
     }
 
-    public static JSONObject postUserInfo () {
-        JSONObject userJSON = new JSONObject();
-        return userJSON;
+    public static JSONObject deleteRideRequestJSON(String ride_request_id) {
+        JSONObject deleteRRJSON = new JSONObject();
+        try {
+            deleteRRJSON.put("rideRequestId", ride_request_id);
+        } catch (JSONException e) {
+            final String TAG = "toJSON";
+            Log.w(TAG, "failed: deleteRR JSON");
+            e.printStackTrace();
+        }
+
+        return deleteRRJSON;
     }
 }

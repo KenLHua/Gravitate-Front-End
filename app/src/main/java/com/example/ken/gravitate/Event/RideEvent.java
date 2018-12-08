@@ -19,12 +19,22 @@ import android.widget.TextView;
 import com.example.ken.gravitate.Models.Rider;
 import com.example.ken.gravitate.R;
 import com.example.ken.gravitate.RiderAdapter;
+import com.example.ken.gravitate.Utils.AuthSingleton;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class RideEvent extends AppCompatActivity {
+    private TextView mPartnerName;
+    private TextView mPartnerEmail;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,24 +52,40 @@ public class RideEvent extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         Boolean stillPending = getIntent().getExtras().getBoolean("stillPending");
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
 
 
         RecyclerView recyclerView = findViewById(R.id.rider_list);
 
         final List<Rider> rider_list = new ArrayList<Rider>();
-        Rider riderCard = new Rider(R.drawable.default_profile, "Bobby Hill", "bobbyHill@ucsd.edu");
+        Rider riderCard = new Rider(R.drawable.default_profile, "Name", "Email");
         rider_list.add(riderCard);
 
-        RiderAdapter adapter = new RiderAdapter(this,rider_list);
-        adapter.stillPending = stillPending.booleanValue();
+        TextView destTimeDisplay = findViewById(R.id.departureTime);
+        TextView flightTimeDisplay = findViewById(R.id.flightTime);
+        TextView pickupAddressDisplay = findViewById(R.id.pickupAddress);
+        String pickupAddress = getIntent().getStringExtra("pickupAddress");
+
+        String flightTime = getIntent().getStringExtra("flightTime");
+        flightTimeDisplay.setText("Flight Time : " + flightTime);
+        pickupAddressDisplay.setText("Pickup Address : " + pickupAddress);
 
         if(!stillPending.booleanValue()){
+
+            String orbitPath = getIntent().getStringExtra("orbitRef");
+            DocumentReference orbitRef = db.document(orbitPath);
+            RiderAdapter adapter = new RiderAdapter(this,orbitRef,rider_list);
+            String destTime = getIntent().getStringExtra("destTime");
+            destTimeDisplay.setText("Arrival Time : "+ destTime);
             ArrayList<String> profileImages = getIntent().getExtras().getStringArrayList("profileImages");
             adapter.setProfileImages(profileImages);
             recyclerView.setAdapter(adapter);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
         }
         else{
+            RiderAdapter adapter = new RiderAdapter(this,null,rider_list);
+            destTimeDisplay.setVisibility(View.GONE);
             recyclerView.setAdapter(null);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
         }
@@ -67,9 +93,7 @@ public class RideEvent extends AppCompatActivity {
 
 
 
-        TextView flightTimeDisplay = findViewById(R.id.flightTime);
-        String flightTime = getIntent().getStringExtra("flightTime");
-        flightTimeDisplay.setText(flightTime);
+
 
 
     }

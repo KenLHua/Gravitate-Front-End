@@ -45,6 +45,7 @@
                 android:value=".Event.ScheduledEvents" />
         </activity>
         <activity android:name=".Event.NewEvent"> </activity>
+        <activity android:name=".Account.ConfirmProfile"> </activity>
         <activity android:name=".Account.MyProfile"> </activity>
         <activity android:name=".Settings.SettingsActivity"
             android:label="Settings">

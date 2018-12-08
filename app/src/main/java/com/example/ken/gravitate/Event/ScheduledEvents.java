@@ -30,10 +30,12 @@ import com.example.ken.gravitate.Account.LoginActivity;
 import com.example.ken.gravitate.Account.MyProfile;
 import com.example.ken.gravitate.Settings.SettingsActivity;
 import com.example.ken.gravitate.R;
+import com.example.ken.gravitate.Utils.APIUtils;
 import com.example.ken.gravitate.Utils.DownloadImageTask;
 import com.example.ken.gravitate.Utils.MyViewHolder;
 import com.example.ken.gravitate.Models.EventRequestModule;
 import com.example.ken.gravitate.forcematch2;
+import com.example.ken.gravitate.Utils.VolleyCallback;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -60,22 +62,22 @@ import java.util.List;
 public class ScheduledEvents extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    final String TAG = "documentLOOKUP";
+
     public static FragmentManager fragmentManager;
     private DrawerLayout drawer;
     private ImageView profile;
     private View header;
     private SpeedDialView fab;
     private TextView emptyRequests;
+    private ImageView navProfilePic;
 
     DocumentReference userDocRef;
     FirebaseFirestore db;
 
-    RecyclerView orbitView;
-
+    private RecyclerView orbitView;
     private SwipeRefreshLayout swipeContainer;
-
     private Context mContext;
-
     private boolean hasRide;
     private FirestoreRecyclerAdapter adapter;
 
@@ -91,11 +93,19 @@ public class ScheduledEvents extends AppCompatActivity
         super.onCreate(savedInstanceState);
         fragmentManager = getSupportFragmentManager();
         setContentView(R.layout.scheduled_events);
-        final String TAG = "documentLOOKUP";
         //Recycler view with adapter to display cards
         orbitView = findViewById(R.id.orbit_list);
         mContext = ScheduledEvents.this;
+        // Side-Navigation Setup
+        drawer = findViewById(R.id.drawer_layout);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
 
+        // Have shadow appear above everything
+        View toolbarShadow = findViewById(R.id.toolbar_shadow);
+        toolbarShadow.bringToFront();
+
+        final String token = FirebaseAuth.getInstance().getAccessToken(false).getResult().getToken();
 
         db = FirebaseFirestore.getInstance();
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
@@ -104,14 +114,14 @@ public class ScheduledEvents extends AppCompatActivity
             startActivity(new Intent(ScheduledEvents.this, LoginActivity.class));
             finishAndRemoveTask();
         }
-        String userProfileUrl = user.getPhotoUrl().toString();
+        String user_url = APIUtils.getUserURL(user);
 
         // Getting ride requests from the user's collection
-         String userID = user.getUid();
-        //String userID = "zkenneth_test2";
+        String userID = user.getUid();
         userDocRef = db.collection("users").document(userID);
         getUserRideRequestList(userDocRef, orbitView);
         orbitView.setLayoutManager(new LinearLayoutManager(ScheduledEvents.this));
+
 
 
 
@@ -131,14 +141,20 @@ public class ScheduledEvents extends AppCompatActivity
         setSupportActionBar(toolbar);
 
 
-        // Side-Navigation Setup
-        drawer = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
         // Get the only header and set the profile's picture
         View navHeader = navigationView.getHeaderView(0);
-        ImageView navProfilePic = navHeader.findViewById(R.id.nav_profile);
-        new DownloadImageTask(navProfilePic).execute(userProfileUrl);
+        navProfilePic = navHeader.findViewById(R.id.nav_profile);
+        APIUtils.getUser(mContext, user, new VolleyCallback() {
+            @Override
+            public void onSuccessResponse(JSONObject result) {
+                try {
+                    new DownloadImageTask(navProfilePic).execute(result.getString("photo_url"));
+
+                } catch (JSONException e ) {
+                    e.printStackTrace();
+                }
+            }
+        }, token);
 
         // Displaying that the user has no ride requests
         emptyRequests = findViewById(R.id.no_rides);
@@ -302,7 +318,7 @@ public class ScheduledEvents extends AppCompatActivity
 
 
     private void getUserRideRequestList(DocumentReference userRef, RecyclerView display) {
-        Query rideRequestQuery = userRef.collection("eventSchedules").limit(10);
+        Query rideRequestQuery = userRef.collection("eventSchedules").orderBy("pending").limit(10);
 
         FirestoreRecyclerOptions<EventRequestModule> options =
                 new FirestoreRecyclerOptions
@@ -332,12 +348,46 @@ public class ScheduledEvents extends AppCompatActivity
             protected void onBindViewHolder(@NonNull MyViewHolder holder, int i, @NonNull EventRequestModule model) {
                 int cardBackground = R.drawable.lax;
                 final String destName = "LAX";
-                int cardProfilePhoto = R.drawable.default_profile;
-                final String flightTime = model.getFlightTime();
+                final String parsedFlightDate = model.getFlightTime().substring(0,10) + " | ";
+                final StringBuilder parsedFlightTime = new StringBuilder(model.getFlightTime().substring(11,16));
+                int flightHour = Integer.parseInt(parsedFlightTime.substring(0,2));
+
+                // Making the local time in AM/PM form
+                if(flightHour == 0){
+                    parsedFlightTime.append(" AM");
+                    parsedFlightTime.setCharAt(0,'1');
+                    parsedFlightTime.setCharAt(1,'2');
+                }
+                else if (flightHour == 12){
+                    parsedFlightTime.append(" PM");
+                }
+                else{
+                    // If the hour is 12 to 23, it is PM
+                    if( flightHour > 11){
+                        parsedFlightTime.append(" PM");
+                        flightHour = flightHour % 12;
+
+                        // Insert only one hour digit
+                        if(flightHour < 10){
+                            parsedFlightTime.setCharAt(0, '0');
+                            parsedFlightTime.setCharAt(1, Integer.toString(flightHour).charAt(0));
+                        }
+                        // Insert two hour digits
+                        else{
+                            parsedFlightTime.setCharAt(0, Integer.toString(flightHour).charAt(0));
+                            parsedFlightTime.setCharAt(1, Integer.toString(flightHour).charAt(1));
+                        }
+                    }
+                    else{
+                        parsedFlightTime.append(" AM"); }
+                }
+
                 final boolean stillPending = model.isPending();
                 final DocumentReference orbitRef = model.getOrbitRef();
+                final String pickupAddress = model.getPickupAddress();
                 List<String> temp = model.getMemberProfilePhotoUrls();
                 final ArrayList<String> profileImages = new ArrayList<String>();
+                final String destTime = model.getDestTime();
                 for (String eachURL : temp){
                     profileImages.add(eachURL);
                 }
@@ -350,12 +400,12 @@ public class ScheduledEvents extends AppCompatActivity
 
 
                 if(stillPending) {
-                    holder.card_time.setText("Desired Flight Time : " + flightTime);
+                    holder.card_time.setText("Flight Time : " + parsedFlightDate + parsedFlightTime);
                     holder.card_pending.setText("Pending Ride Request");
                 }
                 else {
-                    new DownloadImageTask(holder.profile_photo).execute(profileImages.get(0));
-                    holder.card_time.setText("Projected Arrival Time : " + model.getDestTime());
+                    //new DownloadImageTask(holder.profile_photo).execute(profileImages.get(0));
+                    holder.card_time.setText("Arrival Time : " + model.getDestTime());
                     holder.card_pending.setText("Orbiting");
                     holder.orbitRef = model.getOrbitRef();
                     holder.profileImages = profileImages;
@@ -368,11 +418,14 @@ public class ScheduledEvents extends AppCompatActivity
                         //Start new activity to show event details
                         Intent intent = new Intent(mContext, RideEvent.class);
                         intent.putExtra("destName", destName);
-                        intent.putExtra("flightTime", flightTime);
+                        intent.putExtra("flightTime", parsedFlightDate + parsedFlightTime);
                         intent.putExtra("stillPending", stillPending);
+                        intent.putExtra("pickupAddress", pickupAddress);
                         if(!stillPending) {
                             intent.putStringArrayListExtra("profileImages", profileImages);
                             intent.putExtra("orbitRef",  orbitRef.getPath());
+                            intent.putExtra("destTime", destTime );
+
 
                         }
                         mContext.startActivity(intent);
