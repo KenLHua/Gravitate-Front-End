@@ -40,25 +40,39 @@
         >
 
 
+        <View
+            android:id ="@+id/cover_shadow"
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:background="@drawable/toolbar_dropshadow" />
         <TextView
             android:id="@+id/ride_count_btn"
             android:layout_width="200dp"
-            android:layout_height="100dp"
-            android:layout_alignParentStart="true"
+            android:layout_height="80dp"
+            android:layout_below="@id/cover_shadow"
             android:text="0 \nRides"
             android:textColor="@color/colorTextSummary"
             android:gravity = "center" />
         <View
+            android:id ="@+id/email_shadow"
+            android:layout_width="200dp"
+            android:layout_height="5dp"
+            android:layout_below="@id/ride_count_btn"
+            android:background="@drawable/toolbar_dropshadow"/>
+
+        <View
             android:id="@+id/divider"
             android:layout_width="7dp"
-            android:layout_height="100dp"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/ride_count_btn"
+            android:layout_alignBottom="@id/ride_count_btn"
             android:layout_toRightOf="@id/ride_count_btn"
-            android:layout_gravity="center"
             android:background="@color/colorPlainBackground" />
 
         <TextView
             android:id="@+id/edit_account_btn"
             android:layout_toRightOf="@id/divider"
+            android:layout_below="@id/cover_shadow"
             android:layout_width="200dp"
             android:layout_height="100dp"
             android:gravity="center"
@@ -123,8 +137,6 @@
         android:background="@color/colorWhite"
         android:gravity="center"
         android:orientation="vertical"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -164,8 +176,6 @@
         android:background="@color/colorWhite"
         android:gravity="center"
         android:orientation="vertical"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
