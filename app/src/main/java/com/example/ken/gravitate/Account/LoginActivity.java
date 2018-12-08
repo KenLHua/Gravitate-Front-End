@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.ken.gravitate.Event.ScheduledEvents;
 import com.example.ken.gravitate.R;
@@ -66,13 +67,6 @@ public class LoginActivity extends AppCompatActivity {
 
         mCtx = this;
 
-        ImageView logo = findViewById(R.id.logoView);
-        logo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(LoginActivity.this, ScheduledEvents.class));
-            }
-        });
         // Setting up sign in progress
         progressBar = findViewById(R.id.progress_bar);
         progressText = findViewById(R.id.progress_text);
@@ -154,6 +148,16 @@ public class LoginActivity extends AppCompatActivity {
 
     private void firebaseAuthWithGoogle(final GoogleSignInAccount acct) {
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
+        String email = acct.getEmail();
+        email = email.substring(email.length()-9, email.length());
+        if(!email.equals(DOMAIN)){
+            signOut();
+            Toast.makeText(LoginActivity.this
+                    , "Error: Registration only open to " + DOMAIN + " emails.", Toast.LENGTH_LONG).show();
+            progressBar.setVisibility(View.INVISIBLE);
+            progressText.setVisibility(View.INVISIBLE);
+            return;
+        }
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)

@@ -13,6 +13,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.example.ken.gravitate.Account.LoginActivity;
 import com.example.ken.gravitate.Event.ScheduledEvents;
@@ -47,7 +48,7 @@ public class WelcomeScreen extends AppCompatActivity {
 
         setContentView(R.layout.activity_welcome_screen);
 
-        ConstraintLayout welcomeScreen = findViewById(R.id.welcomeScreen);
+        RelativeLayout welcomeScreen = findViewById(R.id.welcomeScreen);
         AnimationDrawable colorgradient = (AnimationDrawable) welcomeScreen.getBackground();
         colorgradient.setEnterFadeDuration(2000);
         colorgradient.setExitFadeDuration(4000);
