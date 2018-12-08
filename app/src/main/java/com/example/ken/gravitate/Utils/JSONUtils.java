@@ -1,16 +1,10 @@
 package com.example.ken.gravitate.Utils;
 
-import android.net.Uri;
 import android.util.Log;
-
-import com.google.firebase.auth.FirebaseUser;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class JSONUtils {
 
@@ -77,5 +71,18 @@ public class JSONUtils {
         }
 
         return userJSON;
+    }
+
+    public static JSONObject deleteRideRequestJSON(String ride_request_id) {
+        JSONObject deleteRRJSON = new JSONObject();
+        try {
+            deleteRRJSON.put("rideRequestId", ride_request_id);
+        } catch (JSONException e) {
+            final String TAG = "toJSON";
+            Log.w(TAG, "failed: deleteRR JSON");
+            e.printStackTrace();
+        }
+
+        return deleteRRJSON;
     }
 }
