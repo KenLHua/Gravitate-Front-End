@@ -67,11 +67,40 @@ public class APIUtils {
         APIRequestSingleton.getInstance(inputFlight).addToRequestQueue(stringRequest,"getRequest");
     }
 
+    public static void postDeleteMatch(final Context mCtx, final String token, final VolleyCallback callback,
+                                       final String ride_request_id) {
+        final String request_url = "https://gravitate-e5d01.appspot.com/deleteMatchh";
+        final String TAG = "Delete Match";
+        // Formulate the request and handle the response.
+        JSONObject deleteJSON = JSONUtils.deleteRideRequestJSON(ride_request_id);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.POST, request_url, deleteJSON, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        callback.onSuccessResponse(response);
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(mCtx, error + "error", Toast.LENGTH_LONG).show();
+                    }
+                }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String>  params = new HashMap<String, String>();
+                params.put("Authorization", token);
+                return params;
+            }
+        };
+        APIRequestSingleton.getInstance(mCtx).addToRequestQueue(jsonObjectRequest, "postDeleteMatch");
+    }
+
+
     /* Gets the correct Endpoint for FlightStats Schedule API
      *  Builds through URI Builder
      *  https://developer.android.com/reference/android/net/Uri.Builder
      *  */
-    static boolean occuredError;
     public static String getFSScheduleURL(String flightCarrier, String flightNumber,
                                           String flightYear, String flightMonth, String flightDay){
         String appId = "501e6179";
