@@ -150,7 +150,8 @@ public class LoginActivity extends AppCompatActivity {
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
         String email = acct.getEmail();
         email = email.substring(email.length()-9, email.length());
-        if(!email.equals(DOMAIN)){
+        Log.d("nonemail", email);
+        if(!email.equals("@"+DOMAIN)){
             signOut();
             Toast.makeText(LoginActivity.this
                     , "Error: Registration only open to " + DOMAIN + " emails.", Toast.LENGTH_LONG).show();
