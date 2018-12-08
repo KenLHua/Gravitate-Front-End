@@ -24,6 +24,12 @@
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             android:theme="@style/ToolbarTheme" />
+        <View
+            android:id ="@+id/toolbar_shadow"
+            android:layout_width="match_parent"
+            android:layout_marginTop = "?actionBarSize"
+            android:layout_height="5dp"
+            android:background="@drawable/toolbar_dropshadow"/>
 
 
         <com.leinardi.android.speeddial.SpeedDialView
@@ -37,11 +43,13 @@
             app:sdMainFabClosedSrc="@drawable/system_icon_plus_white" />
 
 
+
         <FrameLayout
             android:id="@+id/fragment_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="?actionBarSize">
+
 
             <android.support.v4.widget.SwipeRefreshLayout
                 xmlns:android="http://schemas.android.com/apk/res/android"
@@ -50,28 +58,21 @@
                 android:layout_height="match_parent">
 
 
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-
-
-                     <android.support.v7.widget.RecyclerView
-                        android:id="@+id/orbit_list"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                         />
-                    <TextView
-                        android:id="@+id/no_rides"
-                        android:layout_centerHorizontal="true"
-                        android:layout_centerVertical="true"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-
-                    </TextView>
-
-
-
-
+                 <android.support.v7.widget.RecyclerView
+                    android:id="@+id/orbit_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:id="@+id/no_rides"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                </TextView>
 
             </RelativeLayout>
             </android.support.v4.widget.SwipeRefreshLayout>
