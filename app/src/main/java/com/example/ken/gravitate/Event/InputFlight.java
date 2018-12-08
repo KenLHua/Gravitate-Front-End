@@ -27,7 +27,9 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.GetTokenResult;
 
 import java.util.Calendar;
 
@@ -74,7 +76,18 @@ public class InputFlight extends AppCompatActivity {
                 .setCountry("us")
                 .build();
 
-        final String token = FirebaseAuth.getInstance().getAccessToken(false).getResult().getToken();
+        Task<GetTokenResult> tokenTask = FirebaseAuth.getInstance().getAccessToken(false);
+
+        if(!tokenTask.isComplete()){
+            try{
+                tokenTask.wait(500);
+            }
+            catch (InterruptedException e){
+                e.getStackTrace();
+                Toast.makeText(mContext, "Error: Could not get Access Token", Toast.LENGTH_LONG).show();
+            }
+        }
+        final String token  = tokenTask.getResult().getToken();
 //        APIUtils.testAuthEndpoint(this,token);
 
         mContext = this;

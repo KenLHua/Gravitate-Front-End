@@ -3,6 +3,8 @@ package com.example.ken.gravitate.Account;
 import android.content.Context;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -121,6 +123,22 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        ConnectivityManager cm =
+                (ConnectivityManager)mCtx.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+        if(!isConnected){
+            Toast.makeText(mCtx, "Error: Make sure a stable internet connection is available"
+                    , Toast.LENGTH_LONG).show();
+            try{
+                signOut();
+            }catch (Error e){
+                e.printStackTrace();
+            }
+            return;
+        }
 
 
         if (requestCode == RC_SIGN_IN) {
@@ -147,10 +165,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void firebaseAuthWithGoogle(final GoogleSignInAccount acct) {
-        Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
         String email = acct.getEmail();
         email = email.substring(email.length()-9, email.length());
-        Log.d("nonemail", email);
         if(!email.equals("@"+DOMAIN)){
             signOut();
             Toast.makeText(LoginActivity.this
@@ -180,6 +196,11 @@ public class LoginActivity extends AppCompatActivity {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
                             Snackbar.make(findViewById(R.id.login_layout), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
+                            try{
+                                signOut();
+                            }catch (Error e){
+                                e.printStackTrace();
+                            }
 
                         }
                     }
