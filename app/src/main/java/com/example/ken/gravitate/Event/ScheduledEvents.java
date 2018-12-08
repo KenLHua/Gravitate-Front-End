@@ -345,7 +345,40 @@ public class ScheduledEvents extends AppCompatActivity
             protected void onBindViewHolder(@NonNull MyViewHolder holder, int i, @NonNull EventRequestModule model) {
                 int cardBackground = R.drawable.lax;
                 final String destName = "LAX";
-                final String flightTime = model.getFlightTime();
+                final String parsedFlightDate = model.getFlightTime().substring(0,10) + " | ";
+                final StringBuilder parsedFlightTime = new StringBuilder(model.getFlightTime().substring(11,16));
+                int flightHour = Integer.parseInt(parsedFlightTime.substring(0,2));
+
+                // Making the local time in AM/PM form
+                if(flightHour == 0){
+                    parsedFlightTime.append(" AM");
+                    parsedFlightTime.setCharAt(0,'1');
+                    parsedFlightTime.setCharAt(1,'2');
+                }
+                else if (flightHour == 12){
+                    parsedFlightTime.append(" PM");
+                }
+                else{
+                    // If the hour is 12 to 23, it is PM
+                    if( flightHour > 11){
+                        parsedFlightTime.append(" PM");
+                        flightHour = flightHour % 12;
+
+                        // Insert only one hour digit
+                        if(flightHour < 10){
+                            parsedFlightTime.setCharAt(0, '0');
+                            parsedFlightTime.setCharAt(1, Integer.toString(flightHour).charAt(0));
+                        }
+                        // Insert two hour digits
+                        else{
+                            parsedFlightTime.setCharAt(0, Integer.toString(flightHour).charAt(0));
+                            parsedFlightTime.setCharAt(1, Integer.toString(flightHour).charAt(1));
+                        }
+                    }
+                    else{
+                        parsedFlightTime.append(" AM"); }
+                }
+
                 final boolean stillPending = model.isPending();
                 final DocumentReference orbitRef = model.getOrbitRef();
                 final String pickupAddress = model.getPickupAddress();
@@ -364,11 +397,11 @@ public class ScheduledEvents extends AppCompatActivity
 
 
                 if(stillPending) {
-                    holder.card_time.setText("Flight Time : " + flightTime);
+                    holder.card_time.setText("Flight Time : " + parsedFlightDate + parsedFlightTime);
                     holder.card_pending.setText("Pending Ride Request");
                 }
                 else {
-                    new DownloadImageTask(holder.profile_photo).execute(profileImages.get(0));
+                    //new DownloadImageTask(holder.profile_photo).execute(profileImages.get(0));
                     holder.card_time.setText("Arrival Time : " + model.getDestTime());
                     holder.card_pending.setText("Orbiting");
                     holder.orbitRef = model.getOrbitRef();
@@ -382,7 +415,7 @@ public class ScheduledEvents extends AppCompatActivity
                         //Start new activity to show event details
                         Intent intent = new Intent(mContext, RideEvent.class);
                         intent.putExtra("destName", destName);
-                        intent.putExtra("flightTime", flightTime);
+                        intent.putExtra("flightTime", parsedFlightDate + parsedFlightTime);
                         intent.putExtra("stillPending", stillPending);
                         intent.putExtra("pickupAddress", pickupAddress);
                         if(!stillPending) {

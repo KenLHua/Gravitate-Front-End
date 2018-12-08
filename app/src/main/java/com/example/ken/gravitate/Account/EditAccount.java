@@ -72,7 +72,6 @@ public class EditAccount extends AppCompatActivity {
         mContext = EditAccount.this;
         mFullName = findViewById(R.id.inputFullName);
         mPhoneNumber = findViewById(R.id.inputPhoneNumber);
-        mEmailAddress = findViewById(R.id.inputEmailAddress);
         mPostalAddress = findViewById(R.id.inputPostalAddress);
 
         // Display profile pic and autofill user info
@@ -216,17 +215,6 @@ public class EditAccount extends AppCompatActivity {
                         emailAddress,
                         postalAddress)) break;
 
-                // Request_URL = ("Full Name", "Phone Number", "Email Address", "Address")
-                /*String request_url = APIUtils.getFSScheduleURL(
-                mflightCarrier.getText().toString(),mflightNum.getText().toString(),
-                        flightDate.substring(6, flightDate.length())
-                        ,flightDate.substring(0,2)
-                        ,flightDate.substring(3,5));
-
-                APIUtils.getFlightStats(mContext,request_url, inputPickup.getText().toString(),toEvent,mOutput);
-*/
-                // Initializing Request Components
-                mRequestQueue = APIRequestSingleton.getInstance(this.getApplicationContext()).getRequestQueue();
 
                 Toast.makeText(mContext, "Account Information Saved!", Toast.LENGTH_SHORT).show();
                 return true;

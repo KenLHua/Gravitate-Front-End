@@ -140,11 +140,7 @@ public class InputFlight extends AppCompatActivity {
             public void onClick(View v) {
                 switch(v.getId()) {
                     case R.id.flightStats_bttn:
-                        /*** TEST CODE ****/
-/*                        String request_url = APIUtils.getFSScheduleURL("DL", "89",
-                                "2019", "5", "2");*/
 
-                        /****** ACTUAL CODE ****/
                         String flightDate = inputDepartureDate.getText().toString();
                         // Checking if all necessary inputs are given, if not return and give a error
                         if (invalidFlightFields(mflightCarrier.getText().toString(),
@@ -152,15 +148,14 @@ public class InputFlight extends AppCompatActivity {
                                 flightDate,
                                 inputPickup.getText().toString())) return;
 
-                        // Request_URL = ("Carrier", "Flight Number", "YEAR", "MONTH", "DATE")
+                        // Request_URL takes in ("Carrier", "Flight Number", "YEAR", "MONTH", "DATE")
                         String request_url = APIUtils.getFSScheduleURL(
                                 mflightCarrier.getText().toString(),mflightNum.getText().toString(),
                                 flightDate.substring(6, flightDate.length())
                                 ,flightDate.substring(0,2)
                                 ,flightDate.substring(3,5));
 
-                        APIUtils.getFlightStats(mContext,request_url, inputPickup.getText().toString(),toEvent,
-                                mOutput, token);
+                        APIUtils.getFlightStats(mContext, request_url,inputPickup.getText().toString() , toEvent, flightDate, mOutput, token);
                         break;
                 }
             }
@@ -202,9 +197,7 @@ public class InputFlight extends AppCompatActivity {
                     .build(this);
             startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
         } catch (GooglePlayServicesRepairableException e) {
-            // TODO: Handle the error.
         } catch (GooglePlayServicesNotAvailableException e) {
-            // TODO: Handle the error.
         }
     }
     // The deal with the actions done at the autocomplete activity
@@ -216,7 +209,6 @@ public class InputFlight extends AppCompatActivity {
                 inputPickup.setText(place.getAddress());
             } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
                 Status status = PlaceAutocomplete.getStatus(this, data);
-                // TODO: Handle the error.
                 inputPickup.setText("");
                 Log.i("Autocomplete Error", status.getStatusMessage());
 

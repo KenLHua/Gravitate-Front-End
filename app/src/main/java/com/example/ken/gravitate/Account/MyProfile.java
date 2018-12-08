@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -38,10 +39,6 @@ public class MyProfile extends AppCompatActivity {
         populateUserInfo(user);
 
         String userEmail = user.getEmail();
-//        String userFullName = user.getDisplayName();
-//        String userPhoneNumber = user.getPhoneNumber();
-//        String userProfilePic  = user.getPhotoUrl().toString();
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.my_profile_layout);
 

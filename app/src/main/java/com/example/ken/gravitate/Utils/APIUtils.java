@@ -191,7 +191,6 @@ public class APIUtils {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        // TODO: Handle error
                         Toast.makeText(myProfile, error + "error", Toast.LENGTH_LONG).show();
                     }
                 }){
@@ -211,11 +210,9 @@ public class APIUtils {
      *  RETURNS: String in JSON format that contains flight information
      * */
     public static void getFlightStats(final Context inputFlight, String request_url, final String pickupAddress,
-                                              final boolean toEvent, final TextView output, final String token) {
+                                              final boolean toEvent, final String date, final TextView output, final String token) {
 
         final String TAG = "FlightStatsAPI";
-        String earliestTime = null;
-        String latestTime = null;
         // Formulate the request and handle the response.
         StringRequest stringRequest = new StringRequest(Request.Method.GET, request_url,
                 new Response.Listener<String>() {
@@ -224,8 +221,7 @@ public class APIUtils {
                         // Do something with the response
                         JSONObject Ride_Request = JSONUtils.retrieveFSInfo(response, pickupAddress, toEvent);
                         Log.w(TAG, Ride_Request.toString());
-                        APIUtils.postRideRequest(inputFlight,Ride_Request, token);
-                        //output.setText(Ride_Request.toString());
+                        APIUtils.postRideRequest(inputFlight, pickupAddress, date, Ride_Request, token);
                     }
                 },
                 new Response.ErrorListener() {
@@ -257,9 +253,14 @@ public class APIUtils {
         }
         return abbr;
     }
-    public static void postRideRequest(final Context inputFlight, final JSONObject Ride_RequestJSON, final String token) {
+    public static void postRideRequest(final Context inputFlight,final String pickupAddress, final String date, final JSONObject Ride_RequestJSON, final String token) {
         final String server_url = "https://gravitate-e5d01.appspot.com/rideRequests";
         final String TAG = "Ride_Request";
+        String airportCode = APIUtils.getAirportAbbr(Ride_RequestJSON);
+        if ( !airportCode.equals("LAX")){
+            Toast.makeText(inputFlight, "Error: Only LAX flights supported", Toast.LENGTH_LONG).show();
+            return;
+        }
 
         // Formulate the request and handle the response.
         Log.w(TAG, "REQUEST:Attempt to create jsonObjectRequest");
@@ -271,11 +272,15 @@ public class APIUtils {
                         // Do something with the response
                         Log.w(TAG, "POST_REQUEST:Create Ride Request success");
                         Toast.makeText(inputFlight,"Success", Toast.LENGTH_SHORT).show();
+                        // Passing information to the next activity
                         Intent intent = new Intent(inputFlight, CreatedRequestDetails.class);
-                        intent.putExtra("flightTime", APIUtils.getFlightTime(Ride_RequestJSON, false, true));
-                        intent.putExtra("earliestTime", APIUtils.getFlightTime(Ride_RequestJSON, true, false));
-                        intent.putExtra("latestTime", APIUtils.getFlightTime(Ride_RequestJSON, false, false));
+                        String flightTime = APIUtils.getFlightTime(Ride_RequestJSON);
+                        intent.putExtra("flightTime", flightTime);
+                        intent.putExtra("earliestTime", APIUtils.parsePickupTime(flightTime, true));
+                        intent.putExtra("latestTime", APIUtils.parsePickupTime(flightTime, false));
+                        intent.putExtra("pickupAddress", pickupAddress);
                         intent.putExtra("airportCode", APIUtils.getAirportAbbr(Ride_RequestJSON));
+                        intent.putExtra("date", date);
                         inputFlight.startActivity(intent);
 
 
@@ -297,48 +302,102 @@ public class APIUtils {
         };
           APIRequestSingleton.getInstance(inputFlight).addToRequestQueue(jsonObjectRequest, "postRequest");
 
-        Intent intent = new Intent(inputFlight, CreatedRequestDetails.class);
-        intent.putExtra("flightTime", APIUtils.getFlightTime(Ride_RequestJSON, false, true));
-        intent.putExtra("earliestTime", APIUtils.getFlightTime(Ride_RequestJSON, true, false));
-        intent.putExtra("latestTime", APIUtils.getFlightTime(Ride_RequestJSON, false, false));
-        // The airport abbreviation should be LAX, since we do not support other airports
-        if(getAirportAbbr(Ride_RequestJSON) != "LAX") {
-            return;
+    }
+    // time in the form of "##:## AM" or PM
+    public static String parsePickupTime(String time, boolean early){
+        int hour = Integer.parseInt(time.substring(0,2));
+        int minute = Integer.parseInt(time.substring(3,5));
+        boolean afternoonEarly = false;
+        boolean afternoonLate = false;
+        String parsedTime = "";
+        if(time.charAt(6) == 'P'){
+            afternoonEarly = true;
+            afternoonLate = true;
         }
 
-        intent.putExtra("airportCode", APIUtils.getAirportAbbr(Ride_RequestJSON));
-        inputFlight.startActivity(intent);
+        if (early){
+            if( ((hour <= 5) || hour ==12) && minute == 0){
+                if(hour <= 5){
+                    hour = hour + 12;
+                }
+                afternoonEarly = !afternoonEarly;
+            }
+            hour = hour - 5;
+            parsedTime = parsedTime + hour;
+            if(minute < 9){
+                parsedTime = parsedTime + ":0" + minute; }
+            else{
+                parsedTime = parsedTime + ":" + minute; }
+            if(afternoonEarly){
+                parsedTime = parsedTime + " PM";
+            }
+            else{
+                parsedTime = parsedTime + " AM";
+            }
+        }
+        else{
+            if( ((hour <= 2) || hour ==12) && minute == 0){
+                if(hour <= 2){
+                    hour = hour + 12;
+                }
+                afternoonLate = !afternoonLate;
+            }
+            hour = hour - 2;
+            parsedTime = parsedTime + hour;
+            if(minute < 9){
+                parsedTime = parsedTime + ":0" + minute; }
+            else{
+                parsedTime = parsedTime + ":" + minute; }
+            if(afternoonLate){
+                parsedTime = parsedTime + " PM";
+            }
+            else{
+                parsedTime = parsedTime + " AM";
+            }
+        }
+        return parsedTime;
 
     }
 
-    public static String getFlightTime(JSONObject ride_RequestJSON, boolean earlyTime, boolean actualTime){
+    public static String getFlightTime(JSONObject ride_RequestJSON){
         String flightTime = null;
-        int flightHour = 0;
-        String flightMin = null;
 
         try {
             flightTime = ride_RequestJSON.getString("flightLocalTime");
-            for(int i = 0; i < flightTime.length(); i++){
-                if(flightTime.charAt(i) == 'T') {
-                    flightHour = Integer.parseInt(flightTime.substring(i + 1, i + 3));
-                    flightMin = flightTime.substring(i+4,i+6);
-                    if(actualTime){
-                        return flightHour+":"+flightMin;
-                    }
-                    if(earlyTime) {
-                        flightHour = (flightHour - 5); }
-                    else{
-                        flightHour = (flightHour - 2); }
+            StringBuilder parsedFlightTime = new StringBuilder(flightTime.substring(11,16));
+            int flightHour = Integer.parseInt(parsedFlightTime.substring(0,2));
 
-                    if( flightHour < 12){
-                        flightTime = " AM"; }
-                    else{
-                        flightTime = " PM"; }
-                    // Return HH/mm a
-                    flightTime = (flightHour%12)+":"+flightMin+flightTime;
-                    return flightTime;
-                }
+
+            // Making the local time in AM/PM form
+            if(flightHour == 0){
+                parsedFlightTime.append(" AM");
+                parsedFlightTime.setCharAt(0,'1');
+                parsedFlightTime.setCharAt(1,'2');
             }
+            else if (flightHour == 12){
+                parsedFlightTime.append(" PM");
+            }
+            else{
+                // If the hour is 12 to 23, it is PM
+                if( flightHour > 11){
+                    parsedFlightTime.append(" PM");
+                    flightHour = flightHour % 12;
+
+                    // Insert only one hour digit
+                    if(flightHour < 10){
+                        parsedFlightTime.setCharAt(0, '0');
+                        parsedFlightTime.setCharAt(1, Integer.toString(flightHour).charAt(0));
+                    }
+                    // Insert two hour digits
+                    else{
+                        parsedFlightTime.setCharAt(0, Integer.toString(flightHour).charAt(0));
+                        parsedFlightTime.setCharAt(1, Integer.toString(flightHour).charAt(1));
+                    }
+                }
+                else{
+                    parsedFlightTime.append(" AM"); }
+            }
+            return parsedFlightTime.toString();
         }
         catch (JSONException e){
             final String TAG = "toJSON";
@@ -346,7 +405,6 @@ public class APIUtils {
             e.printStackTrace();
             return null;
         }
-        return flightTime;
     }
 
 }

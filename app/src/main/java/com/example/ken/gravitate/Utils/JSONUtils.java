@@ -43,9 +43,9 @@ public class JSONUtils {
                     + departureAirport.getString("stateCode")+ ","
                     + departureAirport.getString("postalCode");
 
+
             flightJSON.put("flightNumber",flightNumber);
             flightJSON.put("flightLocalTime",departureTime);
-/*            flightJSON.put("airportLocation",airport_address);*/
             flightJSON.put("pickupAddress",pickUpAddress);
             flightJSON.put("toEvent",String.valueOf(toEvent));
             flightJSON.put("airportCode", departureAirportFsCode);

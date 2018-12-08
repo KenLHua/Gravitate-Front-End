@@ -60,12 +60,12 @@ public class RideEvent extends AppCompatActivity {
         final List<Rider> rider_list = new ArrayList<Rider>();
         Rider riderCard = new Rider(R.drawable.default_profile, "Name", "Email");
         rider_list.add(riderCard);
-        ;
 
         TextView destTimeDisplay = findViewById(R.id.departureTime);
         TextView flightTimeDisplay = findViewById(R.id.flightTime);
         TextView pickupAddressDisplay = findViewById(R.id.pickupAddress);
         String pickupAddress = getIntent().getStringExtra("pickupAddress");
+
         String flightTime = getIntent().getStringExtra("flightTime");
         flightTimeDisplay.setText("Flight Time : " + flightTime);
         pickupAddressDisplay.setText("Pickup Address : " + pickupAddress);

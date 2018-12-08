@@ -9,7 +9,7 @@
     android:layout_marginLeft="15dp">
 
     <View
-        android:id="@+id/profile_back"
+        android:id="@+id/rider_cover_image"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
