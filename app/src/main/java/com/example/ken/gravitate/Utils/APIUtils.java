@@ -180,7 +180,6 @@ public class APIUtils {
                     public void onResponse(JSONObject response) {
                         // Do something with the response
                         Log.w(TAG, "POST_REQUEST: User JSON Sent");
-                        Toast.makeText(confirmProfile,"Registration Success", Toast.LENGTH_LONG).show();
                         ((Activity) confirmProfile).finish();
                         Intent intent = new Intent(confirmProfile, cls);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -191,7 +190,7 @@ public class APIUtils {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // TODO: Handle error
-                        Toast.makeText(confirmProfile,"Registration Failed", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(confirmProfile,"Failed to save", Toast.LENGTH_SHORT).show();
                         error.printStackTrace();
                     }
                 }){
