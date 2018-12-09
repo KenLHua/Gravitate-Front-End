@@ -16,7 +16,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class MyViewHolder extends  RecyclerView.ViewHolder {
     private View view;
     public ImageView background_img;
-    public CircleImageView profile_photo;
+    public CircleImageView profile_photo1;
+    public CircleImageView profile_photo2;
     public TextView card_dest, card_time, card_pending;
     public Context context;
     public boolean stillPending;
@@ -29,7 +30,8 @@ public class MyViewHolder extends  RecyclerView.ViewHolder {
     public MyViewHolder(View itemView) {
         super(itemView);
         view = itemView;
-        profile_photo = itemView.findViewById(R.id.profile_image1);
+        profile_photo1 = itemView.findViewById(R.id.profile_image1);
+        profile_photo2 = itemView.findViewById(R.id.profile_image2);
         background_img = itemView.findViewById(R.id.card_back);
         card_dest = itemView.findViewById(R.id.card_dest);
         card_time = itemView.findViewById(R.id.card_date);

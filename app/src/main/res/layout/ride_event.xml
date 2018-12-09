@@ -36,21 +36,10 @@
 
 
     <TextView
-        android:id="@+id/departureTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/pickupAddress"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="8dp"
-        android:text="Departure Time : "
-        android:gravity="center"
-        android:textSize="18dp"
-        android:textStyle="bold" />
-    <TextView
         android:id="@+id/flightTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@id/departureTime"
+        android:layout_above="@id/pickupAddress"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="8dp"
         android:text="Flight Time : "

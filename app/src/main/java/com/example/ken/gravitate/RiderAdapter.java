@@ -115,7 +115,7 @@ public class RiderAdapter extends RecyclerView.Adapter<RiderAdapter.RiderViewHol
             profile_photo = itemView.findViewById(R.id.profile_photo);
             fullname = itemView.findViewById(R.id.rider_name);
             email = itemView.findViewById(R.id.rider_email);
-            phone_number = itemView.findViewById(R.id.phone_number);
+            phone_number = itemView.findViewById(R.id.rider_number);
             // If the orbit reference exists
             if (orbitRef != null) {
                 orbitRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -125,6 +125,7 @@ public class RiderAdapter extends RecyclerView.Adapter<RiderAdapter.RiderViewHol
                         HashMap<String, Object> userTicketPairs = (HashMap<String, Object>) task.getResult().get("userTicketPairs");
                         Object[] pairedUserIDs = userTicketPairs.keySet().toArray();
                         // If the orbit has more than yourself
+                        Log.d("pairLength", pairedUserIDs.length + "");
                         if( pairedUserIDs.length > 1){
                             // Find all users that are not yourself and display them
                             for (Object currID : pairedUserIDs) {
@@ -141,8 +142,11 @@ public class RiderAdapter extends RecyclerView.Adapter<RiderAdapter.RiderViewHol
                                                     try {
                                                         JSONObject response = result;
                                                         fullname.setText(response.getString("display_name"));
-                                                        email.setText(response.getString("email"));
+//                                                        Log.d("partnerEmail", response.getString("email"));
+//                                                        email.setText(response.getString("email"));
+                                                        Log.d("partnerPhoto", response.getString("photo_url"));
                                                         new DownloadImageTask(profile_photo).execute(response.getString("photo_url"));
+                                                        Log.d("parterNumber", response.getString("phone_number"));
                                                         phone_number.setText(response.getString("phone_number"));
 
                                                     } catch (JSONException e) {

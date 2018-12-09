@@ -61,7 +61,6 @@ public class RideEvent extends AppCompatActivity {
         Rider riderCard = new Rider(R.drawable.default_profile, "Name", "Email");
         rider_list.add(riderCard);
 
-        TextView destTimeDisplay = findViewById(R.id.departureTime);
         TextView flightTimeDisplay = findViewById(R.id.flightTime);
         TextView pickupAddressDisplay = findViewById(R.id.pickupAddress);
         String pickupAddress = getIntent().getStringExtra("pickupAddress");
@@ -75,8 +74,6 @@ public class RideEvent extends AppCompatActivity {
             String orbitPath = getIntent().getStringExtra("orbitRef");
             DocumentReference orbitRef = db.document(orbitPath);
             RiderAdapter adapter = new RiderAdapter(this,orbitRef,rider_list);
-            String destTime = getIntent().getStringExtra("destTime");
-            destTimeDisplay.setText("Arrival Time : "+ destTime);
             ArrayList<String> profileImages = getIntent().getExtras().getStringArrayList("profileImages");
             adapter.setProfileImages(profileImages);
             recyclerView.setAdapter(adapter);
@@ -85,7 +82,6 @@ public class RideEvent extends AppCompatActivity {
         }
         else{
             RiderAdapter adapter = new RiderAdapter(this,null,rider_list);
-            destTimeDisplay.setVisibility(View.GONE);
             recyclerView.setAdapter(null);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
         }

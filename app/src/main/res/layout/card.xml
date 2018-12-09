@@ -82,8 +82,7 @@
                 android:id="@+id/card_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_marginBottom="30dp"
+                android:layout_alignBottom="@id/profile_image1"
                 android:layout_alignStart="@id/card_dest"
                 android:text="TextView" />
 

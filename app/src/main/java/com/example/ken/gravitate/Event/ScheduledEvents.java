@@ -407,13 +407,14 @@ public class ScheduledEvents extends AppCompatActivity
 
 
                 if(stillPending) {
-                    holder.card_time.setText("Flight Time : " + parsedFlightDate + parsedFlightTime);
                     holder.card_pending.setText("Pending Ride Request");
                 }
                 else {
-                    //new DownloadImageTask(holder.profile_photo1).execute(profileImages.get(0));
-                    //new DownloadImageTask(holder.profile_photo2).execute(profileImages.get(1));
-                    holder.card_time.setText("Arrival Time : " + model.getDestTime());
+                    new DownloadImageTask(holder.profile_photo1).execute(profileImages.get(0));
+                    if(profileImages.size() == 2){
+                        new DownloadImageTask(holder.profile_photo2).execute(profileImages.get(1));
+                    }
+                    holder.card_time.setText("Flight Time : " + parsedFlightDate + parsedFlightTime);
                     holder.card_pending.setText("Orbiting");
                     holder.orbitRef = model.getOrbitRef();
                     holder.profileImages = profileImages;
