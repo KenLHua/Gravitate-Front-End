@@ -1,9 +1,28 @@
 # Gravitate By Team VIBE
+- Billy Rao - Lead Software Architect
+
+- David Alexander - Project Manager
+
+- Lauren Chang - Business Analyst
+
+- Jason Chau - Senior System Analyst
+
+- Leon Wu - Lead Software Developer
+
+- David Nong - Algorithm Specialist
+
+- Tyler Song - Algorithm Specialist
+
+- Andrew Kim - Database Specialist
+
+- Sam Huang - Quality Assurance Lead
+
+- Kenneth Hua - User Experience and Interface Specialist
 
 # How to install Gravitate
 
-1. Download the release APK from https://drive.google.com/file/d/1xsOcxCtgkV4t0J6NrsxuUWTwiYHOW756/view?usp=sharing
-2. Get ADB working on your computer (or download the app and run it on your phone, but we don't recommend this since the app is designed for specifically for the **Pixel 2 XL, Android 9.0 Pie (API 28)**).
+1. Download the release APK from https://drive.google.com/file/d/1YFmY0W-qcZm1OxQFfxsPVFr2E4ouyBnJ/view?usp=sharing
+2. Get ADB working on your computer (or download the app and run it on your phone, but we don't recommend this since the app is designed for specifically for the **Pixel 2 XL, Android 9.0 Pie (API 28)**.
 3. Run this command in cmd  $"adb -e install "Vibe - Gravitate.apk"
 4. Login and test the app.
 

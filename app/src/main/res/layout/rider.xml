@@ -54,7 +54,7 @@
             android:layout_height="wrap_content"
             android:layout_below= "@id/rider_name"
             android:layout_alignLeft="@id/rider_name"
-            android:text="EMAIL"
+            android:text=""
             android:textColor="#ffffff"
             />
 
