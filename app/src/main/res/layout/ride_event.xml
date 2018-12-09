@@ -22,42 +22,57 @@
         android:layout_below="@id/toolbar"
         android:layout_marginTop="16dp"/>
 
-
-    <TextView
-        android:id="@+id/destination"
-        android:layout_width="wrap_content"
+    <android.support.v7.widget.CardView
+        android:layout_width="380dp"
         android:layout_height="wrap_content"
-        android:text="Destination : LAX"
-        android:layout_above="@id/flightTime"
+        android:layout_below="@id/rider_list"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="8dp"
-        android:textSize="20dp"
-        android:textStyle="bold" />
+        android:layout_marginTop="16dp"
+        android:elevation="20dp">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/destination"
+                android:textColor="#000000"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Destination : LAX"
+                android:layout_marginBottom="12dp"
+                android:textSize="20dp"
+                android:textStyle="bold" />
 
 
-    <TextView
-        android:id="@+id/flightTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/pickupAddress"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="8dp"
-        android:text="Flight Time : "
-        android:gravity="center"
-        android:textSize="18dp"
-        android:textStyle="bold" />
+            <TextView
+                android:id="@+id/flightTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/destination"
+                android:layout_marginBottom="12dp"
+                android:text="Flight Time : "
+                android:textColor="#000000"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                />
 
-    <TextView
-        android:id="@+id/pickupAddress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="50dp"
-        android:text="Pickup Address : "
-        android:textSize="18dp"
-        android:gravity="center"
-        android:textStyle="bold" />
+            <TextView
+                android:id="@+id/pickupAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/flightTime"
+                android:text="Pickup Address : "
+                android:layout_marginBottom="12dp"
+                android:textColor="#000000"
+                android:textSize="18dp"
+                android:gravity="left"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+
 
 
 
