@@ -1,5 +1,6 @@
 package com.example.ken.gravitate.Utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -140,7 +141,7 @@ public class APIUtils {
     }
 
     public static void postUser(final Context confirmProfile, FirebaseUser user, String display_name, String phone_number, String photo_url, String pickupAddress
-    , final String token) {
+    , final String token, final Class<?> cls ) {
         final String server_url = getUserURL(user);
         final String userID = user.getUid();
         final JSONObject userJSON = JSONUtils.retrieveUserInfo(userID, display_name, phone_number, photo_url, pickupAddress);
@@ -155,7 +156,10 @@ public class APIUtils {
                         // Do something with the response
                         Log.w(TAG, "POST_REQUEST: User JSON Sent");
                         Toast.makeText(confirmProfile,"Registration Success", Toast.LENGTH_LONG).show();
-                        confirmProfile.startActivity(new Intent(confirmProfile, ScheduledEvents.class));
+                        ((Activity) confirmProfile).finish();
+                        Intent intent = new Intent(confirmProfile, cls);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        confirmProfile.startActivity(intent);
                     }
                 }, new Response.ErrorListener() {
 

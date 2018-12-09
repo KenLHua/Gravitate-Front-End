@@ -234,7 +234,7 @@ public class ScheduledEvents extends AppCompatActivity
                         // Stop animation (This will be after 3 seconds)
                         swipeContainer.setRefreshing(false);
                     }
-                }, 3000); // Delay in millis
+                }, 2000); // Delay in millis
 
             }
         });
@@ -394,6 +394,7 @@ public class ScheduledEvents extends AppCompatActivity
                 List<String> temp = model.getMemberProfilePhotoUrls();
                 final ArrayList<String> profileImages = new ArrayList<String>();
                 final String destTime = model.getDestTime();
+
                 for (String eachURL : temp){
                     profileImages.add(eachURL);
                 }

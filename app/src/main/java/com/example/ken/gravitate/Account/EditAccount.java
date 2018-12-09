@@ -9,12 +9,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.textservice.SpellCheckerInfo;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
+import com.example.ken.gravitate.Event.ScheduledEvents;
 import com.example.ken.gravitate.R;
 import com.example.ken.gravitate.Utils.APIRequestSingleton;
 import com.example.ken.gravitate.Utils.APIUtils;
@@ -188,6 +190,10 @@ public class EditAccount extends AppCompatActivity {
             Toast.makeText(mContext, "Error: Please input your phone number", Toast.LENGTH_LONG).show();
             return true;
         }
+        if(checkPhoneNumber.length() != 12){
+            Toast.makeText(mContext, "Error: Please input a valid 10 length phone number", Toast.LENGTH_LONG).show();
+            return true;
+        }
         if(checkPostalAddress.length() == 0 ){
             Toast.makeText(mContext, "Error: Please input your address", Toast.LENGTH_LONG).show();
             return true;
@@ -211,7 +217,7 @@ public class EditAccount extends AppCompatActivity {
 
                 //Do something with the information
 
-                APIUtils.postUser(this, user, fullName, user.getPhotoUrl().toString(),postalAddress, phoneNumber, token);
+                APIUtils.postUser(this, user, fullName, user.getPhotoUrl().toString(),postalAddress, phoneNumber, token, MyProfile.class);
                 return true;
         }
         return super.onOptionsItemSelected(button);

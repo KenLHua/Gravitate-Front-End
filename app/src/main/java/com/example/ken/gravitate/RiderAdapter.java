@@ -20,6 +20,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 
@@ -99,53 +100,60 @@ public class RiderAdapter extends RecyclerView.Adapter<RiderAdapter.RiderViewHol
         public RiderViewHolder(View itemView, DocumentReference orbitRef, Context context) {
             super(itemView);
             mContext = context;
-            Task<com.google.firebase.auth.GetTokenResult> tokenTask = FirebaseAuth.getInstance().getAccessToken(false);
-
-            if(!tokenTask.isComplete()){
+            Task<GetTokenResult> tokenTask = FirebaseAuth.getInstance().getAccessToken(false);
+            while(!tokenTask.isComplete()){
+                Log.d("GettingToken", "async");
                 try{
-                    tokenTask.wait(500);
+                    wait(500);
                 }
                 catch (InterruptedException e){
-                    e.getStackTrace();
-                    Toast.makeText(mContext, "Error: Could not get Access Token", Toast.LENGTH_LONG).show();
+                    e.printStackTrace();
                 }
             }
             final String token = tokenTask.getResult().getToken();
+
             profile_photo = itemView.findViewById(R.id.profile_photo);
             fullname = itemView.findViewById(R.id.rider_name);
             email = itemView.findViewById(R.id.rider_email);
             phone_number = itemView.findViewById(R.id.phone_number);
+            // If the orbit reference exists
             if (orbitRef != null) {
                 orbitRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        // Get the users within the orbit
                         HashMap<String, Object> userTicketPairs = (HashMap<String, Object>) task.getResult().get("userTicketPairs");
                         Object[] pairedUserIDs = userTicketPairs.keySet().toArray();
-                        for (Object currID : pairedUserIDs) {
-                            String currIDString = (String) currID;
-                            if (currIDString.equals(currUser.getUid())) {
-                                // Do nothing
-                            } else {
-                                String request_url = APIUtils.getUserURL((String) currID);
-                                Log.d("taggyBoi", (String) currID);
-                                APIUtils.getUser(mContext, request_url,
-                                        new VolleyCallback() {
-                                            @Override
-                                            public void onSuccessResponse(JSONObject result) {
-                                                try {
-                                                    JSONObject response = result;
-                                                    fullname.setText(response.getString("display_name"));
-                                                    email.setText(response.getString("email"));
-                                                    new DownloadImageTask(profile_photo).execute(response.getString("photo_url"));
-                                                    phone_number.setText(response.getString("phone_number"));
+                        // If the orbit has more than yourself
+                        if( pairedUserIDs.length > 1){
+                            // Find all users that are not yourself and display them
+                            for (Object currID : pairedUserIDs) {
+                                String currIDString = (String) currID;
+                                if (currIDString.equals(currUser.getUid())) {
+                                    // Do nothing
+                                } else {
+                                    String request_url = APIUtils.getUserURL((String) currID);
+                                    Log.d("taggyBoi", (String) currID);
+                                    APIUtils.getUser(mContext, request_url,
+                                            new VolleyCallback() {
+                                                @Override
+                                                public void onSuccessResponse(JSONObject result) {
+                                                    try {
+                                                        JSONObject response = result;
+                                                        fullname.setText(response.getString("display_name"));
+                                                        email.setText(response.getString("email"));
+                                                        new DownloadImageTask(profile_photo).execute(response.getString("photo_url"));
+                                                        phone_number.setText(response.getString("phone_number"));
 
-                                                } catch (JSONException e) {
-                                                    e.printStackTrace();
+                                                    } catch (JSONException e) {
+                                                        e.printStackTrace();
+                                                    }
+
                                                 }
-
-                                            }
-                                        }, token);
+                                            }, token);
+                                }
                             }
+
                         }
 
                     }

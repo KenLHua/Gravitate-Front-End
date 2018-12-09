@@ -30,8 +30,10 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -56,7 +58,19 @@ public class ConfirmProfile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.confirm_account_layout);
         mAuth = FirebaseAuth.getInstance();
-        token = FirebaseAuth.getInstance().getAccessToken(false).getResult().getToken();
+
+        Task<GetTokenResult> tokenTask = FirebaseAuth.getInstance().getAccessToken(false);
+        while(!tokenTask.isComplete()){
+            Log.d("GettingToken", "async");
+            try{
+                wait(500);
+            }
+            catch (InterruptedException e){
+                e.printStackTrace();
+            }
+        }
+        final String token = tokenTask.getResult().getToken();
+
         user = mAuth.getCurrentUser();
 
 
@@ -150,6 +164,10 @@ public class ConfirmProfile extends AppCompatActivity {
             Toast.makeText(mContext, "Error: Please input your phone number", Toast.LENGTH_LONG).show();
             return true;
         }
+        if(checkPhoneNumber.length() != 12){
+            Toast.makeText(mContext, "Error: Please input a valid 10 length phone number", Toast.LENGTH_LONG).show();
+            return true;
+        }
         if(checkPostalAddress.length() == 0 ){
             Toast.makeText(mContext, "Error: Please input your address", Toast.LENGTH_LONG).show();
             return true;
@@ -174,7 +192,7 @@ public class ConfirmProfile extends AppCompatActivity {
 
                 FirebaseUser user = mAuth.getCurrentUser();
                 String uid = user.getUid();
-                APIUtils.postUser(this, user, display_name, photo_url, pickupAddress,phone_number, token);
+                APIUtils.postUser(this, user, display_name, photo_url, pickupAddress,phone_number, token, ScheduledEvents.class);
                 return true;
         }
         return super.onOptionsItemSelected(button);
