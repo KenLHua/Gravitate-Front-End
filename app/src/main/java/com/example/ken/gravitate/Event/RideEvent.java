@@ -1,5 +1,7 @@
 package com.example.ken.gravitate.Event;
 
+import android.app.DatePickerDialog;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -16,12 +18,19 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.ken.gravitate.Models.Rider;
 import com.example.ken.gravitate.R;
 import com.example.ken.gravitate.RiderAdapter;
+import com.example.ken.gravitate.Utils.APIUtils;
 import com.example.ken.gravitate.Utils.AuthSingleton;
+import com.example.ken.gravitate.Utils.DownloadImageTask;
+import com.example.ken.gravitate.Utils.VolleyCallback;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -30,17 +39,20 @@ import org.json.JSONObject;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
 public class RideEvent extends AppCompatActivity {
     private TextView mPartnerName;
     private TextView mPartnerEmail;
+    private Context mCtx;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ride_event);
 
+        mCtx = this;
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Ride Details");
         toolbar.setNavigationIcon(R.drawable.system_icon_back);
@@ -64,12 +76,46 @@ public class RideEvent extends AppCompatActivity {
 
         TextView flightTimeDisplay = findViewById(R.id.flightTime);
         TextView pickupAddressDisplay = findViewById(R.id.pickupAddress);
+
+        // Getting REST access token
+        Task<GetTokenResult> tokenTask = FirebaseAuth.getInstance().getAccessToken(false);
+        while(!tokenTask.isComplete()){
+            Log.d("GettingToken", "async");
+            synchronized (this){
+                try{
+                    wait(500);
+                }
+                catch (InterruptedException e){
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        final String token = tokenTask.getResult().getToken();
+
+
         Button deleteRideButton = findViewById(R.id.delete_ride_bttn);
+        deleteRideButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String eventId = getIntent().getExtras().getString("eventRef");
+                String rideRequestId = getIntent().getExtras().getString("rideRef");
+                String userId = getIntent().getExtras().getString("userRef");
+                APIUtils.postDeleteRideRequest(mCtx,token,new VolleyCallback() {
+                    @Override
+                    public void onSuccessResponse(JSONObject result) {
+                        Toast.makeText(mCtx, "Ride Request Deleted", Toast.LENGTH_LONG).show();
+                    }
+                },userId,eventId,rideRequestId);
+            }
+        });
+
         String pickupAddress = getIntent().getStringExtra("pickupAddress");
 
         String flightTime = getIntent().getStringExtra("flightTime");
         flightTimeDisplay.setText("Flight Time : " + flightTime);
         pickupAddressDisplay.setText("Pickup Address : " + pickupAddress);
+
 
         if(!stillPending.booleanValue()){
             deleteRideButton.setVisibility(View.GONE);

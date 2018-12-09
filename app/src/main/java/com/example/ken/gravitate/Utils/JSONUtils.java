@@ -64,10 +64,25 @@ public class JSONUtils {
         return userJSON;
     }
 
-    public static JSONObject deleteRideRequestJSON(String ride_request_id) {
+    public static JSONObject deleteMatchJSON(String rideRequestId) {
         JSONObject deleteRRJSON = new JSONObject();
         try {
-            deleteRRJSON.put("rideRequestId", ride_request_id);
+            deleteRRJSON.put("rideRequestId", rideRequestId);
+        } catch (JSONException e) {
+            final String TAG = "toJSON";
+            Log.w(TAG, "failed: deleteRR JSON");
+            e.printStackTrace();
+        }
+
+        return deleteRRJSON;
+    }
+
+    public static JSONObject deleteRideRequestJSON(String userId, String eventId, String rideRequestId) {
+        JSONObject deleteRRJSON = new JSONObject();
+        try {
+            deleteRRJSON.put("userId", userId);
+            deleteRRJSON.put("eventId", eventId);
+            deleteRRJSON.put("rideRequestId", rideRequestId);
         } catch (JSONException e) {
             final String TAG = "toJSON";
             Log.w(TAG, "failed: deleteRR JSON");

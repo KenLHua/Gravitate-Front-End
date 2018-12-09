@@ -70,10 +70,10 @@ public class APIUtils {
 
     public static void postDeleteMatch(final Context mCtx, final String token, final VolleyCallback callback,
                                        final String ride_request_id) {
-        final String request_url = "https://gravitate-e5d01.appspot.com/deleteMatchh";
+        final String request_url = "https://gravitate-e5d01.appspot.com/deleteMatch";
         final String TAG = "Delete Match";
         // Formulate the request and handle the response.
-        JSONObject deleteJSON = JSONUtils.deleteRideRequestJSON(ride_request_id);
+        JSONObject deleteJSON = JSONUtils.deleteMatchJSON(ride_request_id);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.POST, request_url, deleteJSON, new Response.Listener<JSONObject>() {
                     @Override
@@ -97,6 +97,34 @@ public class APIUtils {
         APIRequestSingleton.getInstance(mCtx).addToRequestQueue(jsonObjectRequest, "postDeleteMatch");
     }
 
+    public static void postDeleteRideRequest(final Context mCtx, final String token, final VolleyCallback callback,
+                                       final String user_id, final String event_id, String ride_request_id) {
+        final String request_url = "https://gravitate-e5d01.appspot.com/deleteRideRequest";
+        final String TAG = "Delete Ride Request";
+        // Formulate the request and handle the response.
+        JSONObject deleteJSON = JSONUtils.deleteRideRequestJSON(user_id, event_id, ride_request_id);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.POST, request_url, deleteJSON, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        callback.onSuccessResponse(response);
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(mCtx, error + "error", Toast.LENGTH_LONG).show();
+                    }
+                }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String>  params = new HashMap<String, String>();
+                params.put("Authorization", token);
+                return params;
+            }
+        };
+        APIRequestSingleton.getInstance(mCtx).addToRequestQueue(jsonObjectRequest, "postDeleteMatch");
+    }
 
     /* Gets the correct Endpoint for FlightStats Schedule API
      *  Builds through URI Builder

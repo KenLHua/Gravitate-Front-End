@@ -84,6 +84,7 @@ public class ScheduledEvents extends AppCompatActivity
     GoogleSignInClient mGoogleSignInClient;
     private static final String web_client_id = "1070051773756-o6l5r1l6v7m079r1oua2lo0rsfeu8m9i.apps.googleusercontent.com";
     private static final String DOMAIN = "ucsd.edu";
+    private String userID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,10 +125,9 @@ public class ScheduledEvents extends AppCompatActivity
         db = FirebaseFirestore.getInstance();
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser user = firebaseAuth.getCurrentUser();
-        String user_url = APIUtils.getUserURL(user);
 
         // Getting ride requests from the user's collection
-        String userID = user.getUid();
+        userID = user.getUid();
         userDocRef = db.collection("users").document(userID);
         getUserRideRequestList(userDocRef, orbitView);
         orbitView.setLayoutManager(new LinearLayoutManager(ScheduledEvents.this));
@@ -327,6 +327,7 @@ public class ScheduledEvents extends AppCompatActivity
 
         adapter = new FirestoreRecyclerAdapter<EventRequestModule, MyViewHolder>(options) {
 
+            int index = 0;
 
 
             @NonNull
@@ -380,12 +381,15 @@ public class ScheduledEvents extends AppCompatActivity
                         parsedFlightTime.append(" AM"); }
                 }
 
+                final String eventId = getSnapshots().getSnapshot(i).getId();
+
                 final boolean stillPending = model.isPending();
                 final DocumentReference orbitRef = model.getOrbitRef();
                 final String pickupAddress = model.getPickupAddress();
                 List<String> temp = model.getMemberProfilePhotoUrls();
                 final ArrayList<String> profileImages = new ArrayList<String>();
-                final String destTime = model.getDestTime();
+                final Long destTime = model.getDestTime();
+                final DocumentReference rideRef = model.getRideRequestRef();
 
                 for (String eachURL : temp){
                     profileImages.add(eachURL);
@@ -423,6 +427,10 @@ public class ScheduledEvents extends AppCompatActivity
                         intent.putExtra("flightTime", parsedFlightDate + parsedFlightTime);
                         intent.putExtra("stillPending", stillPending);
                         intent.putExtra("pickupAddress", pickupAddress);
+                        intent.putExtra("rideRef", rideRef.getId());
+                        intent.putExtra("eventRef", eventId);
+                        intent.putExtra("userRef", userID);
+
                         if(!stillPending) {
                             intent.putStringArrayListExtra("profileImages", profileImages);
                             intent.putExtra("orbitRef",  orbitRef.getPath());

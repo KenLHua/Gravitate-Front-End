@@ -9,7 +9,7 @@ import java.util.List;
 public class EventRequestModule {
 
     private String mDestName;
-    private String mDestTime;
+    private Long mDestTime;
     private String mFlightTime;
     private DocumentReference mLocationRef;
     private List<String> mMemberProfilePhotoUrls;
@@ -22,7 +22,7 @@ public class EventRequestModule {
     } // Needed for Firebase
 
     public EventRequestModule(String destName,
-                              String destTime,
+                              Long destTime,
                               String flightTime,
                               DocumentReference locationRef,
                               List<String> memberProfilePhotoUrls,
@@ -70,7 +70,7 @@ public class EventRequestModule {
         return mFlightTime;
     }
 
-    public String getDestTime() {
+    public Long getDestTime() {
         return mDestTime;
     }
 
@@ -106,7 +106,7 @@ public class EventRequestModule {
         this.mFlightTime = mFlightTime;
     }
 
-    public void setDestTime(String mDestTime) {
+    public void setDestTime(Long mDestTime) {
         this.mDestTime= mDestTime;
     }
 
