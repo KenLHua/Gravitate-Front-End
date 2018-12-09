@@ -1,7 +1,9 @@
 package com.example.ken.gravitate.Event;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -105,6 +107,9 @@ public class RideEvent extends AppCompatActivity {
                     @Override
                     public void onSuccessResponse(JSONObject result) {
                         Toast.makeText(mCtx, "Ride Request Deleted", Toast.LENGTH_LONG).show();
+                        ((Activity)mCtx).finish();
+                        Intent intent = new Intent (mCtx, ScheduledEvents.class);
+                        startActivity(intent);
                     }
                 },userId,eventId,rideRequestId);
             }

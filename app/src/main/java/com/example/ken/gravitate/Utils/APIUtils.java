@@ -99,6 +99,8 @@ public class APIUtils {
                     public void onErrorResponse(VolleyError error) {
                         // Request Error (App 4-- or Server 5--)
                         Toast.makeText(mCtx, error + "error", Toast.LENGTH_LONG).show();
+                        Log.w("TAGGIBOI", error);
+                        error.printStackTrace();
                     }
                 }){
             @Override
