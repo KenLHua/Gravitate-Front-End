@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -63,6 +64,7 @@ public class RideEvent extends AppCompatActivity {
 
         TextView flightTimeDisplay = findViewById(R.id.flightTime);
         TextView pickupAddressDisplay = findViewById(R.id.pickupAddress);
+        Button deleteRideButton = findViewById(R.id.delete_ride_bttn);
         String pickupAddress = getIntent().getStringExtra("pickupAddress");
 
         String flightTime = getIntent().getStringExtra("flightTime");
@@ -70,7 +72,7 @@ public class RideEvent extends AppCompatActivity {
         pickupAddressDisplay.setText("Pickup Address : " + pickupAddress);
 
         if(!stillPending.booleanValue()){
-
+            deleteRideButton.setVisibility(View.GONE);
             String orbitPath = getIntent().getStringExtra("orbitRef");
             DocumentReference orbitRef = db.document(orbitPath);
             RiderAdapter adapter = new RiderAdapter(this,orbitRef,rider_list);
@@ -85,12 +87,6 @@ public class RideEvent extends AppCompatActivity {
             recyclerView.setAdapter(null);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
         }
-
-
-
-
-
-
 
     }
 

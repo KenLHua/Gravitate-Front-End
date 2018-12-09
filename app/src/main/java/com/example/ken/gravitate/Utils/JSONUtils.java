@@ -28,15 +28,6 @@ public class JSONUtils {
             String departureTime = info.getString("departureTime");
             // Do we need to calculate Earliest and Latest Arrival in Frontend or Backend?
 
-            // Airport Information
-            JSONObject appendix = reader.getJSONObject("appendix");
-            JSONArray airports = appendix.getJSONArray("airports");
-            JSONObject departureAirport = airports.getJSONObject(1);
-            String airport_address = departureAirport.getString("street1") + ","
-                    + departureAirport.getString("city") + ","
-                    + departureAirport.getString("stateCode")+ ","
-                    + departureAirport.getString("postalCode");
-
 
             flightJSON.put("flightNumber",flightNumber);
             flightJSON.put("flightLocalTime",departureTime);

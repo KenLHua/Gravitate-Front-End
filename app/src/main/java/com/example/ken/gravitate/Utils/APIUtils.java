@@ -117,7 +117,7 @@ public class APIUtils {
                 .appendPath(flightDay)
                 .appendQueryParameter("appId",appId)
                 .appendQueryParameter("appKey",appKey);
-
+        Log.w("TAGGIBOI", builder.toString());
         return builder.toString();
     }
 
@@ -263,14 +263,7 @@ public class APIUtils {
                         // Handle error
                         Log.w(TAG, "GET_REQUEST: FlightStatsAPI failure");
                     }
-                }){
-                    @Override
-                    public Map<String, String> getHeaders() throws AuthFailureError {
-                        Map<String, String>  params = new HashMap<String, String>();
-                        params.put("Authorization", token);
-                        return params;
-                    }
-        };
+                });
         APIRequestSingleton.getInstance(inputFlight).addToRequestQueue(stringRequest,"getRequest");
     }
 
@@ -290,6 +283,7 @@ public class APIUtils {
         final String server_url = "https://gravitate-e5d01.appspot.com/rideRequests";
         final String TAG = "Ride_Request";
         String airportCode = APIUtils.getAirportAbbr(Ride_RequestJSON);
+        Log.w(TAG, "AirportCode: " + airportCode);
         if ( !airportCode.equals("LAX")){
             Toast.makeText(inputFlight, "Error: Only LAX flights supported", Toast.LENGTH_LONG).show();
             return;
