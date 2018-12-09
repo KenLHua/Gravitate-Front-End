@@ -187,13 +187,6 @@ public class ScheduledEvents extends AppCompatActivity
                         .setLabelClickable(false)
                         .create());
 
-        speedDialView.addActionItem(
-                new SpeedDialActionItem.Builder(R.id.fab_force_match, R.drawable.cover_image)
-                        .setLabel("FORCE MATCH")
-                        .setLabelClickable(false)
-                        .create());
-
-
         speedDialView.setOnActionSelectedListener(new SpeedDialView.OnActionSelectedListener() {
             @Override
             public boolean onActionSelected(SpeedDialActionItem speedDialActionItem) {
@@ -201,10 +194,6 @@ public class ScheduledEvents extends AppCompatActivity
                     case R.id.fab_input_flight_number:
 
                         startActivity(new Intent(ScheduledEvents.this, InputFlight.class));
-                        return false; // true to keep the Speed Dial open
-                    case R.id.fab_force_match:
-
-                        startActivity(new Intent(ScheduledEvents.this, forcematch2.class));
                         return false; // true to keep the Speed Dial open
                     default:
                         return false;
