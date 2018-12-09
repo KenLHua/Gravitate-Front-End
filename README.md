@@ -10,7 +10,7 @@ Front-End Committee
 
 Alternatively,
 1. Clone the repository.
-2. Bottom left, click on build variants.
+2. Within Android Studio, look towards the bottom left, click on build variants.
 3. Click on debug under "Build Variant"
 4. Switch debug into release.
 5. Run the app in a **Pixel 2 XL emulator** using **Android 9.0 (API 28) Pie**.
