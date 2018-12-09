@@ -1,4 +1,5 @@
 # Gravitate By Team VIBE
+![Gravitate](https://lh3.google.com/u/0/d/1GfaoBIaI3YnDTJDgO-dI_VIXcXe6CSSC=w1920-h938-iv1)
 - Billy Rao - Lead Software Architect
 
 - David Alexander - Project Manager
