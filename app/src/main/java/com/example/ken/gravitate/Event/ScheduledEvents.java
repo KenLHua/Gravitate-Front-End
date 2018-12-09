@@ -315,7 +315,7 @@ public class ScheduledEvents extends AppCompatActivity
 
 
     private void getUserRideRequestList(DocumentReference userRef, RecyclerView display) {
-        Query rideRequestQuery = userRef.collection("eventSchedules").orderBy("pending").limit(10);
+        Query rideRequestQuery = userRef.collection("eventSchedules").orderBy("destTime").limit(10);
 
         FirestoreRecyclerOptions<EventRequestModule> options =
                 new FirestoreRecyclerOptions
