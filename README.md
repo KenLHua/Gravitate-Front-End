@@ -1,23 +1,23 @@
 # Gravitate By Team VIBE
-> Billy Rao - Lead Software Architect
+- Billy Rao - Lead Software Architect
 
-> David Alexander - Project Manager
+- David Alexander - Project Manager
 
-> Lauren Chang - Business Analyst
+- Lauren Chang - Business Analyst
 
-> Jason Chau - Senior System Analyst
+- Jason Chau - Senior System Analyst
 
-> Leon Wu - Lead Software Developer
+- Leon Wu - Lead Software Developer
 
-> David Nong - Algorithm Specialist
+- David Nong - Algorithm Specialist
 
-> Tyler Song - Algorithm Specialist
+- Tyler Song - Algorithm Specialist
 
-> Andrew Kim - Database Specialist
+- Andrew Kim - Database Specialist
 
-> Sam Huang - Quality Assurance Lead
+- Sam Huang - Quality Assurance Lead
 
-> Kenneth Hua - User Experience and Interface Specialist
+- Kenneth Hua - User Experience and Interface Specialist
 
 # How to install Gravitate
 
