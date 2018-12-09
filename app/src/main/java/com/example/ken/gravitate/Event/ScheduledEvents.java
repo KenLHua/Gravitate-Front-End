@@ -25,7 +25,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.ken.gravitate.Account.LoginActivity;
 import com.example.ken.gravitate.Account.MyProfile;
@@ -46,11 +45,10 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
 import com.leinardi.android.speeddial.SpeedDialActionItem;
 import com.leinardi.android.speeddial.SpeedDialView;
 
@@ -97,6 +95,7 @@ public class ScheduledEvents extends AppCompatActivity
         //Recycler view with adapter to display cards
         orbitView = findViewById(R.id.orbit_list);
         mContext = ScheduledEvents.this;
+        TextView tokenHolder = new TextView(mContext);
         // Side-Navigation Setup
         drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -106,20 +105,18 @@ public class ScheduledEvents extends AppCompatActivity
         View toolbarShadow = findViewById(R.id.toolbar_shadow);
         toolbarShadow.bringToFront();
 
-        String token = null;
-        Task<com.google.firebase.auth.GetTokenResult> tokenTask = FirebaseAuth.getInstance().getAccessToken(false);
 
-        if(!tokenTask.isComplete()){
+        Task<GetTokenResult> tokenTask = FirebaseAuth.getInstance().getAccessToken(false);
+        while(!tokenTask.isComplete()){
+            Log.d("GettingToken", "async");
             try{
-                tokenTask.wait(500);
+                wait(500);
             }
             catch (InterruptedException e){
-                e.getStackTrace();
-                Toast.makeText(mContext, "Error: Could not get Access Token", Toast.LENGTH_LONG).show();
+                e.printStackTrace();
             }
         }
-        token = tokenTask.getResult().getToken();
-
+        final String token = tokenTask.getResult().getToken();
         db = FirebaseFirestore.getInstance();
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser user = firebaseAuth.getCurrentUser();

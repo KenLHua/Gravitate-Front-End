@@ -135,10 +135,8 @@ public class RiderAdapter extends RecyclerView.Adapter<RiderAdapter.RiderViewHol
                                                 try {
                                                     JSONObject response = result;
                                                     fullname.setText(response.getString("display_name"));
-                                                    Log.d("emailBoi", response.getString("email"));
                                                     email.setText(response.getString("email"));
                                                     new DownloadImageTask(profile_photo).execute(response.getString("photo_url"));
-                                                    Log.d("photoBoi", response.getString("photo_url"));
                                                     phone_number.setText(response.getString("phone_number"));
 
                                                 } catch (JSONException e) {
