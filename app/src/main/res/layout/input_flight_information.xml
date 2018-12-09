@@ -172,11 +172,10 @@
 
     <Button
         android:id="@+id/flightStats_bttn"
-        style="@style/Widget.AppCompat.Button.Colored"
+        style="@style/AppTheme.RoundedCornerMaterialButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="25dp"
-        android:background="@color/colorButton"
+        android:layout_margin="50dp"
         android:elevation="8dp"
         android:text="Create Ride Request"
         app:layout_constraintBottom_toBottomOf="parent"
