@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,113 +15,101 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.example.ken.gravitate.Event.CreatedRequestDetails;
-import com.example.ken.gravitate.Event.InputFlight;
-import com.example.ken.gravitate.Event.ScheduledEvents;
-import com.example.ken.gravitate.Models.User;
 import com.google.firebase.auth.FirebaseUser;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class APIUtils {
 
-    /* Sends a GET Request to Flightstats API
-     *  RETURNS: String in JSON format that contains flight information
-     * */
-    public static void testAuthEndpoint(final Context inputFlight, final String token) {
-
-        final String url = "https://gravitate-e5d01.appspot.com/endpointTest";
-        final String TAG = "Auth Test";
-        Log.w(TAG, token);
-        // Formulate the request and handle the response.
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        // Do something with the response
-                        //output.setText(Ride_Request.toString());
-                        Log.w(TAG, "GET_REQUEST: Auth success");
-                        Toast.makeText(inputFlight,response, Toast.LENGTH_LONG).show();
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // Handle error
-                        Log.w(TAG, "GET_REQUEST: Auth failure");
-                        Toast.makeText(inputFlight, "failure", Toast.LENGTH_LONG).show();
-                    }
-                }){
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String>  params = new HashMap<String, String>();
-                params.put("Authorization", token);
-                return params;
-            }
-        };
-        APIRequestSingleton.getInstance(inputFlight).addToRequestQueue(stringRequest,"getRequest");
-    }
-
+    /** postDeleteMatch IMPLEMENTED BUT FOR FUTURE **/
+    /* Method Name: postDeleteMatch
+       Description: Sends a POST request to unmatch an Orbit and turn into a PENDING Ride Request
+       Params: Context mCtx- Context to make Toast in
+               String token - Authorization Token
+               VolleyCallback callback - Used to retrieve Server Response in another Context
+               String ride_request_id - Ride Request ID to turn to PENDING
+    */
     public static void postDeleteMatch(final Context mCtx, final String token, final VolleyCallback callback,
                                        final String ride_request_id) {
-        final String request_url = "https://gravitate-e5d01.appspot.com/deleteMatch";
+
+        /** Gets Information to construct JSON and Endpoint URL**/
         final String TAG = "Delete Match";
-        // Formulate the request and handle the response.
+        final String request_url = "https://gravitate-e5d01.appspot.com/deleteMatch";
         JSONObject deleteJSON = JSONUtils.deleteMatchJSON(ride_request_id);
+
+        // Adds Request to RequestQueue (ASYNC TASK)
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.POST, request_url, deleteJSON, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+                        // Need to override in Context in which this is called to act on response
                         callback.onSuccessResponse(response);
                     }
                 }, new Response.ErrorListener() {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        // Request Error (App 4-- or Server 5--)
                         Toast.makeText(mCtx, error + "error", Toast.LENGTH_LONG).show();
                     }
                 }){
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
+                // Adds Authorization Token to Header
                 Map<String, String>  params = new HashMap<String, String>();
                 params.put("Authorization", token);
                 return params;
             }
         };
+        // Processes Request
         APIRequestSingleton.getInstance(mCtx).addToRequestQueue(jsonObjectRequest, "postDeleteMatch");
     }
 
+    /* Method Name: postDeleteRideRequest
+       Description: Sends a POST request to delete a PENDING Ride Request
+       Params: Context mCtx- Context to make Toast in
+               String token - Authorization Token
+               VolleyCallback callback - Used to retrieve Server Response in another Context
+               String user_id - User ID
+               String event_id - Event ID to delete
+               String ride_request_id - Ride Request ID to delete
+    */
     public static void postDeleteRideRequest(final Context mCtx, final String token, final VolleyCallback callback,
                                        final String user_id, final String event_id, String ride_request_id) {
+        /** Gets Information to construct JSON and Endpoint URL**/
         final String request_url = "https://gravitate-e5d01.appspot.com/deleteRideRequest";
         final String TAG = "Delete Ride Request";
-        // Formulate the request and handle the response.
         JSONObject deleteJSON = JSONUtils.deleteRideRequestJSON(user_id, event_id, ride_request_id);
+
+        // Adds Request to RequestQueue (ASYNC TASK)
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.POST, request_url, deleteJSON, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+                        // Need to override in Context in which this is called to act on response
                         callback.onSuccessResponse(response);
                     }
                 }, new Response.ErrorListener() {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        // Request Error (App 4-- or Server 5--)
                         Toast.makeText(mCtx, error + "error", Toast.LENGTH_LONG).show();
                     }
                 }){
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
+                // Adds Authorization Token to Header
                 Map<String, String>  params = new HashMap<String, String>();
                 params.put("Authorization", token);
                 return params;
             }
         };
+        // Processes Request
         APIRequestSingleton.getInstance(mCtx).addToRequestQueue(jsonObjectRequest, "postDeleteMatch");
     }
 
@@ -149,6 +136,10 @@ public class APIUtils {
         return builder.toString();
     }
 
+    /* Method Name: getUserURL
+       Description: Constructs Server URL Endpoint to GET User Information
+       Params: String user_id - User ID
+    */
     public static String getUserURL( String uid ) {
         Uri.Builder builder = new Uri.Builder();
         builder.scheme("https")
@@ -158,6 +149,10 @@ public class APIUtils {
         return builder.toString();
     }
 
+    /* Method Name: getUserURL
+       Description: Constructs Server URL Endpoint to GET User Information
+       Params: FirebaseUser user - User to get information from
+    */
     public static String getUserURL( FirebaseUser user ) {
         String uid = user.getUid();
         Uri.Builder builder = new Uri.Builder();
