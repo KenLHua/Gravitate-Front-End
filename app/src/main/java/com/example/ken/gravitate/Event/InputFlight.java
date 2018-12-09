@@ -7,7 +7,6 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
-import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -60,6 +59,7 @@ public class InputFlight extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Setting activity UI elements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.input_flight_information);
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -76,19 +76,21 @@ public class InputFlight extends AppCompatActivity {
                 .setCountry("us")
                 .build();
 
+        // Getting REST access token
         Task<GetTokenResult> tokenTask = FirebaseAuth.getInstance().getAccessToken(false);
-
-        if(!tokenTask.isComplete()){
-            try{
-                tokenTask.wait(500);
-            }
-            catch (InterruptedException e){
-                e.getStackTrace();
-                Toast.makeText(mContext, "Error: Could not get Access Token", Toast.LENGTH_LONG).show();
+        while(!tokenTask.isComplete()){
+            Log.d("GettingToken", "async");
+            synchronized (this){
+                try{
+                    wait(500);
+                }
+                catch (InterruptedException e){
+                    e.printStackTrace();
+                }
             }
         }
-        final String token  = tokenTask.getResult().getToken();
-//        APIUtils.testAuthEndpoint(this,token);
+        final String token = tokenTask.getResult().getToken();
+
 
         mContext = this;
         mOutput = findViewById(R.id.outputText);
@@ -128,6 +130,7 @@ public class InputFlight extends AppCompatActivity {
         final DateAndTimePickerAdapter datePicker = new DateAndTimePickerAdapter(cal,inputDepartureDate,
                 InputFlight.this, false);
 
+        // Popup date picker
         inputDepartureDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -148,6 +151,7 @@ public class InputFlight extends AppCompatActivity {
         // Setting Flightstats Bttn
         mFlightStats_Bttn = findViewById(R.id.flightStats_bttn);
 
+        // Lookup flight information using flight stats api
         mFlightStats_Bttn.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {

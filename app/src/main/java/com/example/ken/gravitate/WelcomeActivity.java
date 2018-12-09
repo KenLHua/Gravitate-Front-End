@@ -18,8 +18,9 @@ public class WelcomeActivity extends AppCompatActivity {
     private SlideAdapter myadapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
 
+
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_slides);
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         myadapter = new SlideAdapter(this);

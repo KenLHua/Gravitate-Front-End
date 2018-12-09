@@ -3,6 +3,7 @@ package com.example.ken.gravitate.Utils;
 import android.content.Context;
 import com.google.firebase.auth.FirebaseAuth;
 
+// Class that gets the firebase authentication instance
 public class AuthSingleton {
 
         private static FirebaseAuth mAuthInstance;

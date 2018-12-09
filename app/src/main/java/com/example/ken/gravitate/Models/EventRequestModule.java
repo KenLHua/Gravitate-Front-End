@@ -6,6 +6,7 @@ import com.google.firebase.firestore.DocumentReference;
 import java.util.List;
 
 
+// Model class that holds all the firebase ride request information
 public class EventRequestModule {
 
     private String mDestName;

@@ -5,6 +5,7 @@ import org.json.JSONObject;
 
 import java.util.Map;
 
+// Model class to hold all user information
 public class User {
 
     private String uid, display_name, membership, phone_number, photo_url;

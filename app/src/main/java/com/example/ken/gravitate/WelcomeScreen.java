@@ -33,6 +33,7 @@ public class WelcomeScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         mAuth = FirebaseAuth.getInstance();
+        // if a user is already logged in, skip them to scheduled events
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -49,12 +50,14 @@ public class WelcomeScreen extends AppCompatActivity {
 
         setContentView(R.layout.activity_welcome_screen);
 
+        // Setting the gradient
         RelativeLayout welcomeScreen = findViewById(R.id.welcomeScreen);
         AnimationDrawable colorgradient = (AnimationDrawable) welcomeScreen.getBackground();
         colorgradient.setEnterFadeDuration(2000);
         colorgradient.setExitFadeDuration(4000);
         colorgradient.start();
 
+        // Grab the UI elements
         button = (Button) findViewById(R.id.explore);
         skip = (Button) findViewById(R.id.welcomeSkip);
         button.setOnClickListener(new View.OnClickListener() {

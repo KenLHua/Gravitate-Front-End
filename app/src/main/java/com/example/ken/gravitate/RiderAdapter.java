@@ -36,6 +36,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 //class to iterate the list of cards and put them on the screen
 public class RiderAdapter extends RecyclerView.Adapter<RiderAdapter.RiderViewHolder> {
 
+    // Class variables to be used
     Context context;
     List<Rider> rider_list;
     public List<RiderViewHolder> cards = new ArrayList<RiderViewHolder>();
@@ -48,8 +49,10 @@ public class RiderAdapter extends RecyclerView.Adapter<RiderAdapter.RiderViewHol
     private OnRiderClickListener mlistener;
 
     public interface OnRiderClickListener{
+        // Get position if a rider is clicked
         void onRiderClick(int position);
     }
+    //
     public void setOnRiderClickListener(OnRiderClickListener listener){
         mlistener = listener;
     }
@@ -100,18 +103,23 @@ public class RiderAdapter extends RecyclerView.Adapter<RiderAdapter.RiderViewHol
         public RiderViewHolder(View itemView, DocumentReference orbitRef, Context context) {
             super(itemView);
             mContext = context;
+            // Getting REST access token
             Task<GetTokenResult> tokenTask = FirebaseAuth.getInstance().getAccessToken(false);
             while(!tokenTask.isComplete()){
                 Log.d("GettingToken", "async");
-                try{
-                    wait(500);
-                }
-                catch (InterruptedException e){
-                    e.printStackTrace();
+                synchronized (this){
+                    try{
+                        wait(500);
+                    }
+                    catch (InterruptedException e){
+                        e.printStackTrace();
+                    }
                 }
             }
             final String token = tokenTask.getResult().getToken();
 
+
+            // Get the rider's UI elements
             profile_photo = itemView.findViewById(R.id.profile_photo);
             fullname = itemView.findViewById(R.id.rider_name);
             email = itemView.findViewById(R.id.rider_email);
@@ -131,8 +139,9 @@ public class RiderAdapter extends RecyclerView.Adapter<RiderAdapter.RiderViewHol
                             for (Object currID : pairedUserIDs) {
                                 String currIDString = (String) currID;
                                 if (currIDString.equals(currUser.getUid())) {
-                                    // Do nothing
+                                    // Do nothing if it is you
                                 } else {
+                                    // Create a get request to get their information
                                     String request_url = APIUtils.getUserURL((String) currID);
                                     Log.d("taggyBoi", (String) currID);
                                     APIUtils.getUser(mContext, request_url,
@@ -142,9 +151,6 @@ public class RiderAdapter extends RecyclerView.Adapter<RiderAdapter.RiderViewHol
                                                     try {
                                                         JSONObject response = result;
                                                         fullname.setText(response.getString("display_name"));
-//                                                        Log.d("partnerEmail", response.getString("email"));
-//                                                        email.setText(response.getString("email"));
-                                                        Log.d("partnerPhoto", response.getString("photo_url"));
                                                         new DownloadImageTask(profile_photo).execute(response.getString("photo_url"));
                                                         Log.d("parterNumber", response.getString("phone_number"));
                                                         phone_number.setText(response.getString("phone_number"));
@@ -164,6 +170,7 @@ public class RiderAdapter extends RecyclerView.Adapter<RiderAdapter.RiderViewHol
                 });
             }
 
+            // setting the click listener for each rider
             itemView.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v){

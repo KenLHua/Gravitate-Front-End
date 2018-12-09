@@ -20,49 +20,23 @@ public class DateAndTimePickerAdapter {
     private int SECOND_IN_MILLISECONDS = 1000;
 
 
+    // Field variables
     private DatePickerDialog.OnDateSetListener mDateListener;
     private TimePickerDialog.OnTimeSetListener mTimeListener;
     private TimePickerDialog mTimePicker;
     private Context mContext;
     private Calendar myCal;
     private TextView mTextView;
-    private TextView mRelatedView;
-    private int mRelatedOffset;
 
 
-    /*
-    public DateAndTimePickerAdapter(Calendar cal, TextView textView, android.content.Context context){
-        myCal = cal;
-        mTextView = textView;
-        mContext = context;
-        mDateListener = new DatePickerDialog.OnDateSetListener(){
-            @Override
-            public void onDateSet(DatePicker view, int localYear, int monthOfYear, int dayOfMonth) {
-                Log.d("onDateSet", "called");
-                myCal.set(Calendar.YEAR, localYear);
-                myCal.set(Calendar.MONTH, monthOfYear);
-                myCal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                mTimeListener = new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        myCal.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                        myCal.set(Calendar.MINUTE, minute);
-                        updateLabel(mTextView);
-                    }
-                };
-                mTimePicker = new TimePickerDialog(mContext, mTimeListener,
-                        myCal.get(Calendar.HOUR_OF_DAY), myCal.get(Calendar.MINUTE), false);
-                mTimePicker.show();
-            }
-        };
-    }
-    */
-
+    // Date Picker that helps users choose a date
     public DateAndTimePickerAdapter(Calendar cal, TextView textView, android.content.Context context, final boolean chooseTime){
+        // Boolean to choose 24:00 time along with date
         if( chooseTime) {
             myCal = cal;
             mTextView = textView;
             mContext = context;
+            // Behavior for date picker
             mDateListener = new DatePickerDialog.OnDateSetListener() {
                 @Override
                 public void onDateSet(DatePicker view, int localYear, int monthOfYear, int dayOfMonth) {
@@ -70,6 +44,7 @@ public class DateAndTimePickerAdapter {
                     myCal.set(Calendar.YEAR, localYear);
                     myCal.set(Calendar.MONTH, monthOfYear);
                     myCal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                    // Behavior for time
                     mTimeListener = new TimePickerDialog.OnTimeSetListener() {
                         @Override
                         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -89,6 +64,7 @@ public class DateAndTimePickerAdapter {
             };
         }
         else {
+            // Just have a date picker
             myCal = cal;
             mTextView = textView;
             mContext = context;
@@ -113,6 +89,7 @@ public class DateAndTimePickerAdapter {
 
 
 
+    // Have the user's choice display
     private void updateLabel(TextView textView, boolean chooseTime) {
         if(chooseTime) {
             String myFormat = "MM/dd/yyyy hh:mm a";

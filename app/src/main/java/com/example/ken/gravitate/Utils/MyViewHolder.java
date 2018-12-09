@@ -14,6 +14,7 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MyViewHolder extends  RecyclerView.ViewHolder {
+    // Field variables that are used within the card view
     private View view;
     public ImageView background_img;
     public CircleImageView profile_photo1;
@@ -30,6 +31,7 @@ public class MyViewHolder extends  RecyclerView.ViewHolder {
     public MyViewHolder(View itemView) {
         super(itemView);
         view = itemView;
+        // Grab the UI elements on the XML layouts
         profile_photo1 = itemView.findViewById(R.id.profile_image1);
         profile_photo2 = itemView.findViewById(R.id.profile_image2);
         background_img = itemView.findViewById(R.id.card_back);
@@ -37,6 +39,7 @@ public class MyViewHolder extends  RecyclerView.ViewHolder {
         card_time = itemView.findViewById(R.id.card_date);
         card_pending = itemView.findViewById(R.id.card_pending);
 
+        //Set click behavior that is utilized in the firebase methods
         itemView.setOnClickListener(new View.OnClickListener(){
 
             @Override
@@ -53,6 +56,7 @@ public class MyViewHolder extends  RecyclerView.ViewHolder {
         });
 
     }
+
 
 
     public interface ClickListener {
