@@ -1,5 +1,4 @@
-# Gravitate-Front-End
-Front-End Committee
+# Gravitate By Team VIBE
 
 # How to install Gravitate
 
