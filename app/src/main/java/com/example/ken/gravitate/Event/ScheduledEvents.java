@@ -84,6 +84,7 @@ public class ScheduledEvents extends AppCompatActivity
     GoogleSignInClient mGoogleSignInClient;
     private static final String web_client_id = "1070051773756-o6l5r1l6v7m079r1oua2lo0rsfeu8m9i.apps.googleusercontent.com";
     private static final String DOMAIN = "ucsd.edu";
+    private String userID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,10 +126,9 @@ public class ScheduledEvents extends AppCompatActivity
         db = FirebaseFirestore.getInstance();
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser user = firebaseAuth.getCurrentUser();
-        String user_url = APIUtils.getUserURL(user);
 
         // Getting ride requests from the user's collection
-        String userID = user.getUid();
+        userID = user.getUid();
         userDocRef = db.collection("users").document(userID);
         getUserRideRequestList(userDocRef, orbitView);
         orbitView.setLayoutManager(new LinearLayoutManager(ScheduledEvents.this));
@@ -239,6 +239,7 @@ public class ScheduledEvents extends AppCompatActivity
                 R.color.colorAccent);
     }
 
+    // Creates a Fragment Instance of respective menu item
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
@@ -319,7 +320,7 @@ public class ScheduledEvents extends AppCompatActivity
     // Populate ride request information
     private void getUserRideRequestList(DocumentReference userRef, RecyclerView display) {
         // Get a limit of 10 ride requests from the user
-        Query rideRequestQuery = userRef.collection("eventSchedules").orderBy("pending").limit(10);
+        Query rideRequestQuery = userRef.collection("eventSchedules").orderBy("destTime").limit(10);
 
         // Set the model for firebase to populate the adapter
         FirestoreRecyclerOptions<EventRequestModule> options =
@@ -394,12 +395,15 @@ public class ScheduledEvents extends AppCompatActivity
                 }
 
                 // Grab all the necessary information and pass it onto the next activity once a card is pressed
+                final String eventId = getSnapshots().getSnapshot(i).getId();
+
                 final boolean stillPending = model.isPending();
                 final DocumentReference orbitRef = model.getOrbitRef();
                 final String pickupAddress = model.getPickupAddress();
                 List<String> temp = model.getMemberProfilePhotoUrls();
                 final ArrayList<String> profileImages = new ArrayList<String>();
-                final String destTime = model.getDestTime();
+                final Long destTime = model.getDestTime();
+                final DocumentReference rideRef = model.getRideRequestRef();
 
                 // Get all profile URLs and add it to an array list that can be passed
                 for (String eachURL : temp){
@@ -445,6 +449,10 @@ public class ScheduledEvents extends AppCompatActivity
                         intent.putExtra("pickupAddress", pickupAddress);
 
                         // If it is an orbit, pass a few more fields
+                        intent.putExtra("rideRef", rideRef.getId());
+                        intent.putExtra("eventRef", eventId);
+                        intent.putExtra("userRef", userID);
+
                         if(!stillPending) {
                             intent.putStringArrayListExtra("profileImages", profileImages);
                             intent.putExtra("orbitRef",  orbitRef.getPath());
