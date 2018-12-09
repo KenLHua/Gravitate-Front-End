@@ -145,8 +145,6 @@ public class RiderAdapter extends RecyclerView.Adapter<RiderAdapter.RiderViewHol
 
                                             }
                                         }, token);
-
-
                             }
                         }
 

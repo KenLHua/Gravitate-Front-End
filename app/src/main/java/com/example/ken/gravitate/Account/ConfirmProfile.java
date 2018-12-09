@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -47,6 +48,7 @@ public class ConfirmProfile extends AppCompatActivity {
     private Context mContext;
     private RequestQueue mRequestQueue;
     private String token;
+    private FirebaseUser user;
     String photo_url;
 
     @Override
@@ -55,20 +57,11 @@ public class ConfirmProfile extends AppCompatActivity {
         setContentView(R.layout.confirm_account_layout);
         mAuth = FirebaseAuth.getInstance();
         token = FirebaseAuth.getInstance().getAccessToken(false).getResult().getToken();
-        FirebaseUser user = mAuth.getCurrentUser();
-        checkUserExists(user);
+        user = mAuth.getCurrentUser();
 
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Confirm Account");
-//        toolbar.setNavigationIcon(R.drawable.system_icon_back);
-//        // Back button will go to previous page when clicked on
-//        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                onSupportNavigateUp();
-//            }
-//        });
         setSupportActionBar(toolbar);
         mContext = this;
         mFullName = findViewById(R.id.inputFullName);
@@ -181,20 +174,11 @@ public class ConfirmProfile extends AppCompatActivity {
 
                 FirebaseUser user = mAuth.getCurrentUser();
                 String uid = user.getUid();
-                APIUtils.postUser(this, uid, display_name, photo_url, pickupAddress,phone_number, token);
+                APIUtils.postUser(this, user, display_name, photo_url, pickupAddress,phone_number, token);
                 return true;
         }
         return super.onOptionsItemSelected(button);
     }
 
-    public void checkUserExists( FirebaseUser user ) {
-        APIUtils.getUser(this, user,
-                new VolleyCallback() {
-                    @Override
-                    public void onSuccessResponse(JSONObject result) {
-                        startActivity(new Intent (ConfirmProfile.this, ScheduledEvents.class));
-                    }
-                },token);
-    }
 }
 

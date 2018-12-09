@@ -36,10 +36,14 @@ public class WelcomeScreen extends AppCompatActivity {
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if ( user != null ) {
+                    mAuth.removeAuthStateListener(mAuthListener);
                     startActivity(new Intent(WelcomeScreen.this, ScheduledEvents.class));
+                    finish();
                 }
+
             }
         };
 
@@ -67,6 +71,7 @@ public class WelcomeScreen extends AppCompatActivity {
                 switch(v.getId()){
                     case R.id.welcomeSkip:
                         startActivity(new Intent(WelcomeScreen.this, LoginActivity.class));
+                        finish();
                         break;
 
                 }
@@ -88,5 +93,10 @@ public class WelcomeScreen extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
+    }
+    @Override
+    protected void onStop(){
+        super.onStop();
+        mAuth.removeAuthStateListener(mAuthListener);
     }
 }

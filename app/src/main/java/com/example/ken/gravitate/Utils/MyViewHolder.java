@@ -1,14 +1,11 @@
 package com.example.ken.gravitate.Utils;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.ken.gravitate.Event.RideEvent;
-import com.example.ken.gravitate.Event.ScheduledEvents;
 import com.example.ken.gravitate.R;
 import com.google.firebase.firestore.DocumentReference;
 
@@ -32,7 +29,7 @@ public class MyViewHolder extends  RecyclerView.ViewHolder {
     public MyViewHolder(View itemView) {
         super(itemView);
         view = itemView;
-        profile_photo = itemView.findViewById(R.id.profile_image);
+        profile_photo = itemView.findViewById(R.id.profile_image1);
         background_img = itemView.findViewById(R.id.card_back);
         card_dest = itemView.findViewById(R.id.card_dest);
         card_time = itemView.findViewById(R.id.card_date);

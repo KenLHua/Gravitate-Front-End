@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
@@ -23,7 +24,7 @@ import android.widget.Toast;
 import com.example.ken.gravitate.Event.ScheduledEvents;
 import com.example.ken.gravitate.R;
 import com.example.ken.gravitate.Utils.APIUtils;
-import com.example.ken.gravitate.Utils.JSONUtils;
+import com.example.ken.gravitate.Utils.VolleyCallback;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -36,6 +37,7 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 import org.json.JSONObject;
@@ -54,6 +56,8 @@ public class LoginActivity extends AppCompatActivity {
     private RelativeLayout layout;
     private ProgressBar progressBar;
     private TextView progressText;
+    private boolean skippedProfile = false;
+    private String token;
 
     @Override
     protected void onStart() {
@@ -66,6 +70,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         layout = findViewById(R.id.login_layout);
+        Log.d("Startingactivity", "hello");
 
         mCtx = this;
 
@@ -86,17 +91,14 @@ public class LoginActivity extends AppCompatActivity {
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         mAuth = FirebaseAuth.getInstance();
 
+
+
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                // We have a user
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if ( user != null ) {
-                    startActivity(new Intent(LoginActivity.this, ScheduledEvents.class));
-                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-                }
             }
         };
+
 
         // Floating Action Button Setup
         sign_in_bttn = findViewById(R.id.googleBtn);
@@ -181,21 +183,56 @@ public class LoginActivity extends AppCompatActivity {
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        progressBar.setVisibility(View.INVISIBLE);
-                        progressText.setVisibility(View.INVISIBLE);
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
-                            String display_name = acct.getDisplayName();
-                            String photo_url = acct.getPhotoUrl().toString();
-                            Intent intent = new Intent(LoginActivity.this, ConfirmProfile.class);
-                            intent.putExtra("display_name", display_name);
-                            intent.putExtra("photo_url", photo_url);
-                            startActivity(intent);
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            Task<GetTokenResult> tokenTask = FirebaseAuth.getInstance().getAccessToken(false);
+
+                            while(!tokenTask.isComplete()){
+                                Log.d("GettingToken", "async");
+                                try{
+                                    wait(500);
+                                }
+                                catch (InterruptedException e){
+                                    e.printStackTrace();
+                                }
+                            }
+                            token = tokenTask.getResult().getToken();
+
+                            checkUserExists(user, token);
+                            Handler handler = new Handler();
+                            Runnable r = new Runnable() {
+                                @Override
+                                public void run() {
+
+                                    if(!skippedProfile) {
+                                        String display_name = acct.getDisplayName();
+                                        String photo_url = acct.getPhotoUrl().toString();
+                                        progressBar.setVisibility(View.INVISIBLE);
+                                        progressText.setVisibility(View.INVISIBLE);
+                                        Intent intent = new Intent(LoginActivity.this, ConfirmProfile.class);
+                                        intent.putExtra("display_name", display_name);
+                                        intent.putExtra("photo_url", photo_url);
+                                        startActivity(intent);
+
+                                    }
+                                    else{
+
+                                        startActivity(new Intent(LoginActivity.this, ScheduledEvents.class));
+
+
+                                    }
+
+                                }
+                            };
+                            handler.postDelayed(r,3000);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
                             Snackbar.make(findViewById(R.id.login_layout), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
+                            progressBar.setVisibility(View.INVISIBLE);
+                            progressText.setVisibility(View.INVISIBLE);
                             try{
                                 signOut();
                             }catch (Error e){
@@ -209,7 +246,9 @@ public class LoginActivity extends AppCompatActivity {
 
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+
         startActivityForResult(signInIntent, RC_SIGN_IN);
+
 
     }
 
@@ -221,4 +260,17 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 });
     }
+
+    public void checkUserExists( FirebaseUser user, String token ) {
+
+        APIUtils.getUser(this, user,
+                new VolleyCallback() {
+                    @Override
+                    public void onSuccessResponse(JSONObject result) {
+                        skippedProfile = true;
+                    }
+                },token);
+    }
+
+
 }

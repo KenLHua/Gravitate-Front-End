@@ -139,10 +139,11 @@ public class APIUtils {
         return builder.toString();
     }
 
-    public static void postUser(final Context confirmProfile, String uid, String display_name, String phone_number, String photo_url, String pickupAddress
+    public static void postUser(final Context confirmProfile, FirebaseUser user, String display_name, String phone_number, String photo_url, String pickupAddress
     , final String token) {
-        final String server_url = getUserURL(uid);
-        final JSONObject userJSON = JSONUtils.retrieveUserInfo(uid, display_name, phone_number, photo_url, pickupAddress);
+        final String server_url = getUserURL(user);
+        final String userID = user.getUid();
+        final JSONObject userJSON = JSONUtils.retrieveUserInfo(userID, display_name, phone_number, photo_url, pickupAddress);
         Log.w("USERJSON", userJSON.toString());
         final String TAG = "User";
         Log.w(TAG, userJSON.toString());
@@ -192,7 +193,6 @@ public class APIUtils {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // TODO: Handle error
-                        Toast.makeText(myProfile, error + "error", Toast.LENGTH_LONG).show();
                     }
                 }) {
             @Override

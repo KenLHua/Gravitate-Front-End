@@ -117,13 +117,10 @@ public class ScheduledEvents extends AppCompatActivity
             }
         }
         final String token = tokenTask.getResult().getToken();
+
         db = FirebaseFirestore.getInstance();
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser user = firebaseAuth.getCurrentUser();
-        if( user == null){
-            startActivity(new Intent(ScheduledEvents.this, LoginActivity.class));
-            finishAndRemoveTask();
-        }
         String user_url = APIUtils.getUserURL(user);
 
         // Getting ride requests from the user's collection
@@ -413,7 +410,8 @@ public class ScheduledEvents extends AppCompatActivity
                     holder.card_pending.setText("Pending Ride Request");
                 }
                 else {
-                    //new DownloadImageTask(holder.profile_photo).execute(profileImages.get(0));
+                    //new DownloadImageTask(holder.profile_photo1).execute(profileImages.get(0));
+                    //new DownloadImageTask(holder.profile_photo2).execute(profileImages.get(1));
                     holder.card_time.setText("Arrival Time : " + model.getDestTime());
                     holder.card_pending.setText("Orbiting");
                     holder.orbitRef = model.getOrbitRef();
