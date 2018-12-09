@@ -1,7 +1,6 @@
 package com.example.ken.gravitate.Account;
 
 import android.content.Context;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -9,13 +8,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -60,6 +56,7 @@ public class LoginActivity extends AppCompatActivity {
     private String token;
 
     @Override
+    // Set the authentication listener on start of the activity
     protected void onStart() {
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
@@ -67,6 +64,7 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        // Setting content
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         layout = findViewById(R.id.login_layout);
@@ -92,7 +90,7 @@ public class LoginActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
 
-
+        // Create an auth listener for the auth instance
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -123,6 +121,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     @Override
+    // When returning from google autocomplete, do something with the information
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         ConnectivityManager cm =
@@ -151,6 +150,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    // When sign in is valid, authenticate with our firebase
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             // Signed in successfully
@@ -166,9 +166,11 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    // Authenticating with firebase
     private void firebaseAuthWithGoogle(final GoogleSignInAccount acct) {
         String email = acct.getEmail();
         email = email.substring(email.length()-9, email.length());
+        // If email does not end with @ucsd.edu, then do not let them sign up
         if(!email.equals("@"+DOMAIN)){
             signOut();
             Toast.makeText(LoginActivity.this
@@ -183,10 +185,12 @@ public class LoginActivity extends AppCompatActivity {
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
+                        // If we authenticated successfully
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+                            // Get REST access token
                             Task<GetTokenResult> tokenTask = FirebaseAuth.getInstance().getAccessToken(false);
 
                             while(!tokenTask.isComplete()){
@@ -200,12 +204,15 @@ public class LoginActivity extends AppCompatActivity {
                             }
                             token = tokenTask.getResult().getToken();
 
+                            // Check if user already set up profie
                             checkUserExists(user, token);
+                            // Delay action by 3000 miliseconds
                             Handler handler = new Handler();
                             Runnable r = new Runnable() {
                                 @Override
                                 public void run() {
 
+                                    // If user does not exist, then trigger profile setup
                                     if(!skippedProfile) {
                                         String display_name = acct.getDisplayName();
                                         String photo_url = acct.getPhotoUrl().toString();
@@ -217,6 +224,7 @@ public class LoginActivity extends AppCompatActivity {
                                         startActivity(intent);
 
                                     }
+                                    // Else, let them into the app
                                     else{
 
                                         startActivity(new Intent(LoginActivity.this, ScheduledEvents.class));
@@ -227,6 +235,7 @@ public class LoginActivity extends AppCompatActivity {
                                 }
                             };
                             handler.postDelayed(r,3000);
+
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
@@ -234,6 +243,7 @@ public class LoginActivity extends AppCompatActivity {
                             progressBar.setVisibility(View.INVISIBLE);
                             progressText.setVisibility(View.INVISIBLE);
                             try{
+                                // If it fails, sign them out of the google authentication
                                 signOut();
                             }catch (Error e){
                                 e.printStackTrace();
@@ -244,6 +254,7 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
+    // sign in behavior
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
 
@@ -252,6 +263,7 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    // Sign out behavior
     public void signOut() {
         mGoogleSignInClient.signOut()
                 .addOnCompleteListener(this, new OnCompleteListener<Void>() {
@@ -261,6 +273,7 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
+    // Helper method to check if user set up profile
     public void checkUserExists( FirebaseUser user, String token ) {
 
         APIUtils.getUser(this, user,

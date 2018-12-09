@@ -338,6 +338,7 @@ public class APIUtils {
     }
     // time in the form of "##:## AM" or PM
     public static String parsePickupTime(String time, boolean early){
+
         int hour = Integer.parseInt(time.substring(0,2));
         int minute = Integer.parseInt(time.substring(3,5));
         boolean afternoonEarly = false;
@@ -348,14 +349,17 @@ public class APIUtils {
             afternoonLate = true;
         }
 
+
         if (early){
-            if( ((hour <= 5) || hour ==12) && minute == 0){
+            if( ((hour <= 5) || hour ==12)){
                 if(hour <= 5){
                     hour = hour + 12;
                 }
                 afternoonEarly = !afternoonEarly;
             }
+
             hour = hour - 5;
+
             parsedTime = parsedTime + hour;
             if(minute < 9){
                 parsedTime = parsedTime + ":0" + minute; }
@@ -369,7 +373,7 @@ public class APIUtils {
             }
         }
         else{
-            if( ((hour <= 2) || hour ==12) && minute == 0){
+            if( ((hour <= 2) || hour ==12)){
                 if(hour <= 2){
                     hour = hour + 12;
                 }

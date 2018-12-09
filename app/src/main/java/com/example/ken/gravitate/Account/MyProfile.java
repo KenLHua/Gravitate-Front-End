@@ -101,6 +101,7 @@ public class MyProfile extends AppCompatActivity {
 
     }
 
+    // Populate the user's profile page with their database information
     public void populateUserInfo( FirebaseUser user ) {
         APIUtils.getUser(this, user,
                 new VolleyCallback() {

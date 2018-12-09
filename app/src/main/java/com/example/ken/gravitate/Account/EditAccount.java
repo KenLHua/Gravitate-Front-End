@@ -41,8 +41,7 @@ public class EditAccount extends AppCompatActivity {
 
     int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
 
-    private Button mSaveEditAccountBtn;
-
+    // Setting all activity variables
     private TextView mFullName;
     private TextView mPhoneNumber;
     private TextView mPostalAddress;
@@ -52,6 +51,8 @@ public class EditAccount extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        // Initializing layout UI elements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.edit_account_layout);
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -65,37 +66,35 @@ public class EditAccount extends AppCompatActivity {
                 onSupportNavigateUp();
             }
         });
-
+        // Set the action bar to use the toolbar
         setSupportActionBar(toolbar);
 
 
+        // Getting REST access token
         Task<GetTokenResult> tokenTask = FirebaseAuth.getInstance().getAccessToken(false);
         while(!tokenTask.isComplete()){
             Log.d("GettingToken", "async");
-            try{
-                wait(500);
-            }
-            catch (InterruptedException e){
-                e.printStackTrace();
+            synchronized (this){
+                try{
+                    wait(500);
+                }
+                catch (InterruptedException e){
+                    e.printStackTrace();
+                }
             }
         }
-        token = tokenTask.getResult().getToken();
+        final String token = tokenTask.getResult().getToken();
 
-        /*
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.edit_account_fragment, new EditAccountFragment())
-                .commit();
-                */
         user = AuthSingleton.getInstance().getCurrentUser();
 
-
+        // Set these variables to be used to input data
         mContext = EditAccount.this;
         mFullName = findViewById(R.id.inputFullName);
         mPhoneNumber = findViewById(R.id.inputPhoneNumber);
         mPostalAddress = findViewById(R.id.inputPostalAddress);
 
 
+        // Set the information to match the user's information in the database
         APIUtils.getUser(mContext, user,
                 new VolleyCallback() {
                     @Override
@@ -180,7 +179,7 @@ public class EditAccount extends AppCompatActivity {
         }
     }
 
-    // Checks if all flight input fields are filled
+    // Checks if all profile fields are correct
     private boolean invalidAccountFields(String checkFullName, String checkPhoneNumber, String checkPostalAddress) {
         if(checkFullName.length() == 0 ){
             Toast.makeText(mContext, "Error: Please input your full name", Toast.LENGTH_LONG).show();

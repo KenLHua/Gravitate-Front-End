@@ -95,7 +95,7 @@ public class ScheduledEvents extends AppCompatActivity
         //Recycler view with adapter to display cards
         orbitView = findViewById(R.id.orbit_list);
         mContext = ScheduledEvents.this;
-        TextView tokenHolder = new TextView(mContext);
+
         // Side-Navigation Setup
         drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -106,6 +106,7 @@ public class ScheduledEvents extends AppCompatActivity
         toolbarShadow.bringToFront();
 
 
+        // Getting REST access token
         Task<GetTokenResult> tokenTask = FirebaseAuth.getInstance().getAccessToken(false);
         while(!tokenTask.isComplete()){
             Log.d("GettingToken", "async");
@@ -410,6 +411,7 @@ public class ScheduledEvents extends AppCompatActivity
 
                 if(stillPending) {
                     holder.card_pending.setText("Pending Ride Request");
+                    holder.card_time.setText("Flight Time : " + parsedFlightDate + parsedFlightTime);
                 }
                 else {
                     new DownloadImageTask(holder.profile_photo1).execute(profileImages.get(0));

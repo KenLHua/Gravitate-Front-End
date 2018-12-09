@@ -41,6 +41,7 @@ import org.json.JSONObject;
 public class ConfirmProfile extends AppCompatActivity {
     int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
 
+    // Initializing activity variables
     private Button mSaveEditAccountBtn;
     private FirebaseAuth mAuth;
     private TextView mFullName;
@@ -55,35 +56,44 @@ public class ConfirmProfile extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        // Populating activity layout
         super.onCreate(savedInstanceState);
         setContentView(R.layout.confirm_account_layout);
+        // Getting authentication instance
         mAuth = FirebaseAuth.getInstance();
 
+
+        // Getting REST access token
         Task<GetTokenResult> tokenTask = FirebaseAuth.getInstance().getAccessToken(false);
         while(!tokenTask.isComplete()){
             Log.d("GettingToken", "async");
-            try{
-                wait(500);
-            }
-            catch (InterruptedException e){
-                e.printStackTrace();
+            synchronized (this){
+                try{
+                    wait(500);
+                }
+                catch (InterruptedException e){
+                    e.printStackTrace();
+                }
             }
         }
         final String token = tokenTask.getResult().getToken();
 
         user = mAuth.getCurrentUser();
 
-
+        // Initializing the toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Confirm Account");
         setSupportActionBar(toolbar);
+        // Setting context
         mContext = this;
+        // Grabbing UI elements that hold information
         mFullName = findViewById(R.id.inputFullName);
         mPicture = findViewById(R.id.c_profile_pic);
         mPhoneNumber = findViewById(R.id.inputPhoneNumber);
+        // Numbers must start with united states code
         mPhoneNumber.setText("+1");
         mPostalAddress = findViewById(R.id.inputPostalAddress);
-        mRequestQueue = APIRequestSingleton.getInstance(this.getApplicationContext()).getRequestQueue();
 
         // Display profile pic and autofill user info
         String display_name = getIntent().getStringExtra("display_name");
@@ -98,6 +108,7 @@ public class ConfirmProfile extends AppCompatActivity {
                 .build();
 
 
+        // Let address changes only happen through google activity
         mPostalAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -154,7 +165,7 @@ public class ConfirmProfile extends AppCompatActivity {
         }
     }
 
-    // Checks if all flight input fields are filled
+    // Checks if all profile informations are valid
     private boolean invalidAccountFields(String checkFullName, String checkPhoneNumber, String checkPostalAddress) {
         if(checkFullName.length() == 0 ){
             Toast.makeText(mContext, "Error: Please input your full name", Toast.LENGTH_LONG).show();
