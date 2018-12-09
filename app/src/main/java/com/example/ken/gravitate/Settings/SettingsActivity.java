@@ -34,6 +34,7 @@ public class SettingsActivity extends AppCompatActivity {
                 .replace(R.id.settings_fragment, new SettingsFragment())
                 .commit();
 
+
     }
 
     // Helper method for back button

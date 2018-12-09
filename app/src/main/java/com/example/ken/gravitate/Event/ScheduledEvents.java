@@ -109,11 +109,13 @@ public class ScheduledEvents extends AppCompatActivity
         Task<GetTokenResult> tokenTask = FirebaseAuth.getInstance().getAccessToken(false);
         while(!tokenTask.isComplete()){
             Log.d("GettingToken", "async");
-            try{
-                wait(500);
-            }
-            catch (InterruptedException e){
-                e.printStackTrace();
+            synchronized (this){
+                try{
+                    wait(500);
+                }
+                catch (InterruptedException e){
+                    e.printStackTrace();
+                }
             }
         }
         final String token = tokenTask.getResult().getToken();
