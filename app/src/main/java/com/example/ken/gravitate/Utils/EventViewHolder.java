@@ -13,6 +13,7 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+
 public class EventViewHolder extends  RecyclerView.ViewHolder {
     // Field variables that are used within the card view
     private View view;

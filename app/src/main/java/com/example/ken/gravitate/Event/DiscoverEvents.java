@@ -57,8 +57,14 @@ import com.leinardi.android.speeddial.SpeedDialView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.time.Instant;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.List;
+
+import java.time.ZonedDateTime;
+import java.time.ZoneId;
 
 public class DiscoverEvents extends AppCompatActivity {
 
@@ -192,8 +198,6 @@ public class DiscoverEvents extends AppCompatActivity {
                 View v = inflater.inflate(R.layout.event_card, viewGroup, false);
                 registerForContextMenu(v);
                 EventViewHolder eventViewHolder = new EventViewHolder(v);
-
-
                 return eventViewHolder;
             }
 
@@ -205,6 +209,12 @@ public class DiscoverEvents extends AppCompatActivity {
                 final String destName = "LAX";
                 // Format the flight local time to be readable
                 final String parsedFlightDate = model.getStartTimestamp().toString();
+
+                final Long startTimestamp = model.getStartTimestamp();
+                final ZoneId zoneId = ZoneId.of("America/Los_Angeles");
+                final ZonedDateTime eventDate = ZonedDateTime.ofInstant(Instant.ofEpochSecond(startTimestamp), zoneId);
+                // TODO: test
+                final String eventDay = eventDate.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM));
 
                 // Grab all the necessary information and pass it onto the next activity once a card is pressed
                 final String eventId = getSnapshots().getSnapshot(i).getId();
@@ -228,8 +238,8 @@ public class DiscoverEvents extends AppCompatActivity {
 
                 // If no orbit is found
                 if(true) { // Currently
-                    holder.card_status.setText("Pending Ride Request");
-                    holder.card_time.setText("Event Date: " + parsedFlightDate);
+                    holder.card_status.setText("Active");
+                    holder.card_time.setText("Event Date: " + eventDay);
                 }
 //                // If an orbit is found
 ////                else {
