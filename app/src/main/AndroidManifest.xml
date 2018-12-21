@@ -66,6 +66,9 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".Event.DiscoverEvents"
+            android:label="Discover Events">
+        </activity>
 
         <service android:name=".GravitateFirebaseMessagingService">
             <intent-filter>

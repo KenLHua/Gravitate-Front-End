@@ -258,6 +258,10 @@ public class ScheduledEvents extends AppCompatActivity
                 signOut();
                 break;
         }
+        switch(menuItem.getItemId()) {
+            case R.id.nav_discover:
+                startActivity(new Intent(ScheduledEvents.this, DiscoverEvents.class));
+        }
 
         drawer.closeDrawer(GravityCompat.START);
 

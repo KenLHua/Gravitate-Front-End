@@ -15,5 +15,10 @@
             android:id="@+id/nav_logout"
             android:icon="@drawable/baseline_exit_to_app_black_18dp"
             android:title="Logout"/>
+        <item
+            android:id="@+id/nav_discover"
+            android:icon="@drawable/system_icon_event"
+            android:title="Discover"
+            />
     </group>
 </menu>
