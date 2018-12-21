@@ -68,15 +68,10 @@ import java.time.ZoneId;
 
 public class DiscoverEvents extends AppCompatActivity {
 
-    final String TAG = "documentLOOKUP";
+    final String TAG = "DiscoverEvents";
 
     public static FragmentManager fragmentManager;
-    private DrawerLayout drawer;
-    private ImageView profile;
-    private View header;
-    private SpeedDialView fab;
     private TextView emptyRequests;
-    private ImageView navProfilePic;
 
 //    DocumentReference userDocRef;
     CollectionReference eventsRef;
@@ -88,10 +83,6 @@ public class DiscoverEvents extends AppCompatActivity {
     private Context mContext;
     private boolean hasRide;
     private FirestoreRecyclerAdapter adapter;
-
-    private static final String web_client_id = "1070051773756-o6l5r1l6v7m079r1oua2lo0rsfeu8m9i.apps.googleusercontent.com";
-    private static final String DOMAIN = "ucsd.edu";
-    private String userID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,7 +105,6 @@ public class DiscoverEvents extends AppCompatActivity {
         FirebaseUser user = firebaseAuth.getCurrentUser();
 
         // Getting ride requests from the user's collection
-        userID = user.getUid();
         eventsRef = db.collection("events");
         getEventList(eventsRef, eventsView);
         eventsView.setLayoutManager(new LinearLayoutManager(DiscoverEvents.this));
@@ -125,16 +115,6 @@ public class DiscoverEvents extends AppCompatActivity {
 
         // Displaying that the user has no ride requests
         emptyRequests = findViewById(R.id.no_rides);
-
-//
-//        // Side-Navigation Menu Setup
-//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
-//                R.string.navigation_drawer_open,R.string.navigation_drawer_close);
-//        drawer.addDrawerListener(toggle);
-//        toggle.syncState();
-
-        // Floating Action Button Setup
-
 
         // Swipe to refresh
         swipeContainer = findViewById(R.id.swipeContainer);
@@ -213,21 +193,11 @@ public class DiscoverEvents extends AppCompatActivity {
                 final Long startTimestamp = model.getStartTimestamp();
                 final ZoneId zoneId = ZoneId.of("America/Los_Angeles");
                 final ZonedDateTime eventDate = ZonedDateTime.ofInstant(Instant.ofEpochSecond(startTimestamp), zoneId);
-                // TODO: test
+                // TODO: refactor and test all operations involved in Datetime conversion
                 final String eventDay = eventDate.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM));
 
-                // Grab all the necessary information and pass it onto the next activity once a card is pressed
-                final String eventId = getSnapshots().getSnapshot(i).getId();
-
                 final boolean eventStatus = model.getIsClosed();
-//                final DocumentReference orbitRef = model.getOrbitRef();
-//                List<String> temp = model.getMemberProfilePhotoUrls();
                 final ArrayList<String> profileImages = new ArrayList<String>();
-
-                // Get all profile URLs and add it to an array list that can be passed
-//                for (String eachURL : temp){
-//                    profileImages.add(eachURL);
-//                }
 
                 // Set the context and fields
                 holder.context = mContext;
@@ -236,22 +206,11 @@ public class DiscoverEvents extends AppCompatActivity {
                 // Update whether the "no requests found" is displayed
                 hasRide = true;
 
-                // If no orbit is found
+                // If events are active (= not isClosed)
                 if(true) { // Currently
                     holder.card_status.setText("Active");
                     holder.card_time.setText("Event Date: " + eventDay);
                 }
-//                // If an orbit is found
-////                else {
-////                    new DownloadImageTask(holder.profile_photo1).execute(profileImages.get(0));
-////                    if(profileImages.size() == 2){
-////                        new DownloadImageTask(holder.profile_photo2).execute(profileImages.get(1));
-////                    }
-////                    holder.card_time.setText("Flight Time : " + parsedFlightDate + parsedFlightTime);
-////                    holder.card_status.setText("Orbiting");
-////                    holder.orbitRef = model.getOrbitRef();
-////                    holder.profileImages = profileImages;
-////                }
 
             }
 
@@ -284,8 +243,6 @@ public class DiscoverEvents extends AppCompatActivity {
         super.onStop();
         adapter.stopListening();
     }
-
-
 
 
 }
