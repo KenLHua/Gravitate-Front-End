@@ -28,10 +28,14 @@ android {
             signingConfig signingConfigs.config
         }
     }
-    productFlavors {
-    }
+    flavorDimensions "version"
     dataBinding {
         enabled = true
+    }
+    productFlavors {
+        dev {
+            applicationId 'com.example.ken.gravitate.dev'
+        }
     }
 }
 

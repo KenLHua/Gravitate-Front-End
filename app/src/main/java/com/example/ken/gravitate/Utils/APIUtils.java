@@ -38,7 +38,7 @@ public class APIUtils {
 
         /** Gets Information to construct JSON and Endpoint URL**/
         final String TAG = "Delete Match";
-        final String request_url = "https://gravitate-e5d01.appspot.com/deleteMatch";
+        final String request_url = "https://gravitate-dev.appspot.com/deleteMatch";
         JSONObject deleteJSON = JSONUtils.deleteMatchJSON(ride_request_id);
 
         // Adds Request to RequestQueue (ASYNC TASK)
@@ -145,7 +145,7 @@ public class APIUtils {
     public static String getUserURL( String uid ) {
         Uri.Builder builder = new Uri.Builder();
         builder.scheme("https")
-                .path("gravitate-e5d01.appspot.com/users")
+                .path("gravitate-dev.appspot.com/users")
                 .appendPath(uid);
 
         return builder.toString();
@@ -159,7 +159,7 @@ public class APIUtils {
         String uid = user.getUid();
         Uri.Builder builder = new Uri.Builder();
         builder.scheme("https")
-                .path("gravitate-e5d01.appspot.com/users")
+                .path("gravitate-dev.appspot.com/users")
                 .appendPath(uid);
 
         return builder.toString();
@@ -304,7 +304,7 @@ public class APIUtils {
         return abbr;
     }
     public static void postRideRequest(final Context inputFlight,final String pickupAddress, final String date, final JSONObject Ride_RequestJSON, final String token) {
-        final String server_url = "https://gravitate-e5d01.appspot.com/rideRequests";
+        final String server_url = "https://gravitate-dev.appspot.com/rideRequests";
         final String TAG = "Ride_Request";
         String airportCode = APIUtils.getAirportAbbr(Ride_RequestJSON);
         Log.w(TAG, "AirportCode: " + airportCode);
@@ -414,7 +414,7 @@ public class APIUtils {
 
     }
     public static void postForceMatch(final Context forceMatch, JSONObject Ride_RequestJSON) {
-        final String server_url = "https://gravitate-e5d01.appspot.com/devForceMatch";
+        final String server_url = "https://gravitate-dev.appspot.com/devForceMatch";
         final String TAG = "ForceMatch";
 
 
