@@ -63,7 +63,8 @@ public class WelcomeScreen extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openOnBoard();
+                openReactActivity();
+//                openOnBoard();
             }
         });
 
@@ -92,6 +93,12 @@ public class WelcomeScreen extends AppCompatActivity {
         startActivity(intent);
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
+
+    public void openReactActivity() {
+        Intent intent = new Intent(this, MyReactActivity.class);
+        startActivity(intent);
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
