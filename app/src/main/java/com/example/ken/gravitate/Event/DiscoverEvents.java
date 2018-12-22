@@ -186,11 +186,13 @@ public class DiscoverEvents extends AppCompatActivity {
             protected void onBindViewHolder(@NonNull EventViewHolder holder, int i, @NonNull Event model) {
                 // Set background and destination UI elements
                 final String destName = model.getEventLocation();
-                int cardBackground = R.drawable.lax;
-                if (destName == "LAX") {
+                int cardBackground;
+                if (destName.equals("LAX")) {
                     cardBackground = R.drawable.lax;
-                } else if (destName == "UCSB") {
+                } else if (destName.equals("UCSB")) {
                     cardBackground = R.drawable.ucsb;
+                } else {
+                    cardBackground = R.drawable.lax;
                 }
                 // Format the flight local time to be readable
                 final String parsedFlightDate = model.getStartTimestamp().toString();
