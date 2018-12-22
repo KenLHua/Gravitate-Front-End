@@ -47,7 +47,7 @@ public class LoginActivity extends AppCompatActivity {
     GoogleSignInClient mGoogleSignInClient;
     FirebaseAuth.AuthStateListener mAuthListener;
     private static final String TAG = "GoogleActivity";
-    private static final String web_client_id = "1070051773756-o6l5r1l6v7m079r1oua2lo0rsfeu8m9i.apps.googleusercontent.com";
+//    private static final String web_client_id = "1070051773756-o6l5r1l6v7m079r1oua2lo0rsfeu8m9i.apps.googleusercontent.com";
     private static final String DOMAIN = "ucsd.edu";
     private RelativeLayout layout;
     private ProgressBar progressBar;
@@ -80,7 +80,7 @@ public class LoginActivity extends AppCompatActivity {
         // Configure sign-in to request the user's ID, email address, and basic profile.
         // ID and basic profile are included in DEFAULT_SIGN_IN.
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(web_client_id)
+                .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .setHostedDomain(DOMAIN)
                 .build();
