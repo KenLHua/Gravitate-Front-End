@@ -185,8 +185,13 @@ public class DiscoverEvents extends AppCompatActivity {
             // When firestore gives us information, populate the information
             protected void onBindViewHolder(@NonNull EventViewHolder holder, int i, @NonNull Event model) {
                 // Set background and destination UI elements
+                final String destName = model.getEventLocation();
                 int cardBackground = R.drawable.lax;
-                final String destName = "LAX";
+                if (destName == "LAX") {
+                    cardBackground = R.drawable.lax;
+                } else if (destName == "UCSB") {
+                    cardBackground = R.drawable.ucsb;
+                }
                 // Format the flight local time to be readable
                 final String parsedFlightDate = model.getStartTimestamp().toString();
 
