@@ -81,7 +81,7 @@ public class APIUtils {
     public static void postDeleteRideRequest(final Context mCtx, final String token, final VolleyCallback callback,
                                        final String user_id, final String event_id, String ride_request_id) {
         /** Gets Information to construct JSON and Endpoint URL**/
-        final String request_url = "https://gravitate-e5d01.appspot.com/deleteRideRequest";
+        final String request_url = "https://gravitate-dev.appspot.com/deleteRideRequest";
         final String TAG = "Delete Ride Request";
         JSONObject deleteJSON = JSONUtils.deleteRideRequestJSON(user_id, event_id, ride_request_id);
 
@@ -340,8 +340,10 @@ public class APIUtils {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
+
                         Toast.makeText(inputFlight,"Error: Flight Request not made", Toast.LENGTH_SHORT).show();
                         error.printStackTrace();
+                        Log.w(TAG, "POST_REQUEST:Create Ride Request failed " + new String(error.networkResponse.data) );
                     }
                 }){
                     @Override
