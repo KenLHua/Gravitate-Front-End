@@ -8,6 +8,9 @@ android {
             storeFile file('../gravitate_key.jks')
             storePassword 'gravitate123'
         }
+        debug {
+            storeFile file('../debug.keystore')
+        }
     }
     compileSdkVersion 28
     defaultConfig {
@@ -25,7 +28,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
-            signingConfig signingConfigs.config
+            signingConfig signingConfigs.debug
         }
     }
     flavorDimensions "version"
