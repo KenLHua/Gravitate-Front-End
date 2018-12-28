@@ -8,9 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
-
+import com.example.ken.gravitate.Models.Orbit;
 import com.example.ken.gravitate.Models.Rider;
 import com.example.ken.gravitate.Utils.APIUtils;
 import com.example.ken.gravitate.Utils.AuthSingleton;
@@ -30,11 +29,12 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 //class to iterate the list of cards and put them on the screen
-public class RiderAdapter extends RecyclerView.Adapter<RiderAdapter.RiderViewHolder> {
+public class OrbitMemberAdapter extends RecyclerView.Adapter<OrbitMemberAdapter.RiderViewHolder> {
 
     // Class variables to be used
     Context context;
@@ -43,8 +43,7 @@ public class RiderAdapter extends RecyclerView.Adapter<RiderAdapter.RiderViewHol
     private FirebaseUser currUser = AuthSingleton.getInstance().getCurrentUser();
     private FirebaseUser partnerUser;
     public boolean stillPending;
-    private DocumentReference mOrbitRef;
-    public ArrayList<String> profileImages;
+    private Orbit mOrbit;
     private String token;
     private OnRiderClickListener mlistener;
 
@@ -57,15 +56,12 @@ public class RiderAdapter extends RecyclerView.Adapter<RiderAdapter.RiderViewHol
         mlistener = listener;
     }
 
-    public RiderAdapter(Context context, DocumentReference orbitRef, List<Rider> rider_list) {
+    public OrbitMemberAdapter(Context context, Orbit orbit, List<Rider> rider_list) {
         this.context = context;
-        this.mOrbitRef = orbitRef;
+        this.mOrbit = orbit;
         this.rider_list = rider_list;
     }
 
-    public void setProfileImages(ArrayList<String> profileImages){
-        this.profileImages = profileImages;
-    }
     //create each Card
     @NonNull
     @Override
@@ -73,7 +69,7 @@ public class RiderAdapter extends RecyclerView.Adapter<RiderAdapter.RiderViewHol
         if(!stillPending) {
             LayoutInflater inflater = LayoutInflater.from(context);
             View v = inflater.inflate(R.layout.rider, viewGroup, false);
-            RiderViewHolder tempViewHolder = new RiderViewHolder(v, this.mOrbitRef, this.context);
+            RiderViewHolder tempViewHolder = new RiderViewHolder(v, this.mOrbit, this.context);
             cards.add(tempViewHolder);
             Log.d("cards", cards.size() + "");
 
@@ -101,7 +97,7 @@ public class RiderAdapter extends RecyclerView.Adapter<RiderAdapter.RiderViewHol
         TextView fullname, email, phone_number;
         Context mContext;
 
-        public RiderViewHolder(View itemView, DocumentReference orbitRef, Context context) {
+        public RiderViewHolder(View itemView, Orbit orbit, Context context) {
             super(itemView);
             mContext = context;
             // Getting REST access token
@@ -117,6 +113,7 @@ public class RiderAdapter extends RecyclerView.Adapter<RiderAdapter.RiderViewHol
                     }
                 }
             }
+
             final String token = tokenTask.getResult().getToken();
 
 
@@ -126,50 +123,17 @@ public class RiderAdapter extends RecyclerView.Adapter<RiderAdapter.RiderViewHol
             email = itemView.findViewById(R.id.rider_email);
             phone_number = itemView.findViewById(R.id.rider_number);
             // If the orbit reference exists
-            if (orbitRef != null) {
-                orbitRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        // Get the users within the orbit
-                        HashMap<String, Object> userTicketPairs = (HashMap<String, Object>) task.getResult().get("userTicketPairs");
-                        Object[] pairedUserIDs = userTicketPairs.keySet().toArray();
-                        // If the orbit has more than yourself
-                        Log.d("pairLength", pairedUserIDs.length + "");
-                        if( pairedUserIDs.length > 1){
-                            // Find all users that are not yourself and display them
-                            for (Object currID : pairedUserIDs) {
-                                String currIDString = (String) currID;
-                                if (currIDString.equals(currUser.getUid())) {
-                                    // Do nothing if it is you
-                                } else {
-                                    // Create a get request to get their information
-                                    String request_url = APIUtils.getUserURL((String) currID);
-                                    Log.d("taggyBoi", (String) currID);
-                                    APIUtils.getUser(mContext, request_url,
-                                            new VolleyCallback() {
-                                                @Override
-                                                public void onSuccessResponse(JSONObject result) {
-                                                    try {
-                                                        JSONObject response = result;
-                                                        fullname.setText(response.getString("display_name"));
-                                                        new DownloadImageTask(profile_photo).execute(response.getString("photo_url"));
-                                                        Log.d("parterNumber", response.getString("phone_number"));
-                                                        phone_number.setText(response.getString("phone_number"));
 
-                                                    } catch (JSONException e) {
-                                                        e.printStackTrace();
-                                                    }
-
-                                                }
-                                            }, token);
-                                }
-                            }
-
-                        }
-
-                    }
-                });
+            Map<String, Object> userTicketPairs = orbit.getUserTicketPairs();
+            Object[] pairedUserIDs = userTicketPairs.keySet().toArray();
+            // If the orbit has more than yourself
+            Log.d("pairLength", pairedUserIDs.length + "");
+            if( pairedUserIDs.length > 1){
+                // Find all users that are not yourself and display them
+                // Actual: Find the last user that is not yourself and display them
+                updateRiders(token, pairedUserIDs);
             }
+
 
             // setting the click listener for each rider
             itemView.setOnClickListener(new View.OnClickListener(){
@@ -184,9 +148,45 @@ public class RiderAdapter extends RecyclerView.Adapter<RiderAdapter.RiderViewHol
                 }
             });
         }
+
+        private void updateRiders(String token, Object[] pairedUserIDs) {
+            // TODO: migrate to outer class
+            // TODO: allow more than one rider other than the user themselves
+            for (Object currID : pairedUserIDs) {
+                String currIDString = (String) currID;
+                if (currIDString.equals(currUser.getUid())) {
+                    // Do nothing if it is you
+                } else {
+                    // Create a get request to get their information
+                    String request_url = APIUtils.getUserURL((String) currID);
+                    Log.d("taggyBoi", (String) currID);
+                    APIUtils.getUser(mContext, request_url,
+                            new VolleyCallback() {
+                                @Override
+                                public void onSuccessResponse(JSONObject result) {
+                                    try {
+                                        JSONObject response = result;
+                                        updateRider(response);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+
+                                }
+                            }, token);
+                }
+            }
+        }
+
+        private void updateRider(JSONObject response) throws JSONException {
+            /*
+             Are full name, phone number, etc. overwritten
+                if called by updateRiders for the second time?
+              */
+            fullname.setText(response.getString("display_name"));
+            new DownloadImageTask(profile_photo).execute(response.getString("photo_url"));
+            Log.d("parterNumber", response.getString("phone_number"));
+            phone_number.setText(response.getString("phone_number"));
+        }
     }
-
-
-
 
 }

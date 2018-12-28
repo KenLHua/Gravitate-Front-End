@@ -452,6 +452,9 @@ public class ScheduledEvents extends AppCompatActivity
                         intent.putExtra("stillPending", stillPending);
                         intent.putExtra("pickupAddress", pickupAddress);
 
+                        // Pass Firestore Reference of ride request and orbit if applicable
+                        intent.putExtra("rideRequestId", rideRef.getId());
+
                         // If it is an orbit, pass a few more fields
                         intent.putExtra("rideRef", rideRef.getId());
                         intent.putExtra("eventRef", eventId);
