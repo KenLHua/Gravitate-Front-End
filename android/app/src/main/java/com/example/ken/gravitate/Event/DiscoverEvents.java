@@ -195,7 +195,7 @@ public class DiscoverEvents extends AppCompatActivity {
                     cardBackground = R.drawable.lax;
                 }
                 // Format the flight local time to be readable
-                final String parsedFlightDate = model.getStartTimestamp().toString();
+//                final String parsedFlightDate = model.getStartTimestamp().toString();
 
                 final Long startTimestamp = model.getStartTimestamp();
                 final ZoneId zoneId = ZoneId.of("America/Los_Angeles");

@@ -45,6 +45,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Event.ScheduledEvents" />
         </activity>
+        <activity android:name=".Event.RequestCreated"
+            android:parentActivityName=".Event.ScheduledEvents">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Event.ScheduledEvents" />
+        </activity>
         <activity android:name=".Event.InputFlight"
             android:parentActivityName=".Event.ScheduledEvents">
             <meta-data
