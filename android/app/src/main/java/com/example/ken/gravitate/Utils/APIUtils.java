@@ -81,13 +81,13 @@ public class APIUtils {
     public static void postDeleteRideRequest(final Context mCtx, final String token, final VolleyCallback callback,
                                        final String user_id, final String event_id, String ride_request_id) {
         /** Gets Information to construct JSON and Endpoint URL**/
-        final String request_url = "https://gravitate-dev.appspot.com/deleteRideRequest";
+        final String request_url = "https://gravitate-dev.appspot.com/rideRequests/"+ride_request_id;
         final String TAG = "Delete Ride Request";
-        JSONObject deleteJSON = JSONUtils.deleteRideRequestJSON(user_id, event_id, ride_request_id);
+//        JSONObject deleteJSON = JSONUtils.deleteRideRequestJSON(user_id, event_id, ride_request_id);
 
         // Adds Request to RequestQueue (ASYNC TASK)
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                (Request.Method.POST, request_url, deleteJSON, new Response.Listener<JSONObject>() {
+                (Request.Method.DELETE, request_url, null, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         // Need to override in Context in which this is called to act on response
