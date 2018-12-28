@@ -1,9 +1,0 @@
-apply plugin: 'java-library'
-
-dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.google.firebase:firebase-firestore:17.1.2'
-}
-
-sourceCompatibility = "7"
-targetCompatibility = "7"
