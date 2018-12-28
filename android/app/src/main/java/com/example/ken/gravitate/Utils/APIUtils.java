@@ -15,6 +15,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.example.ken.gravitate.Event.CreatedRequestDetails;
+import com.example.ken.gravitate.Event.RequestCreated;
 import com.google.firebase.auth.FirebaseUser;
 
 import org.json.JSONException;
@@ -323,7 +324,24 @@ public class APIUtils {
                         // Do something with the response
                         Log.w(TAG, "POST_REQUEST:Create Ride Request success");
                         Toast.makeText(inputFlight,"Success", Toast.LENGTH_SHORT).show();
-                        // Passing information to the next activity
+                        try {
+                            String id = response.getString("id");
+                            // Passing information to the next activity
+                            showCreated(id);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            showCreatedInferred();
+                        }
+                    }
+
+                    private void showCreated(String id) {
+                        Intent intent = new Intent(inputFlight, RequestCreated.class);
+                        intent.putExtra("id", id);
+                        intent.putExtra("airportCode", APIUtils.getAirportAbbr(Ride_RequestJSON));
+                        inputFlight.startActivity(intent);
+                    }
+
+                    private void showCreatedInferred() {
                         Intent intent = new Intent(inputFlight, CreatedRequestDetails.class);
                         String flightTime = APIUtils.getFlightTime(Ride_RequestJSON);
                         intent.putExtra("flightTime", flightTime);
@@ -333,8 +351,6 @@ public class APIUtils {
                         intent.putExtra("airportCode", APIUtils.getAirportAbbr(Ride_RequestJSON));
                         intent.putExtra("date", date);
                         inputFlight.startActivity(intent);
-
-
                     }
                 }, new Response.ErrorListener() {
 
