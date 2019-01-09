@@ -56,6 +56,11 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Event.ScheduledEvents" /></activity>
+        <activity android:name=".Event.CreateEventRide"
+            android:parentActivityName=".Event.DiscoverEvents">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Event.DiscoverEvents" /></activity>
         <activity android:name=".Event.RideEvent"
             android:parentActivityName=".Event.ScheduledEvents">
             <meta-data

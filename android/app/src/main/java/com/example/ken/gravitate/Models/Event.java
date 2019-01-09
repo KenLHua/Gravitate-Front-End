@@ -7,7 +7,7 @@ import java.util.List;
 
 
 // Model class that holds all the firebase ride request information
-public class Event {
+public class Event extends FirestoreModel {
 
     private Long mStartTimestamp;
     private Long mEndTimestamp;

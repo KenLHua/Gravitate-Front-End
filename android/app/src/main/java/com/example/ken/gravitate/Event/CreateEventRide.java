@@ -1,9 +1,7 @@
 package com.example.ken.gravitate.Event;
-import com.example.ken.gravitate.Utils.APIUtils;
-import com.example.ken.gravitate.Utils.DateAndTimePickerAdapter;
 
-import android.content.Context;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
@@ -15,11 +13,12 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.android.volley.RequestQueue;
-import com.example.ken.gravitate.Utils.APIRequestSingleton;
-import com.example.ken.gravitate.R;
 
-//Necessary libraries for Address Autocomplete functionality
+import com.android.volley.RequestQueue;
+import com.example.ken.gravitate.R;
+import com.example.ken.gravitate.Utils.APIRequestSingleton;
+import com.example.ken.gravitate.Utils.APIUtils;
+import com.example.ken.gravitate.Utils.DateAndTimePickerAdapter;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.Status;
@@ -32,7 +31,9 @@ import com.google.firebase.auth.GetTokenResult;
 
 import java.util.Calendar;
 
-public class InputFlight extends AppCompatActivity {
+//Necessary libraries for Address Autocomplete functionality
+
+public class CreateEventRide extends AppCompatActivity {
     // Autrocomplete Request Code
     int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
 
@@ -45,6 +46,7 @@ public class InputFlight extends AppCompatActivity {
     private TextView mflightCarrier;
     private TextView mflightNum;
     private TextView inputDepartureDate;
+    private TextView mEventId;
 
     //The pickupAddress text
     private TextView inputPickup;
@@ -61,7 +63,7 @@ public class InputFlight extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         // Setting activity UI elements
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.input_flight_information);
+        setContentView(R.layout.create_event_ride);
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.input_flight_toolbar);
         toolbar.setNavigationIcon(R.drawable.system_icon_back);
@@ -95,6 +97,9 @@ public class InputFlight extends AppCompatActivity {
         mContext = this;
         mOutput = findViewById(R.id.outputText);
 
+        // For displaying eventId for debugging purposes
+        mEventId = findViewById(R.id.eventId);
+
         // Creating input TextFields
         mflightCarrier = findViewById(R.id.inputFlightCarrier);
         mflightNum = findViewById(R.id.inputFlightNumber);
@@ -126,83 +131,14 @@ public class InputFlight extends AppCompatActivity {
         // Set a date and time picker to update inputDepartureDate
         // Once inputDepartureDate is updated, also update earlyArrivalTime with a time 4 hours before
         final DateAndTimePickerAdapter datePicker = new DateAndTimePickerAdapter(cal,inputDepartureDate,
-                InputFlight.this, false);
-
-        // Popup date picker
-        inputDepartureDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Create the datePicker window
-                cal.setTimeInMillis(Calendar.getInstance().getTimeInMillis());
-                DatePickerDialog dateDialog = new DatePickerDialog(InputFlight.this, datePicker.getDateListener(),
-                        cal.get(Calendar.YEAR), cal.get(Calendar.MONTH),
-                        cal.get(Calendar.DAY_OF_MONTH));
-                // Set the minimum date to be today
-                dateDialog.getDatePicker().setMinDate(cal.getTimeInMillis());
-                // Show the window
-                dateDialog.show();
-            }
-        });
+                CreateEventRide.this, false);
 
 
+        final String eventId = getIntent().getExtras().getString("eventId");
+        mEventId.setText(eventId);
 
-        // Setting Flightstats Bttn
-        mFlightStats_Bttn = findViewById(R.id.flightStats_bttn);
-
-        // Lookup flight information using flight stats api
-        mFlightStats_Bttn.setOnClickListener( new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switch(v.getId()) {
-                    case R.id.flightStats_bttn:
-
-                        String flightDate = inputDepartureDate.getText().toString();
-                        // Checking if all necessary inputs are given, if not return and give a error
-                        if (invalidFlightFields(mflightCarrier.getText().toString(),
-                                mflightNum.getText().toString(),
-                                flightDate,
-                                inputPickup.getText().toString())) return;
-
-                        // Request_URL takes in ("Carrier", "Flight Number", "YEAR", "MONTH", "DATE")
-                        String request_url = APIUtils.getFSScheduleURL(
-                                mflightCarrier.getText().toString(),mflightNum.getText().toString(),
-                                flightDate.substring(6, flightDate.length())
-                                ,flightDate.substring(0,2)
-                                ,flightDate.substring(3,5));
-
-                        APIUtils.getFlightStats(mContext, request_url,inputPickup.getText().toString() , toEvent, flightDate, mOutput, token);
-                        break;
-                }
-            }
-        });
-
-        // Initializing Request Components
-        mRequestQueue = APIRequestSingleton.getInstance(this.getApplicationContext()).
-                getRequestQueue();
     }
 
-
-
-    // Checks if all flight input fields are filled
-    private boolean invalidFlightFields(String flightCarrier, String flightNum, String flightDate, String pickupAddress) {
-        if(flightCarrier.length() == 0 ){
-            Toast.makeText(mContext, "Error: Please input the flight carrier", Toast.LENGTH_LONG).show();
-            return true;
-        }
-        if(flightNum.length() == 0 ){
-            Toast.makeText(mContext, "Error: Please input the flight number", Toast.LENGTH_LONG).show();
-            return true;
-        }
-        if(flightDate.length() == 0 ){
-            Toast.makeText(mContext, "Error: Please choose a date", Toast.LENGTH_LONG).show();
-            return true;
-        }
-        if(pickupAddress.length() == 0 ){
-            Toast.makeText(mContext, "Error: Please choose a pickup address", Toast.LENGTH_LONG).show();
-            return true;
-        }
-        return false;
-    }
 
     // Calling the PlaceAutoComplete activity
     private void callPlaceAutocompleteActivityIntent( AutocompleteFilter filter){
@@ -232,8 +168,6 @@ public class InputFlight extends AppCompatActivity {
             }
         }
     }
-
-
 
 
 }
