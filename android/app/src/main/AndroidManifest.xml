@@ -12,17 +12,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
-        <activity
-            android:name=".MyReactActivity"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
+        <!--<activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />-->
+        <!--<activity-->
+            <!--android:name=".MyReactActivity"-->
+            <!--android:label="@string/app_name"-->
+            <!--android:theme="@style/Theme.AppCompat.Light.NoActionBar">-->
+            <!--&lt;!&ndash;<intent-filter>&ndash;&gt;-->
+                <!--&lt;!&ndash;<action android:name="android.intent.action.MAIN" />&ndash;&gt;-->
 
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
-        </activity>
+                <!--&lt;!&ndash;<category android:name="android.intent.category.LAUNCHER" />&ndash;&gt;-->
+            <!--&lt;!&ndash;</intent-filter>&ndash;&gt;-->
+        <!--</activity>-->
 
         <activity android:name=".WelcomeActivity"> </activity>
         <activity android:name=".WelcomeScreen">

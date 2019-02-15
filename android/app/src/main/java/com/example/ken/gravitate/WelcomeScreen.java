@@ -93,11 +93,11 @@ public class WelcomeScreen extends AppCompatActivity {
         startActivity(intent);
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
-
-    public void openReactActivity() {
-        Intent intent = new Intent(this, MyReactActivity.class);
-        startActivity(intent);
-    }
+//
+//    public void openReactActivity() {
+//        Intent intent = new Intent(this, MyReactActivity.class);
+//        startActivity(intent);
+//    }
 
     @Override
     protected void onStart() {
