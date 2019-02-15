@@ -15,6 +15,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.example.ken.gravitate.Event.CreatedRequestDetails;
+import com.example.ken.gravitate.Event.RequestCreated;
 import com.google.firebase.auth.FirebaseUser;
 
 import org.json.JSONException;
@@ -81,13 +82,13 @@ public class APIUtils {
     public static void postDeleteRideRequest(final Context mCtx, final String token, final VolleyCallback callback,
                                        final String user_id, final String event_id, String ride_request_id) {
         /** Gets Information to construct JSON and Endpoint URL**/
-        final String request_url = "https://gravitate-e5d01.appspot.com/deleteRideRequest";
+        final String request_url = "https://gravitate-dev.appspot.com/rideRequests/"+ride_request_id;
         final String TAG = "Delete Ride Request";
-        JSONObject deleteJSON = JSONUtils.deleteRideRequestJSON(user_id, event_id, ride_request_id);
+//        JSONObject deleteJSON = JSONUtils.deleteRideRequestJSON(user_id, event_id, ride_request_id);
 
         // Adds Request to RequestQueue (ASYNC TASK)
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                (Request.Method.POST, request_url, deleteJSON, new Response.Listener<JSONObject>() {
+                (Request.Method.DELETE, request_url, null, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         // Need to override in Context in which this is called to act on response
@@ -323,7 +324,24 @@ public class APIUtils {
                         // Do something with the response
                         Log.w(TAG, "POST_REQUEST:Create Ride Request success");
                         Toast.makeText(inputFlight,"Success", Toast.LENGTH_SHORT).show();
-                        // Passing information to the next activity
+                        try {
+                            String id = response.getString("id");
+                            // Passing information to the next activity
+                            showCreated(id);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            showCreatedInferred();
+                        }
+                    }
+
+                    private void showCreated(String id) {
+                        Intent intent = new Intent(inputFlight, RequestCreated.class);
+                        intent.putExtra("id", id);
+                        intent.putExtra("airportCode", APIUtils.getAirportAbbr(Ride_RequestJSON));
+                        inputFlight.startActivity(intent);
+                    }
+
+                    private void showCreatedInferred() {
                         Intent intent = new Intent(inputFlight, CreatedRequestDetails.class);
                         String flightTime = APIUtils.getFlightTime(Ride_RequestJSON);
                         intent.putExtra("flightTime", flightTime);
@@ -333,15 +351,15 @@ public class APIUtils {
                         intent.putExtra("airportCode", APIUtils.getAirportAbbr(Ride_RequestJSON));
                         intent.putExtra("date", date);
                         inputFlight.startActivity(intent);
-
-
                     }
                 }, new Response.ErrorListener() {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
+
                         Toast.makeText(inputFlight,"Error: Flight Request not made", Toast.LENGTH_SHORT).show();
                         error.printStackTrace();
+                        Log.w(TAG, "POST_REQUEST:Create Ride Request failed " + new String(error.networkResponse.data) );
                     }
                 }){
                     @Override

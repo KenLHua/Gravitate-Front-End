@@ -62,6 +62,7 @@ public class RiderAdapter extends RecyclerView.Adapter<RiderAdapter.RiderViewHol
         this.mOrbitRef = orbitRef;
         this.rider_list = rider_list;
     }
+
     public void setProfileImages(ArrayList<String> profileImages){
         this.profileImages = profileImages;
     }

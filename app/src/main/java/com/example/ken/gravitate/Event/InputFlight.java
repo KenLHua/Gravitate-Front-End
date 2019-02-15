@@ -99,8 +99,6 @@ public class InputFlight extends AppCompatActivity {
         mflightCarrier = findViewById(R.id.inputFlightCarrier);
         mflightNum = findViewById(R.id.inputFlightNumber);
 
-
-
         // Creating input TextFields
         inputPickup = findViewById(R.id.inputPickup);
         mflightCarrier = findViewById(R.id.inputFlightCarrier);

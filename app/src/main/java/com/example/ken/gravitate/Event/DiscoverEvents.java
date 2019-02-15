@@ -39,6 +39,7 @@ import com.example.ken.gravitate.Utils.MyViewHolder;
 import com.example.ken.gravitate.Utils.VolleyCallback;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.firebase.ui.firestore.SnapshotParser;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -49,6 +50,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.leinardi.android.speeddial.SpeedDialActionItem;
@@ -164,11 +166,22 @@ public class DiscoverEvents extends AppCompatActivity {
         FirestoreRecyclerOptions<Event> options =
                 new FirestoreRecyclerOptions
                         .Builder<Event>()
-                        .setQuery(eventsQuery,Event.class)
+                        .setQuery(eventsQuery, new SnapshotParser<Event>() {
+                            @NonNull
+                            @Override
+                            public Event parseSnapshot(@NonNull DocumentSnapshot snapshot) {
+                                Event event = snapshot.toObject(Event.class);
+                                event.setId(snapshot.getId());
+                                return event;
+                            }
+                        })
                         .build();
 
         // Create the adapter
         adapter = new FirestoreRecyclerAdapter<Event, EventViewHolder>(options) {
+
+            private Event mEvent;
+
             @NonNull
             @Override
             // Set the holder for the view that will have all the information for each view
@@ -183,7 +196,7 @@ public class DiscoverEvents extends AppCompatActivity {
 
             @Override
             // When firestore gives us information, populate the information
-            protected void onBindViewHolder(@NonNull EventViewHolder holder, int i, @NonNull Event model) {
+            protected void onBindViewHolder(@NonNull EventViewHolder holder, int i, @NonNull final Event model) {
                 // Set background and destination UI elements
                 final String destName = model.getEventLocation();
                 int cardBackground;
@@ -195,7 +208,7 @@ public class DiscoverEvents extends AppCompatActivity {
                     cardBackground = R.drawable.lax;
                 }
                 // Format the flight local time to be readable
-                final String parsedFlightDate = model.getStartTimestamp().toString();
+//                final String parsedFlightDate = model.getStartTimestamp().toString();
 
                 final Long startTimestamp = model.getStartTimestamp();
                 final ZoneId zoneId = ZoneId.of("America/Los_Angeles");
@@ -218,6 +231,26 @@ public class DiscoverEvents extends AppCompatActivity {
                     holder.card_status.setText("Active");
                     holder.card_time.setText("Event Date: " + eventDay);
                 }
+
+                // Once a card is clicked
+                holder.setOnClickListener(new EventViewHolder.ClickListener(){
+
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        //Start new activity to show event details
+                        Intent intent = new Intent(mContext, CreateEventRide.class);
+                        // Pass all the information into the next actiity
+                        intent.putExtra("eventId", model.getId());
+
+                        mContext.startActivity(intent);
+                    }
+
+                    // Behavior the user holds down on a card
+                    @Override
+                    public void onItemLongClick(View view, int position) {
+                        // Do nothing
+                    }
+                });
 
             }
 

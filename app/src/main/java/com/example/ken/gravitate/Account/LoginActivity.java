@@ -82,7 +82,7 @@ public class LoginActivity extends AppCompatActivity {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
-                .setHostedDomain(DOMAIN)
+//                .setHostedDomain(DOMAIN)
                 .build();
 
         // Build a GoogleSignInClient with the options specified by gso.
@@ -170,15 +170,15 @@ public class LoginActivity extends AppCompatActivity {
     private void firebaseAuthWithGoogle(final GoogleSignInAccount acct) {
         String email = acct.getEmail();
         email = email.substring(email.length()-9, email.length());
-        // If email does not end with @ucsd.edu, then do not let them sign up
-        if(!email.equals("@"+DOMAIN)){
-            signOut();
-            Toast.makeText(LoginActivity.this
-                    , "Error: Registration only open to " + DOMAIN + " emails.", Toast.LENGTH_LONG).show();
-            progressBar.setVisibility(View.INVISIBLE);
-            progressText.setVisibility(View.INVISIBLE);
-            return;
-        }
+//        // If email does not end with @ucsd.edu, then do not let them sign up
+//        if(!email.equals("@"+DOMAIN)){
+//            signOut();
+//            Toast.makeText(LoginActivity.this
+//                    , "Error: Registration only open to " + DOMAIN + " emails.", Toast.LENGTH_LONG).show();
+//            progressBar.setVisibility(View.INVISIBLE);
+//            progressText.setVisibility(View.INVISIBLE);
+//            return;
+//        } TODO: recover before release
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
