@@ -141,7 +141,7 @@ public class ScheduledEvents extends AppCompatActivity
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(web_client_id)
                 .requestEmail()
-                .setHostedDomain(DOMAIN)
+//                .setHostedDomain(DOMAIN)
                 .build();
 
         // Build a GoogleSignInClient with the options specified by gso.
@@ -257,6 +257,10 @@ public class ScheduledEvents extends AppCompatActivity
             case R.id.nav_logout:
                 signOut();
                 break;
+        }
+        switch(menuItem.getItemId()) {
+            case R.id.nav_discover:
+                startActivity(new Intent(ScheduledEvents.this, DiscoverEvents.class));
         }
 
         drawer.closeDrawer(GravityCompat.START);
@@ -447,6 +451,9 @@ public class ScheduledEvents extends AppCompatActivity
                         intent.putExtra("flightTime", parsedFlightDate + parsedFlightTime);
                         intent.putExtra("stillPending", stillPending);
                         intent.putExtra("pickupAddress", pickupAddress);
+
+                        // Pass Firestore Reference of ride request and orbit if applicable
+                        intent.putExtra("rideRequestId", rideRef.getId());
 
                         // If it is an orbit, pass a few more fields
                         intent.putExtra("rideRef", rideRef.getId());
