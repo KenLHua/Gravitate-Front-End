@@ -41,7 +41,7 @@ public class APIUtils {
 
         /** Gets Information to construct JSON and Endpoint URL**/
         final String TAG = "Delete Match";
-        final String request_url = "https://" + backendUrl + "/deleteMatch";
+        final String request_url = "https://" + backendUrl + "/rideRequests/"+ride_request_id + "/unmatch" ;
         JSONObject deleteJSON = JSONUtils.deleteMatchJSON(ride_request_id);
 
         // Adds Request to RequestQueue (ASYNC TASK)
@@ -307,7 +307,7 @@ public class APIUtils {
         return abbr;
     }
     public static void postRideRequest(final Context inputFlight,final String pickupAddress, final String date, final JSONObject Ride_RequestJSON, final String token) {
-        final String server_url = "https://" + backendUrl + "/rideRequests";
+        final String server_url = "https://" + backendUrl + "/requestRide/" + "airport";
         final String TAG = "Ride_Request";
         String airportCode = APIUtils.getAirportAbbr(Ride_RequestJSON);
         Log.w(TAG, "AirportCode: " + airportCode);
