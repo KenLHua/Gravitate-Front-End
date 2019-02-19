@@ -34,8 +34,6 @@
 
         </activity>
 
-        // Simple activities for adding new features
-
         <activity android:name=".Account.LoginActivity"></activity>
 
         <activity android:name=".Event.ScheduledEvents"></activity>
