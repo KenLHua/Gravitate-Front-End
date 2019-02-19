@@ -264,6 +264,40 @@ public class APIUtils {
         APIRequestSingleton.getInstance(myProfile).addToRequestQueue(jsonObjectRequest, "getUserRequest");
     }
 
+    /* Sends a GET Request to server to retrieve RideRequest Details
+     *   RETURNS: JSONObject that contains details
+     */
+    public static void getRideRequest(final Context ctx, final String rideRequestId, final String token, final VolleyCallback callback){
+        Uri.Builder builder = new Uri.Builder();
+        builder.scheme("https")
+                .path(backendUrl + "/rideRequests")
+                .appendPath(rideRequestId);
+        final String request_url = builder.toString();
+        final String TAG = "RideRequest Details";
+        // Formulate the request and handle the response.
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.GET, request_url, null, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        callback.onSuccessResponse(response);
+                        Log.w("GETRideRequest", response.toString());
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO: Handle error
+                    }
+                }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String>  params = new HashMap<String, String>();
+                params.put("Authorization", token);
+                return params;
+            }
+        };
+        APIRequestSingleton.getInstance(ctx).addToRequestQueue(jsonObjectRequest, "getRideRequest");
+    }
 
 
     /* Sends a GET Request to Flightstats API
