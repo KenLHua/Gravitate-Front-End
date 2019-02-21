@@ -100,17 +100,17 @@ public class RiderAdapter extends RecyclerView.Adapter<RiderAdapter.RiderViewHol
             super(itemView);
             mContext = context;
             Task<com.google.firebase.auth.GetTokenResult> tokenTask = FirebaseAuth.getInstance().getAccessToken(false);
-
-            if(!tokenTask.isComplete()){
+            while(!tokenTask.isComplete()){
+                Log.d("GettingToken", "async");
                 try{
-                    tokenTask.wait(500);
+                    wait(500);
                 }
                 catch (InterruptedException e){
-                    e.getStackTrace();
-                    Toast.makeText(mContext, "Error: Could not get Access Token", Toast.LENGTH_LONG).show();
+                    e.printStackTrace();
                 }
             }
             final String token = tokenTask.getResult().getToken();
+
             profile_photo = itemView.findViewById(R.id.profile_photo);
             fullname = itemView.findViewById(R.id.rider_name);
             email = itemView.findViewById(R.id.rider_email);

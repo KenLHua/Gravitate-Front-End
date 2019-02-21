@@ -38,20 +38,17 @@ public class MyProfile extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         mContext = MyProfile.this;
 
-        String token = null;
         Task<GetTokenResult> tokenTask = FirebaseAuth.getInstance().getAccessToken(false);
-
-        if(!tokenTask.isComplete()){
+        while(!tokenTask.isComplete()){
+            Log.d("GettingToken", "async");
             try{
-                tokenTask.wait(500);
+                wait(500);
             }
             catch (InterruptedException e){
-                e.getStackTrace();
-                Toast.makeText(mContext, "Error: Could not get Access Token", Toast.LENGTH_LONG).show();
+                e.printStackTrace();
             }
         }
-        token = tokenTask.getResult().getToken();
-
+        final String token = tokenTask.getResult().getToken();
         // Getting current user's information
         FirebaseUser user = AuthSingleton.getInstance().getCurrentUser();
         populateUserInfo(user);

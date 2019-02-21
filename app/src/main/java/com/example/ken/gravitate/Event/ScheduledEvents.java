@@ -117,6 +117,7 @@ public class ScheduledEvents extends AppCompatActivity
             }
         }
         final String token = tokenTask.getResult().getToken();
+
         db = FirebaseFirestore.getInstance();
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser user = firebaseAuth.getCurrentUser();
