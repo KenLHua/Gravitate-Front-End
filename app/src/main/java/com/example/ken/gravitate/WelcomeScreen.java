@@ -33,29 +33,37 @@ public class WelcomeScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         mAuth = FirebaseAuth.getInstance();
+        // if a user is already logged in, skip them to scheduled events
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if ( user != null ) {
+                    mAuth.removeAuthStateListener(mAuthListener);
                     startActivity(new Intent(WelcomeScreen.this, ScheduledEvents.class));
+                    finish();
                 }
+
             }
         };
 
         setContentView(R.layout.activity_welcome_screen);
 
+        // Setting the gradient
         RelativeLayout welcomeScreen = findViewById(R.id.welcomeScreen);
         AnimationDrawable colorgradient = (AnimationDrawable) welcomeScreen.getBackground();
         colorgradient.setEnterFadeDuration(2000);
         colorgradient.setExitFadeDuration(4000);
         colorgradient.start();
 
+        // Grab the UI elements
         button = (Button) findViewById(R.id.explore);
         skip = (Button) findViewById(R.id.welcomeSkip);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+//                openReactActivity();
                 openOnBoard();
             }
         });
@@ -67,6 +75,7 @@ public class WelcomeScreen extends AppCompatActivity {
                 switch(v.getId()){
                     case R.id.welcomeSkip:
                         startActivity(new Intent(WelcomeScreen.this, LoginActivity.class));
+                        finish();
                         break;
 
                 }
@@ -84,9 +93,20 @@ public class WelcomeScreen extends AppCompatActivity {
         startActivity(intent);
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
+//
+//    public void openReactActivity() {
+//        Intent intent = new Intent(this, MyReactActivity.class);
+//        startActivity(intent);
+//    }
+
     @Override
     protected void onStart() {
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
+    }
+    @Override
+    protected void onStop(){
+        super.onStop();
+        mAuth.removeAuthStateListener(mAuthListener);
     }
 }

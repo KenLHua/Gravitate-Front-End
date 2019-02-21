@@ -18,28 +18,34 @@ import com.example.ken.gravitate.Account.LoginActivity;
 
 public class SlideAdapter extends PagerAdapter {
 
+    // Field variables
     Context context;
     LayoutInflater inflater;
+    // The slide in images
     public int[] lst_images = {
             R.drawable.welcome_screen_car_art,
             R.drawable.card_background_airplane,
             R.drawable.welcome_screen_rivalry_art
     };
+    // Titles for the screens
     public String[] lst_title = {
             "Discover Rides",
             "Choose Airport",
             "Match Users"
     };
+    // Screen descriptions
     public String[] lst_description = {
             "Discover thousands of rides to your destination.",
             "Choose your card_background_airplane flight time and destination.",
             "We will match you with like-minded people."
     };
+    // move the dots for each screen
     public int[] lst_dots = {
             R.drawable.listdots1,
             R.drawable.listdots2,
             R.drawable.listdots3
     };
+    // Set background at white for all cards
     public int[] lst_backgroundcolor = {
             Color.rgb(255,255,255),
             Color.rgb(255,255,255),

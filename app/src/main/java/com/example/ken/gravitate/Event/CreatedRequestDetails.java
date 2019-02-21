@@ -13,6 +13,7 @@ import com.example.ken.gravitate.R;
 
 public class CreatedRequestDetails extends AppCompatActivity {
 
+    // UI variables
     TextView mEarliestTime;
     TextView mLatestTime;
     TextView mAirport;
@@ -26,6 +27,7 @@ public class CreatedRequestDetails extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Ride Request Details");
         toolbar.setNavigationIcon(R.drawable.system_icon_back);
+        // Setting toolbar back button behavior
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -33,6 +35,7 @@ public class CreatedRequestDetails extends AppCompatActivity {
             }
         });
         setSupportActionBar(toolbar);
+        // Getting information passed in from the last activity
         String earliestTime = getIntent().getStringExtra("earliestTime");
         String latestTime = getIntent().getStringExtra("latestTime");
         String airport = getIntent().getStringExtra("airportCode");
@@ -40,6 +43,7 @@ public class CreatedRequestDetails extends AppCompatActivity {
         String pickupAddress = getIntent().getStringExtra("pickupAddress");
         String date = getIntent().getStringExtra("date");
 
+        // Getting UI elements
         mEarliestTime = findViewById(R.id.earlyArrivalTime);
         mLatestTime = findViewById(R.id.latestArrivalTime);
         mAirport = findViewById(R.id.airportName);
@@ -47,6 +51,7 @@ public class CreatedRequestDetails extends AppCompatActivity {
         mPickupAddress = findViewById(R.id.pickupAddress);
         mDate = findViewById(R.id.Date);
 
+        // Setting information for the user to use
         mEarliestTime.setText(earliestTime);
         mLatestTime.setText(latestTime);
         mAirport.setText(airport);
@@ -54,6 +59,7 @@ public class CreatedRequestDetails extends AppCompatActivity {
         mPickupAddress.setText(pickupAddress);
         mDate.setText(date);
 
+        // Show the toolbar back button
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 

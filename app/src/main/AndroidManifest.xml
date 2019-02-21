@@ -12,6 +12,18 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+        <!--<activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />-->
+        <!--<activity-->
+            <!--android:name=".MyReactActivity"-->
+            <!--android:label="@string/app_name"-->
+            <!--android:theme="@style/Theme.AppCompat.Light.NoActionBar">-->
+            <!--&lt;!&ndash;<intent-filter>&ndash;&gt;-->
+                <!--&lt;!&ndash;<action android:name="android.intent.action.MAIN" />&ndash;&gt;-->
+
+                <!--&lt;!&ndash;<category android:name="android.intent.category.LAUNCHER" />&ndash;&gt;-->
+            <!--&lt;!&ndash;</intent-filter>&ndash;&gt;-->
+        <!--</activity>-->
+
         <activity android:name=".WelcomeActivity"> </activity>
         <activity android:name=".WelcomeScreen">
             <intent-filter>
@@ -33,18 +45,28 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Event.ScheduledEvents" />
         </activity>
+        <activity android:name=".Event.RequestCreated"
+            android:parentActivityName=".Event.ScheduledEvents">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Event.ScheduledEvents" />
+        </activity>
         <activity android:name=".Event.InputFlight"
             android:parentActivityName=".Event.ScheduledEvents">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Event.ScheduledEvents" /></activity>
+        <activity android:name=".Event.CreateEventRide"
+            android:parentActivityName=".Event.DiscoverEvents">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Event.DiscoverEvents" /></activity>
         <activity android:name=".Event.RideEvent"
             android:parentActivityName=".Event.ScheduledEvents">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Event.ScheduledEvents" />
         </activity>
-        <activity android:name=".Event.NewEvent"> </activity>
         <activity android:name=".Account.ConfirmProfile"> </activity>
         <activity android:name=".Account.MyProfile"> </activity>
         <activity android:name=".Settings.SettingsActivity"
@@ -52,6 +74,10 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Event.ScheduledEvents"/>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.NOTIFICATION_PREFERENCES" />
+            </intent-filter>
         </activity>
         <activity android:name=".forcematch2"></activity>
 
@@ -63,14 +89,9 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".Account.ChangePassword"
-            android:label="Change Password">
-            <intent-filter>
-                <action android:name="com.example.ken.gravitate.Account.ChangePassword" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
+        <activity android:name=".Event.DiscoverEvents"
+            android:label="Discover Events">
         </activity>
-
 
         <service android:name=".GravitateFirebaseMessagingService">
             <intent-filter>

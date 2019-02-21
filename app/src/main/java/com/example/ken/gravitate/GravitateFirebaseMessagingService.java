@@ -32,21 +32,25 @@ import com.example.ken.gravitate.Event.ScheduledEvents;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+// Class to retrieve notifications from the server
 public class GravitateFirebaseMessagingService extends FirebaseMessagingService {
     private String TAG = "GravitateNotifcations";
 
     @Override
+    // When a notification is received
     public void onMessageReceived(RemoteMessage remoteMessage) {
         Log.d(TAG, "From: " + remoteMessage.getFrom());
 
         // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
             Log.d(TAG, "Message data payload: " + remoteMessage.getData());
+            // Create the notification
             sendNotification(remoteMessage.getData().toString());
         }
 
     }
 
+    // Short code to handle the notification now
     private void handleNow(){
         Log.d(TAG, "Short task done");
     }
@@ -58,6 +62,8 @@ public class GravitateFirebaseMessagingService extends FirebaseMessagingService 
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
                 PendingIntent.FLAG_ONE_SHOT);
 
+
+        // Creating the default notification channel
         String channelId1 = getString(R.string.orbit_notif_channel);
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder =
@@ -71,7 +77,7 @@ public class GravitateFirebaseMessagingService extends FirebaseMessagingService 
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        // Since android Oreo notification channel is needed.
+        // Create the flight channel only if a certain
         String channelId2 = getString(R.string.flight_notif_channel);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel orbitChannel = new NotificationChannel(channelId2,

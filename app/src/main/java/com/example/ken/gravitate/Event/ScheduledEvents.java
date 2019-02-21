@@ -84,18 +84,20 @@ public class ScheduledEvents extends AppCompatActivity
     GoogleSignInClient mGoogleSignInClient;
     private static final String web_client_id = "1070051773756-o6l5r1l6v7m079r1oua2lo0rsfeu8m9i.apps.googleusercontent.com";
     private static final String DOMAIN = "ucsd.edu";
+    private String userID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         hasRide = false;
 
+        // Setting UI layout
         super.onCreate(savedInstanceState);
         fragmentManager = getSupportFragmentManager();
         setContentView(R.layout.scheduled_events);
         //Recycler view with adapter to display cards
         orbitView = findViewById(R.id.orbit_list);
         mContext = ScheduledEvents.this;
-        TextView tokenHolder = new TextView(mContext);
+
         // Side-Navigation Setup
         drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -106,14 +108,17 @@ public class ScheduledEvents extends AppCompatActivity
         toolbarShadow.bringToFront();
 
 
+        // Getting REST access token
         Task<GetTokenResult> tokenTask = FirebaseAuth.getInstance().getAccessToken(false);
         while(!tokenTask.isComplete()){
             Log.d("GettingToken", "async");
-            try{
-                wait(500);
-            }
-            catch (InterruptedException e){
-                e.printStackTrace();
+            synchronized (this){
+                try{
+                    wait(500);
+                }
+                catch (InterruptedException e){
+                    e.printStackTrace();
+                }
             }
         }
         final String token = tokenTask.getResult().getToken();
@@ -121,14 +126,9 @@ public class ScheduledEvents extends AppCompatActivity
         db = FirebaseFirestore.getInstance();
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser user = firebaseAuth.getCurrentUser();
-        if( user == null){
-            startActivity(new Intent(ScheduledEvents.this, LoginActivity.class));
-            finishAndRemoveTask();
-        }
-        String user_url = APIUtils.getUserURL(user);
 
         // Getting ride requests from the user's collection
-        String userID = user.getUid();
+        userID = user.getUid();
         userDocRef = db.collection("users").document(userID);
         getUserRideRequestList(userDocRef, orbitView);
         orbitView.setLayoutManager(new LinearLayoutManager(ScheduledEvents.this));
@@ -141,7 +141,7 @@ public class ScheduledEvents extends AppCompatActivity
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(web_client_id)
                 .requestEmail()
-                .setHostedDomain(DOMAIN)
+//                .setHostedDomain(DOMAIN)
                 .build();
 
         // Build a GoogleSignInClient with the options specified by gso.
@@ -189,13 +189,6 @@ public class ScheduledEvents extends AppCompatActivity
                         .setLabelClickable(false)
                         .create());
 
-        speedDialView.addActionItem(
-                new SpeedDialActionItem.Builder(R.id.fab_force_match, R.drawable.cover_image)
-                        .setLabel("FORCE MATCH")
-                        .setLabelClickable(false)
-                        .create());
-
-
         speedDialView.setOnActionSelectedListener(new SpeedDialView.OnActionSelectedListener() {
             @Override
             public boolean onActionSelected(SpeedDialActionItem speedDialActionItem) {
@@ -204,16 +197,13 @@ public class ScheduledEvents extends AppCompatActivity
 
                         startActivity(new Intent(ScheduledEvents.this, InputFlight.class));
                         return false; // true to keep the Speed Dial open
-                    case R.id.fab_force_match:
-
-                        startActivity(new Intent(ScheduledEvents.this, forcematch2.class));
-                        return false; // true to keep the Speed Dial open
                     default:
                         return false;
                 }
             }
         });
 
+        // Scrolling the cards will hide the FAB button
         orbitView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView orbitView, int dx, int dy) {
@@ -230,6 +220,7 @@ public class ScheduledEvents extends AppCompatActivity
         // Swipe to refresh
         swipeContainer = findViewById(R.id.swipeContainer);
 
+        // Swipe to refresh behavior
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -238,7 +229,7 @@ public class ScheduledEvents extends AppCompatActivity
                         // Stop animation (This will be after 3 seconds)
                         swipeContainer.setRefreshing(false);
                     }
-                }, 3000); // Delay in millis
+                }, 1500); // Delay in millis
 
             }
         });
@@ -266,6 +257,10 @@ public class ScheduledEvents extends AppCompatActivity
             case R.id.nav_logout:
                 signOut();
                 break;
+        }
+        switch(menuItem.getItemId()) {
+            case R.id.nav_discover:
+                startActivity(new Intent(ScheduledEvents.this, DiscoverEvents.class));
         }
 
         drawer.closeDrawer(GravityCompat.START);
@@ -326,9 +321,12 @@ public class ScheduledEvents extends AppCompatActivity
     }
 
 
+    // Populate ride request information
     private void getUserRideRequestList(DocumentReference userRef, RecyclerView display) {
-        Query rideRequestQuery = userRef.collection("eventSchedules").orderBy("pending").limit(10);
+        // Get a limit of 10 ride requests from the user
+        Query rideRequestQuery = userRef.collection("eventSchedules").orderBy("destTime").limit(10);
 
+        // Set the model for firebase to populate the adapter
         FirestoreRecyclerOptions<EventRequestModule> options =
                 new FirestoreRecyclerOptions
                         .Builder<EventRequestModule>()
@@ -337,12 +335,15 @@ public class ScheduledEvents extends AppCompatActivity
 
         
 
+
+        // Create the adapter
         adapter = new FirestoreRecyclerAdapter<EventRequestModule, MyViewHolder>(options) {
 
 
 
             @NonNull
             @Override
+            // Set the holder for the view that will have all the information for each view
             public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
                 // Create the card
                 LayoutInflater inflater = LayoutInflater.from(mContext);
@@ -355,10 +356,15 @@ public class ScheduledEvents extends AppCompatActivity
             }
 
             @Override
+            // When firestore gives us information, populate the information
             protected void onBindViewHolder(@NonNull MyViewHolder holder, int i, @NonNull EventRequestModule model) {
+                // Set background and destination UI elements
                 int cardBackground = R.drawable.lax;
                 final String destName = "LAX";
+                // Format the flight local time to be readable
                 final String parsedFlightDate = model.getFlightTime().substring(0,10) + " | ";
+
+                // Parse the hour and minutes
                 final StringBuilder parsedFlightTime = new StringBuilder(model.getFlightTime().substring(11,16));
                 int flightHour = Integer.parseInt(parsedFlightTime.substring(0,2));
 
@@ -392,53 +398,78 @@ public class ScheduledEvents extends AppCompatActivity
                         parsedFlightTime.append(" AM"); }
                 }
 
+                // Grab all the necessary information and pass it onto the next activity once a card is pressed
+                final String eventId = getSnapshots().getSnapshot(i).getId();
+
                 final boolean stillPending = model.isPending();
                 final DocumentReference orbitRef = model.getOrbitRef();
                 final String pickupAddress = model.getPickupAddress();
                 List<String> temp = model.getMemberProfilePhotoUrls();
                 final ArrayList<String> profileImages = new ArrayList<String>();
-                final String destTime = model.getDestTime();
+                final Long destTime = model.getDestTime();
+                final DocumentReference rideRef = model.getRideRequestRef();
+
+                // Get all profile URLs and add it to an array list that can be passed
                 for (String eachURL : temp){
                     profileImages.add(eachURL);
                 }
+
+                // Set the context and fields
                 holder.context = mContext;
                 holder.stillPending = stillPending;
                 holder.background_img.setImageResource(cardBackground);
-
                 holder.card_dest.setText(destName);
+                // Update whether the "no requests found" is displayed
                 hasRide = true;
 
-
+                // If no orbit is found
                 if(stillPending) {
-                    holder.card_time.setText("Flight Time : " + parsedFlightDate + parsedFlightTime);
                     holder.card_pending.setText("Pending Ride Request");
+                    holder.card_time.setText("Flight Time : " + parsedFlightDate + parsedFlightTime);
                 }
+                // If an orbit is found
                 else {
-                    //new DownloadImageTask(holder.profile_photo).execute(profileImages.get(0));
-                    holder.card_time.setText("Arrival Time : " + model.getDestTime());
+                    new DownloadImageTask(holder.profile_photo1).execute(profileImages.get(0));
+                    if(profileImages.size() == 2){
+                        new DownloadImageTask(holder.profile_photo2).execute(profileImages.get(1));
+                    }
+                    holder.card_time.setText("Flight Time : " + parsedFlightDate + parsedFlightTime);
                     holder.card_pending.setText("Orbiting");
                     holder.orbitRef = model.getOrbitRef();
                     holder.profileImages = profileImages;
                 }
 
+                // Once a card is clicked
                 holder.setOnClickListener(new MyViewHolder.ClickListener(){
 
                     @Override
                     public void onItemClick(View view, int position) {
                         //Start new activity to show event details
                         Intent intent = new Intent(mContext, RideEvent.class);
+                        // Pass all the information into the next actiity
                         intent.putExtra("destName", destName);
                         intent.putExtra("flightTime", parsedFlightDate + parsedFlightTime);
                         intent.putExtra("stillPending", stillPending);
                         intent.putExtra("pickupAddress", pickupAddress);
+
+                        // Pass Firestore Reference of ride request and orbit if applicable
+                        intent.putExtra("rideRequestId", rideRef.getId());
+
+                        // If it is an orbit, pass a few more fields
+                        intent.putExtra("rideRef", rideRef.getId());
+                        intent.putExtra("eventRef", eventId);
+                        intent.putExtra("userRef", userID);
+
                         if(!stillPending) {
                             intent.putStringArrayListExtra("profileImages", profileImages);
                             intent.putExtra("orbitRef",  orbitRef.getPath());
                             intent.putExtra("destTime", destTime );
                         }
+                        // Go into the view more details of a card
                         mContext.startActivity(intent);
                     }
 
+                    // Behavior the user holds down on a card
                     @Override
                     public void onItemLongClick(View view, int position) {
                         // Show options menu when long pressing a card
@@ -461,6 +492,7 @@ public class ScheduledEvents extends AppCompatActivity
                 });
             }
 
+            // If the data changes, do these actions
             @Override
             public void onDataChanged() {
                 if (adapter.getItemCount() == 0){

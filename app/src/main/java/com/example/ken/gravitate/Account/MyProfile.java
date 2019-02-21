@@ -31,6 +31,7 @@ public class MyProfile extends AppCompatActivity {
     private TextView mNameDisplay;
     private TextView mEmailDisplay;
     private TextView mPhoneDisplay;
+    private TextView mPickupDisplay;
     private ImageView mProfileImageDisplay;
     private Context mContext;
     private String token;
@@ -38,6 +39,7 @@ public class MyProfile extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         mContext = MyProfile.this;
 
+<<<<<<< HEAD
         Task<GetTokenResult> tokenTask = FirebaseAuth.getInstance().getAccessToken(false);
         while(!tokenTask.isComplete()){
             Log.d("GettingToken", "async");
@@ -49,6 +51,9 @@ public class MyProfile extends AppCompatActivity {
             }
         }
         final String token = tokenTask.getResult().getToken();
+=======
+
+>>>>>>> fb9e46d5bbee9e97dad7ea3a041f719930ffb614
         // Getting current user's information
         FirebaseUser user = AuthSingleton.getInstance().getCurrentUser();
         populateUserInfo(user);
@@ -59,15 +64,30 @@ public class MyProfile extends AppCompatActivity {
 
         // Getting UI fields to input user information
         mNameDisplay = (TextView) findViewById(R.id.username);
-        mEmailDisplay = (TextView) findViewById(R.id.email);
         mPhoneDisplay = (TextView) findViewById(R.id.phone_number);
+        mEmailDisplay = (TextView) findViewById(R.id.email);
+        mPickupDisplay= (TextView) findViewById(R.id.address);
         mProfileImageDisplay = (ImageView) findViewById(R.id.c_profile_pic);
+        mEmailDisplay.setText(userEmail);
 
-        // Setting UI fields to represent the current user's information
-//        mNameDisplay.setText(userFullName);
-       mEmailDisplay.setText(userEmail);
-//        mPhoneDisplay.setText(userPhoneNumber);
-//        new DownloadImageTask(mProfileImageDisplay).execute(userProfilePic);
+        APIUtils.getUser(mContext, user,
+                new VolleyCallback() {
+                    @Override
+                    public void onSuccessResponse(JSONObject result) {
+                        try {
+                            JSONObject response = result;
+                            mNameDisplay.setText(response.getString("display_name"));
+                            mPickupDisplay.setText(response.getString("pickupAddress"));
+                            new DownloadImageTask(mProfileImageDisplay).execute(response.getString("photo_url"));
+                            mPhoneDisplay.setText(response.getString("phone_number"));
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }, token);
+
 
 
 
@@ -95,6 +115,7 @@ public class MyProfile extends AppCompatActivity {
 
     }
 
+    // Populate the user's profile page with their database information
     public void populateUserInfo( FirebaseUser user ) {
         APIUtils.getUser(this, user,
                 new VolleyCallback() {

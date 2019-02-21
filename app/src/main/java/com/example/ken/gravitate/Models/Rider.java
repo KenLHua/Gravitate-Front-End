@@ -1,5 +1,6 @@
 package com.example.ken.gravitate.Models;
 
+// Model class to hold all rider information
 public class Rider {
     private int profile_photo;
     private String fullname;

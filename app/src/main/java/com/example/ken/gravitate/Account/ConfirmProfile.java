@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -29,8 +30,10 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -38,6 +41,7 @@ import org.json.JSONObject;
 public class ConfirmProfile extends AppCompatActivity {
     int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
 
+    // Initializing activity variables
     private Button mSaveEditAccountBtn;
     private FirebaseAuth mAuth;
     private TextView mFullName;
@@ -47,36 +51,49 @@ public class ConfirmProfile extends AppCompatActivity {
     private Context mContext;
     private RequestQueue mRequestQueue;
     private String token;
+    private FirebaseUser user;
     String photo_url;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        // Populating activity layout
         super.onCreate(savedInstanceState);
         setContentView(R.layout.confirm_account_layout);
+        // Getting authentication instance
         mAuth = FirebaseAuth.getInstance();
-        token = FirebaseAuth.getInstance().getAccessToken(false).getResult().getToken();
-        FirebaseUser user = mAuth.getCurrentUser();
-        checkUserExists(user);
 
 
+        // Getting REST access token
+        Task<GetTokenResult> tokenTask = FirebaseAuth.getInstance().getAccessToken(false);
+        while(!tokenTask.isComplete()){
+            Log.d("GettingToken", "async");
+            synchronized (this){
+                try{
+                    wait(500);
+                }
+                catch (InterruptedException e){
+                    e.printStackTrace();
+                }
+            }
+        }
+        final String token = tokenTask.getResult().getToken();
+
+        user = mAuth.getCurrentUser();
+
+        // Initializing the toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Confirm Account");
-//        toolbar.setNavigationIcon(R.drawable.system_icon_back);
-//        // Back button will go to previous page when clicked on
-//        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                onSupportNavigateUp();
-//            }
-//        });
         setSupportActionBar(toolbar);
+        // Setting context
         mContext = this;
+        // Grabbing UI elements that hold information
         mFullName = findViewById(R.id.inputFullName);
         mPicture = findViewById(R.id.c_profile_pic);
         mPhoneNumber = findViewById(R.id.inputPhoneNumber);
+        // Numbers must start with united states code
         mPhoneNumber.setText("+1");
         mPostalAddress = findViewById(R.id.inputPostalAddress);
-        mRequestQueue = APIRequestSingleton.getInstance(this.getApplicationContext()).getRequestQueue();
 
         // Display profile pic and autofill user info
         String display_name = getIntent().getStringExtra("display_name");
@@ -91,6 +108,7 @@ public class ConfirmProfile extends AppCompatActivity {
                 .build();
 
 
+        // Let address changes only happen through google activity
         mPostalAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -147,7 +165,7 @@ public class ConfirmProfile extends AppCompatActivity {
         }
     }
 
-    // Checks if all flight input fields are filled
+    // Checks if all profile informations are valid
     private boolean invalidAccountFields(String checkFullName, String checkPhoneNumber, String checkPostalAddress) {
         if(checkFullName.length() == 0 ){
             Toast.makeText(mContext, "Error: Please input your full name", Toast.LENGTH_LONG).show();
@@ -155,6 +173,10 @@ public class ConfirmProfile extends AppCompatActivity {
         }
         if(checkPhoneNumber.length() == 0 ){
             Toast.makeText(mContext, "Error: Please input your phone number", Toast.LENGTH_LONG).show();
+            return true;
+        }
+        if(checkPhoneNumber.length() != 12){
+            Toast.makeText(mContext, "Error: Please input a valid 10 length phone number", Toast.LENGTH_LONG).show();
             return true;
         }
         if(checkPostalAddress.length() == 0 ){
@@ -181,20 +203,11 @@ public class ConfirmProfile extends AppCompatActivity {
 
                 FirebaseUser user = mAuth.getCurrentUser();
                 String uid = user.getUid();
-                APIUtils.postUser(this, uid, display_name, photo_url, pickupAddress,phone_number, token);
+                APIUtils.postUser(this, user, display_name, photo_url, pickupAddress,phone_number, token, ScheduledEvents.class);
                 return true;
         }
         return super.onOptionsItemSelected(button);
     }
 
-    public void checkUserExists( FirebaseUser user ) {
-        APIUtils.getUser(this, user,
-                new VolleyCallback() {
-                    @Override
-                    public void onSuccessResponse(JSONObject result) {
-                        startActivity(new Intent (ConfirmProfile.this, ScheduledEvents.class));
-                    }
-                },token);
-    }
 }
 
