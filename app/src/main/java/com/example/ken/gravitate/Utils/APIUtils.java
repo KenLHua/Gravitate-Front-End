@@ -18,6 +18,7 @@ import com.example.ken.gravitate.Event.CreatedRequestDetails;
 import com.example.ken.gravitate.Event.RequestCreated;
 import com.google.firebase.auth.FirebaseUser;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -263,6 +264,60 @@ public class APIUtils {
         };
         APIRequestSingleton.getInstance(myProfile).addToRequestQueue(jsonObjectRequest, "getUserRequest");
     }
+
+    /**
+     * PUT
+     * @param ctx
+     * @param rideRequestId
+     * @param token
+     * @param callback
+     */
+    /* Sends a JSON to PUT Endpoint to process luggage details
+     *   RETURNS: JSONObject that contains details
+     */
+    public static void putRideRequest(final Context ctx, final String rideRequestId,
+                                      final String token, final VolleyCallback callback){
+        Uri.Builder builder = new Uri.Builder();
+        builder.scheme("https")
+                .path(backendUrl + "/rideRequests")
+                .appendPath(rideRequestId)
+                .appendPath("luggage");
+        final String request_url = builder.toString();
+        final String TAG = "Luggage";
+        JSONObject luggageJSON = new JSONObject();
+        try {
+            luggageJSON = JSONUtils.createLuggageJSON();
+        } catch ( JSONException e ) {
+            e.printStackTrace();;
+        }
+
+
+        // Formulate the request and handle the response.
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.PUT, request_url, luggageJSON, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        callback.onSuccessResponse(response);
+                        Log.w("GETRideRequest", response.toString());
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO: Handle error
+                        error.printStackTrace();
+                    }
+                }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String>  params = new HashMap<String, String>();
+                params.put("Authorization", token);
+                return params;
+            }
+        };
+        APIRequestSingleton.getInstance(ctx).addToRequestQueue(jsonObjectRequest, "Luggage");
+    }
+
 
     /* Sends a GET Request to server to retrieve RideRequest Details
      *   RETURNS: JSONObject that contains details

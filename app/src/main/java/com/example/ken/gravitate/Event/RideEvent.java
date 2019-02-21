@@ -76,6 +76,16 @@ public class RideEvent extends AppCompatActivity {
 
         db = FirebaseFirestore.getInstance();
         final String rideRequestId = getIntent().getExtras().getString("rideRequestId");
+
+        Button test = findViewById(R.id.test);
+        test.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // Code here executes on main thread after user presses button
+                putLuggage(rideRequestId);
+            }
+        });
+
+
         DocumentReference docRef = db.collection("rideRequests").document(rideRequestId);
         docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -116,6 +126,30 @@ public class RideEvent extends AppCompatActivity {
 
     }
 
+    private void putLuggage( final String rideRequestId ) {
+        // Getting REST access token
+        Task<GetTokenResult> tokenTask = FirebaseAuth.getInstance().getAccessToken(false);
+        while(!tokenTask.isComplete()){
+            Log.d("GettingToken", "async");
+            synchronized (this){
+                try{
+                    wait(500); // TODO: change
+                }
+                catch (InterruptedException e){
+                    e.printStackTrace();
+                }
+            }
+        }
+        final String token = tokenTask.getResult().getToken();
+
+        APIUtils.putRideRequest(mCtx, rideRequestId, token, new VolleyCallback() {
+            @Override
+            public void onSuccessResponse(JSONObject result) {
+                Toast.makeText(mCtx, "Luggage Sent", Toast.LENGTH_LONG).show();
+                ((Activity)mCtx).finish();
+            }
+        });
+    }
 
     private void updateOrbitExists(Orbit orbit) {
         RecyclerView recyclerView = findViewById(R.id.rider_list);

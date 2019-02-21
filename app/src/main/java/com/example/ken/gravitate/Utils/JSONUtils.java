@@ -6,6 +6,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.List;
+
 public class JSONUtils {
 
     /* Method Name: retrieveFSInfo
@@ -106,6 +108,49 @@ public class JSONUtils {
 
         return deleteRRJSON;
     }
+
+    public static JSONObject createLuggageJSON() throws JSONException {
+        JSONObject luggage1 = new JSONObject();
+        try{
+            luggage1.put("luggage_type", "large");
+            luggage1.put("weight_in_lbs", 20);
+
+        }catch ( JSONException e ) {
+            e.printStackTrace();
+        }
+        JSONObject luggage2 = new JSONObject();
+        try{
+            luggage2.put("luggage_type", "medium");
+            luggage2.put("weight_in_lbs", 15);
+
+        }catch ( JSONException e ) {
+            e.printStackTrace();
+        }
+        JSONObject luggage3 = new JSONObject();
+        try{
+            luggage3.put("luggage_type", "medium");
+            luggage3.put("weight_in_lbs", 25);
+
+        }catch ( JSONException e ) {
+            e.printStackTrace();
+        }
+
+        JSONArray luggage = new JSONArray();
+        luggage.put(luggage1);
+        luggage.put(luggage2);
+        luggage.put(luggage3);
+
+        JSONObject luggages = new JSONObject();
+        try{
+            luggages.putOpt("luggages", luggage);
+        }catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Log.v("LuggageJSON", luggages.toString());
+        return luggages;
+
+    }
+
 
     /* Method Name: deleteRideRequestJSON
        Description: Creates JSON that contains Orbit Information to delete
