@@ -174,6 +174,10 @@ public class AirportRideRequest {
     public void setUserId(String mUserId) {
         this.mUserId = mUserId;
     }
+
+    public String getLuggageWeight() { return null; }
+
+    public String getLuggageSize() { return null; }
 //
 //    public String getName() { return mName; }
 //

@@ -145,12 +145,19 @@ public class RideEvent extends AppCompatActivity {
 
         TextView flightTimeDisplay = findViewById(R.id.flightTime);
         TextView pickupAddressDisplay = findViewById(R.id.pickupAddress);
+        TextView luggageWeightDisplay = findViewById(R.id.luggageWeight);
+        TextView luggageSizeDisplay = findViewById(R.id.luggageSize);
 
         String pickupAddress = rideRequest.getPickupAddress();
         String flightTime = rideRequest.getFlightLocalTime();
+        String luggageWeight = rideRequest.getLuggageWeight();
+        String luggageSize = rideRequest.getLuggageSize();
+
 
         flightTimeDisplay.setText("Flight Time : " + flightTime);
         pickupAddressDisplay.setText("Pickup Address : " + pickupAddress);
+        luggageWeightDisplay.setText("Luggage Weight : " + luggageWeight);
+        luggageSizeDisplay.setText("Luggage SIze : " + luggageSize);
 
     }
 
