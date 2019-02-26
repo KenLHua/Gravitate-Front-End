@@ -26,7 +26,7 @@
                 android:layout_width="400dp"
                 android:layout_height="250dp"
                 android:scaleType="centerCrop"
-                app:srcCompat = "@drawable/lax" />
+                app:srcCompat="@drawable/lax" />
 
 
             <ImageView

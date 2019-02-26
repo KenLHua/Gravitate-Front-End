@@ -34,6 +34,7 @@
         android:layout_marginTop="16dp"/>
 
     <android.support.v7.widget.CardView
+        android:id="@+id/luggage_size"
         android:layout_width="380dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/rider_list"
@@ -48,12 +49,12 @@
 
             <TextView
                 android:id="@+id/ride_request_title"
-                android:textColor="#000000"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Ride Information"
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="12dp"
+                android:text="Ride Information"
+                android:textColor="#000000"
                 android:textSize="23dp"
                 android:textStyle="bold" />
 
@@ -62,18 +63,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_below="@id/ride_request_title"
-                android:background="@color/colorAccent"
-                android:layout_marginBottom="12dp"/>
+                android:layout_marginBottom="12dp"
+                android:background="@color/colorAccent" />
 
 
             <TextView
                 android:id="@+id/destination"
-                android:textColor="#000000"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/divider2"
-                android:text="Destination : LAX"
                 android:layout_marginBottom="12dp"
+                android:text="Destination : LAX"
+                android:textColor="#000000"
                 android:textSize="18dp"
                 android:textStyle="bold" />
 
@@ -87,26 +88,46 @@
                 android:text="Flight Time : "
                 android:textColor="#000000"
                 android:textSize="18dp"
-                android:textStyle="bold"
-                />
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/pickupAddress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/flightTime"
-                android:text="Pickup Address : "
                 android:layout_marginBottom="12dp"
+                android:gravity="left"
+                android:text="Pickup Address : "
                 android:textColor="#000000"
                 android:textSize="18dp"
-                android:gravity="left"
                 android:textStyle="bold" />
 
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 
+    <android.support.v7.widget.CardView
+        android:layout_width="380dp"
+        android:layout_height="200dp"
+        android:layout_below="@id/luggage_size"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:elevation="20dp">
 
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Luggage Size" />
 
+        <!-- The margintop is arbitrary distance from luggage_size -->
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_marginTop="50dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text='22.5" x 14.5" x 9"' />
+
+    </android.support.v7.widget.CardView>
 
 
 </RelativeLayout>
