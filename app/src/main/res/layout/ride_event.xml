@@ -23,8 +23,8 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
-        android:theme="@style/ToolbarTheme"
-        android:elevation="4dp"/>
+        android:elevation="4dp"
+        android:theme="@style/ToolbarTheme" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rider_list"

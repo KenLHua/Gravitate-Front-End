@@ -2,11 +2,38 @@ package com.example.ken.gravitate.Utils;
 
 import android.util.Log;
 
+import com.example.ken.gravitate.Models.Luggage;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.List;
+
 public class JSONUtils {
+
+
+    // Luggages
+    // - Luggage_Type param
+    // - weight_in_ilbs param
+    public static JSONObject luggageJSON(List<Luggage> userLuggage) {
+        JSONObject luggageJSON = new JSONObject();
+
+        try {
+            for (int index = 0; index < userLuggage.size(); index++) {
+                luggageJSON.put("weight" + index, userLuggage.get(index).getWeight());
+                luggageJSON.put("size" + index, userLuggage.get(index).getSize());
+            }
+
+        }catch(JSONException e){
+            final String TAG = "toJSON";
+            Log.w(TAG, "failed: Flight JSON");
+            e.printStackTrace();
+            }
+
+        return luggageJSON;
+    }
+
 
     /* Method Name: retrieveFSInfo
        Description: ParsesFlightStatsAPI JSON and adds paramters pickUpAddress
