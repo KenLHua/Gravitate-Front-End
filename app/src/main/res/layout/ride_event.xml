@@ -23,8 +23,8 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
-        android:theme="@style/ToolbarTheme"
-        android:elevation="4dp"/>
+        android:elevation="4dp"
+        android:theme="@style/ToolbarTheme" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rider_list"
@@ -34,6 +34,7 @@
         android:layout_marginTop="16dp"/>
 
     <android.support.v7.widget.CardView
+        android:id="@+id/luggage_size"
         android:layout_width="380dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/rider_list"
@@ -48,12 +49,12 @@
 
             <TextView
                 android:id="@+id/ride_request_title"
-                android:textColor="#000000"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Ride Information"
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="12dp"
+                android:text="Ride Information"
+                android:textColor="#000000"
                 android:textSize="23dp"
                 android:textStyle="bold" />
 
@@ -62,18 +63,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_below="@id/ride_request_title"
-                android:background="@color/colorAccent"
-                android:layout_marginBottom="12dp"/>
+                android:layout_marginBottom="12dp"
+                android:background="@color/colorAccent" />
 
 
             <TextView
                 android:id="@+id/destination"
-                android:textColor="#000000"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/divider2"
-                android:text="Destination : LAX"
                 android:layout_marginBottom="12dp"
+                android:text="Destination : LAX"
+                android:textColor="#000000"
                 android:textSize="18dp"
                 android:textStyle="bold" />
 
@@ -87,26 +88,147 @@
                 android:text="Flight Time : "
                 android:textColor="#000000"
                 android:textSize="18dp"
-                android:textStyle="bold"
-                />
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/pickupAddress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/flightTime"
-                android:text="Pickup Address : "
                 android:layout_marginBottom="12dp"
+                android:gravity="left"
+                android:text="Pickup Address : "
                 android:textColor="#000000"
                 android:textSize="18dp"
-                android:gravity="left"
                 android:textStyle="bold" />
 
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 
+    <android.support.v7.widget.CardView
+        android:layout_width="380dp"
+        android:layout_height="150dp"
+        android:layout_below="@id/luggage_size"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:elevation="20dp">
+
+        <TextView
+            android:id="@+id/your_lugggage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Your Luggage"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+        <!-- The margintop is arbitrary distance from luggage_size -->
+
+        <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="85dp" >
+
+        <TextView
+            android:id="@+id/carry_on"
+            style="@style/Widget.AppCompat.Button"
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/colorButton"
+            android:backgroundTintMode="src_atop"
+            android:elevation="@dimen/sd_fab_normal_size"
+            android:text="Carry-On"
+            android:textAppearance="@style/TextAppearance.AppCompat.Button" />
+
+            <Button
+                android:id="@+id/decrement_carry"
+                style="@style/Widget.AppCompat.Button"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/colorFAB"
+                android:backgroundTintMode="src_atop"
+                android:elevation="@dimen/sd_fab_normal_size"
+                android:text="-"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/increment_carry"
+                style="@style/Widget.AppCompat.Button"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/colorFAB"
+                android:backgroundTintMode="src_atop"
+                android:elevation="@dimen/sd_fab_normal_size"
+                android:text="+"
+                android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/numb_carry_on"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="0"
+            android:layout_marginTop="5dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textSize="30dp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="36dp" >
+
+            <TextView
+                android:id="@+id/checked_in"
+                style="@style/Widget.AppCompat.Button"
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/colorButton"
+                android:backgroundTintMode="src_atop"
+                android:elevation="@dimen/sd_fab_normal_size"
+                android:text="Checked-In" />
+
+            <Button
+                android:id="@+id/decrement_check"
+                style="@style/Widget.AppCompat.Button"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/colorFAB"
+                android:backgroundTintMode="src_atop"
+                android:elevation="@dimen/sd_fab_normal_size"
+                android:text="-"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/increment_check"
+                style="@style/Widget.AppCompat.Button"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/colorFAB"
+                android:backgroundTintMode="src_atop"
+                android:elevation="@dimen/sd_fab_normal_size"
+                android:text="+"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/numb_checked_in"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textSize="30dp"
+                android:text="0"
+                android:textStyle="bold" />
+
+        </LinearLayout>
 
 
+    </android.support.v7.widget.CardView>
 
 
 </RelativeLayout>

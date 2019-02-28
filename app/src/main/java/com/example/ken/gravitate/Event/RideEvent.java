@@ -57,10 +57,83 @@ public class RideEvent extends AppCompatActivity {
     private Context mCtx;
     private FirebaseFirestore db;
 
+    //luggage size variables
+    private TextView numbCarryOn;
+    private TextView numbCheckIn;
+    private Button incrementCarry;
+    private Button decrementCarry;
+    private Button incrementCheck;
+    private Button decrementCheck;
+    private int carryCounter;
+    private int checkCounter;
+
+    private View.OnClickListener clickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            switch(v.getId()){
+                case R.id.increment_carry:
+                    plusCarryCounter();
+                    break;
+                case R.id.decrement_carry:
+                    minusCarryCounter();
+                    break;
+                case R.id.increment_check:
+                    plusCheckCounter();
+                    break;
+                case R.id.decrement_check:
+                    minusCheckCounter();
+                    break;
+            }
+        }
+    };
+
+    private void initCarryCounter(){
+        carryCounter = 0;
+        numbCarryOn.setText(carryCounter);
+
+    }
+
+    private void plusCarryCounter(){
+        carryCounter++;
+        numbCarryOn.setText(carryCounter);
+    }
+
+    private void minusCarryCounter(){
+        carryCounter--;
+        numbCarryOn.setText(carryCounter);
+    }
+
+    private void initCheckCounter(){
+        checkCounter = 0;
+        numbCheckIn.setText(checkCounter);
+    }
+
+    private void plusCheckCounter(){
+        checkCounter++;
+        numbCheckIn.setText(checkCounter);
+    }
+
+    private void minusCheckCounter(){
+        checkCounter--;
+        numbCheckIn.setText(checkCounter);
+    }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ride_event);
+        numbCarryOn = (TextView)findViewById(R.id.numb_carry_on);
+        numbCheckIn = (TextView)findViewById(R.id.numb_checked_in);
+        incrementCarry = (Button) findViewById(R.id.increment_carry;
+        decrementCarry = (Button)findViewById(R.id.decrement_carry);
+        incrementCheck = (Button) findViewById(R.id.increment_check;
+        decrementCheck = (Button)findViewById(R.id.decrement_check);
+        incrementCheck.setOnClickListener(clickListener);
+        decrementCheck.setOnClickListener(clickListener);
+        incrementCarry.setOnClickListener(clickListener);
+        decrementCarry.setOnClickListener(clickListener);
+        initCarryCounter();
+        initCheckCounter();
 
         mCtx = this;
         Toolbar toolbar = findViewById(R.id.toolbar);
