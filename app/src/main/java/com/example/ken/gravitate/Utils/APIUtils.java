@@ -16,17 +16,48 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.example.ken.gravitate.Event.CreatedRequestDetails;
 import com.example.ken.gravitate.Event.RequestCreated;
+import com.example.ken.gravitate.Models.Luggage;
 import com.google.firebase.auth.FirebaseUser;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class APIUtils {
 
     private static String backendUrl = "gravitate-dev.appspot.com";
+    public static void luggageAPIUtil(final Context mCtx, final String token, final VolleyCallback callback,
+                                      final String ride_request_id, List<Luggage> userLuggage){
+        final String TAG = "luggage request";
+        final String request_url = "https://" + backendUrl + "";
+        JSONObject luggageJSON = JSONUtils.luggageJSON(userLuggage);
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.POST, request_url, luggageJSON, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        callback.onSuccessResponse(response);
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Request Error (App 4-- or Server 5--)
+                        Toast.makeText(mCtx, error + "error", Toast.LENGTH_LONG).show();
+                    }
+                }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                // Adds Authorization Token to Header
+                Map<String, String>  params = new HashMap<String, String>();
+                params.put("Authorization", token);
+                return params;
+            }
+        };
+    }
 
     /** postDeleteMatch IMPLEMENTED BUT FOR FUTURE **/
     /* Method Name: postDeleteMatch
