@@ -8,6 +8,17 @@
     >
 
     <Button
+        android:id="@+id/luggage_info_bttn"
+        style="@style/AppTheme.RoundedCornerMaterialButton"
+        android:elevation="8dp"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:text="Luggage" />
+
+    <Button
         android:id="@+id/delete_ride_bttn"
         style="@style/AppTheme.RoundedCornerMaterialButton"
         android:elevation="8dp"

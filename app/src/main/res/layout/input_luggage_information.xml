@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+
+    <android.support.v7.widget.CardView
+        android:layout_width="380dp"
+        android:layout_height="150dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:elevation="20dp">
+
+    <TextView
+        android:id="@+id/your_lugggage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Your Luggage"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textSize="20dp"
+        android:textStyle="bold" />
+
+    <!-- The margintop is arbitrary distance from luggage_size -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="85dp" >
+
+        <TextView
+            android:id="@+id/carry_on"
+            style="@style/Widget.AppCompat.Button"
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/colorButton"
+            android:backgroundTintMode="src_atop"
+            android:elevation="@dimen/sd_fab_normal_size"
+            android:text="Carry-On"
+            android:textAppearance="@style/TextAppearance.AppCompat.Button" />
+
+        <Button
+            android:id="@+id/decrement_carry"
+            style="@style/Widget.AppCompat.Button"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/colorFAB"
+            android:backgroundTintMode="src_atop"
+            android:elevation="@dimen/sd_fab_normal_size"
+            android:text="-"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/increment_carry"
+            style="@style/Widget.AppCompat.Button"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/colorFAB"
+            android:backgroundTintMode="src_atop"
+            android:elevation="@dimen/sd_fab_normal_size"
+            android:text="+"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/numb_carry_on"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="0"
+            android:layout_marginTop="5dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textSize="30dp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="36dp" >
+
+        <TextView
+            android:id="@+id/checked_in"
+            style="@style/Widget.AppCompat.Button"
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/colorButton"
+            android:backgroundTintMode="src_atop"
+            android:elevation="@dimen/sd_fab_normal_size"
+            android:text="Checked-In" />
+
+        <Button
+            android:id="@+id/decrement_check"
+            style="@style/Widget.AppCompat.Button"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/colorFAB"
+            android:backgroundTintMode="src_atop"
+            android:elevation="@dimen/sd_fab_normal_size"
+            android:text="-"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/increment_check"
+            style="@style/Widget.AppCompat.Button"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/colorFAB"
+            android:backgroundTintMode="src_atop"
+            android:elevation="@dimen/sd_fab_normal_size"
+            android:text="+"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/numb_checked_in"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="5dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textSize="30dp"
+            android:text="0"
+            android:textStyle="bold" />
+
+    </LinearLayout>
