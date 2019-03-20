@@ -29,6 +29,7 @@
     <string name="flight_notif_channel" translatable="false">flight</string>
     <string name="notification_title" translatable="false">Gravitate Notification</string>
 
-
+    <string name="facebook_app_id">604617470013473</string>
+    <string name="fb_login_protocol_scheme">fb604617470013473</string>
 
 </resources>

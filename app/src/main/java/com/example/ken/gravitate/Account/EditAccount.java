@@ -23,6 +23,11 @@ import com.example.ken.gravitate.Utils.APIUtils;
 import com.example.ken.gravitate.Utils.AuthSingleton;
 import com.example.ken.gravitate.Utils.DownloadImageTask;
 import com.example.ken.gravitate.Utils.VolleyCallback;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.Status;
@@ -48,6 +53,7 @@ public class EditAccount extends AppCompatActivity {
     private Context mContext;
     private String token;
     private FirebaseUser user;
+    private CallbackManager callbackManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,6 +134,30 @@ public class EditAccount extends AppCompatActivity {
             public void onClick(View v) {
                 callPlaceAutocompleteActivityIntent(filter); }});
 
+        // Facebook log-in integration
+        callbackManager = CallbackManager.Factory.create();
+
+        LoginManager.getInstance().registerCallback(callbackManager,
+                new FacebookCallback<LoginResult>() {
+                    @Override
+                    public void onSuccess(LoginResult loginResult) {
+                        Toast.makeText(mContext, "Successful fb login. ", Toast.LENGTH_LONG).show();
+                        Log.i("fb login onSuccess", loginResult.toString());
+                        Log.i("fb login onSuccess Token", loginResult.getAccessToken().getToken());
+
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        Toast.makeText(mContext, "Cancelled fb login. ", Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onError(FacebookException exception) {
+                        Toast.makeText(mContext, "Error fb login. ", Toast.LENGTH_LONG).show();
+                        Log.i("fb login onError", exception.getMessage());
+                    }
+                });
 
     }
 
@@ -176,6 +206,10 @@ public class EditAccount extends AppCompatActivity {
             } else if (resultCode == RESULT_CANCELED) {
                 // The user canceled the operation.
             }
+        } else {
+            callbackManager.onActivityResult(requestCode, resultCode, data);
+//            super.onActivityResult(requestCode, resultCode, data);
+
         }
     }
 
