@@ -2,6 +2,7 @@ package com.example.ken.gravitate.Account;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -159,7 +160,21 @@ public class EditAccount extends AppCompatActivity {
                     }
                 });
 
+        // Test link to someone else's facebook messenger profile
+        findViewById(R.id.fb_mme).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String url = "https://m.me/billyraozx";
+
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                startActivity(i);
+            }
+        });
+
     }
+
+
 
     //  Add Save button to the ActionBar
     @Override
