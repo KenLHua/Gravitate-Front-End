@@ -29,6 +29,7 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.Status;
@@ -42,6 +43,8 @@ import com.google.firebase.auth.GetTokenResult;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Arrays;
 
 public class EditAccount extends AppCompatActivity {
 
@@ -137,13 +140,13 @@ public class EditAccount extends AppCompatActivity {
 
         // Facebook log-in integration
         callbackManager = CallbackManager.Factory.create();
-
         LoginManager.getInstance().registerCallback(callbackManager,
                 new FacebookCallback<LoginResult>() {
                     @Override
                     public void onSuccess(LoginResult loginResult) {
                         Toast.makeText(mContext, "Successful fb login. ", Toast.LENGTH_LONG).show();
                         Log.i("fb login onSuccess", loginResult.toString());
+                        // TODO: delete before release
                         Log.i("fb login onSuccess Token", loginResult.getAccessToken().getToken());
 
                     }
@@ -160,6 +163,9 @@ public class EditAccount extends AppCompatActivity {
                     }
                 });
 
+        // TODO: move to new Activity (will override current use cases)
+        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("user_events"));
+
         // Test link to someone else's facebook messenger profile
         findViewById(R.id.fb_mme).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -171,6 +177,14 @@ public class EditAccount extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
+
+//        findViewById(R.id.fb_event_button).setOnClickListener( new View.OnClickListener()  {
+//            @Override
+//            public void onClick(View v) {
+//
+//            }
+//        } );
 
     }
 
