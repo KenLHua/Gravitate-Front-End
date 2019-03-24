@@ -18,12 +18,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.ken.gravitate.Models.Event;
 import com.example.ken.gravitate.Models.UserEvent;
 import com.example.ken.gravitate.R;
 import com.example.ken.gravitate.Utils.APIUtils;
+import com.example.ken.gravitate.Utils.DownloadImageTask;
 import com.example.ken.gravitate.Utils.EventViewHolder;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
@@ -71,6 +73,7 @@ public class MyEvents extends AppCompatActivity {
     private boolean hasRide;
     private FirestoreRecyclerAdapter adapter;
     private Button mUploadEventButton;
+    private String token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +91,7 @@ public class MyEvents extends AppCompatActivity {
                 }
             }
         }
-        final String token = tokenTask.getResult().getToken();
+        token = tokenTask.getResult().getToken();
 
         hasRide = false;
 
@@ -257,10 +260,44 @@ public class MyEvents extends AppCompatActivity {
 
                 // Set the context and fields
                 holder.context = mContext;
-                holder.background_img.setImageResource(cardBackground);
+                final ImageView backgroundImg = holder.background_img;
+//                holder.background_img.setImageResource(cardBackground);
                 holder.card_dest.setText(destName);
                 // Update whether the "no requests found" is displayed
                 hasRide = true;
+
+
+                // Set cover photo
+
+                final String fbEventId = model.getFbEventId();
+
+                Bundle parameters = new Bundle();
+                parameters.putString("fields", "cover");
+
+                new GraphRequest(
+                        AccessToken.getCurrentAccessToken(),
+                        "/"+fbEventId,
+                        parameters,
+                        HttpMethod.GET,
+                        new GraphRequest.Callback() {
+                            public void onCompleted(GraphResponse response) {
+                                JSONObject responseObject = response.getJSONObject();
+
+                                Log.d("fb event cover", responseObject.toString());
+                                try {
+                                    JSONObject coverObject = responseObject.getJSONObject("cover");
+                                    final String coverUrl = coverObject.getString("source");
+                                    new DownloadImageTask(backgroundImg).execute(coverUrl);
+
+                                } catch (JSONException e) {
+                                    Log.e("fb event cover",
+                                            "Retrieve User Facebook Event Cover photo failed",
+                                            e.fillInStackTrace());
+                                }
+
+                            }
+                        }
+                ).executeAsync();
 
                 // If events are active (= not isClosed)
                 if(true) { // Currently
