@@ -409,6 +409,53 @@ public class APIUtils {
 
     }
 
+    public static void postEventRideRequest(final Context requestRide,
+                                            final JSONObject Ride_RequestJSON,
+                                            final String token) {
+        final String server_url = "https://" + backendUrl + "/requestRide/" + "event";
+        final String TAG = "Ride_Request";
+
+        // Formulate the request and handle the response.
+        Log.w(TAG, "REQUEST:Attempt to create jsonObjectRequest");
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.POST, server_url, Ride_RequestJSON, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        // Do something with the response
+                        Log.w(TAG, "POST_REQUEST:Create Event Ride Request success");
+                        Toast.makeText(requestRide,"Success", Toast.LENGTH_SHORT).show();
+                        try {
+                            String id = response.getString("id");
+
+                            // Passing information to the next activity
+//                            showCreated(id);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+//                            showCreatedInferred();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                        Toast.makeText(requestRide,"Error: Event Ride Request not made", Toast.LENGTH_SHORT).show();
+                        error.printStackTrace();
+                        Log.w(TAG, "POST_REQUEST:Create Event Ride Request failed " + new String(error.networkResponse.data) );
+                    }
+                }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String>  params = new HashMap<String, String>();
+                params.put("Authorization", token);
+                return params;
+            }
+        };
+        APIRequestSingleton.getInstance(requestRide).addToRequestQueue(jsonObjectRequest, "postRequest");
+
+    }
+
     public static void postFacebookEvent(
             final Context myEvents, final JSONObject userEventJSON, final String token) {
         final String server_url = "https://" + backendUrl + "/me/events";

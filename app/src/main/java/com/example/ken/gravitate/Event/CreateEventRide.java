@@ -29,6 +29,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GetTokenResult;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Calendar;
 
 //Necessary libraries for Address Autocomplete functionality
@@ -57,6 +60,7 @@ public class CreateEventRide extends AppCompatActivity {
 
     /**** TESTING ****/
     private TextView mOutput;
+    private Button mRequestRideButton;
 
 
     @Override
@@ -136,6 +140,41 @@ public class CreateEventRide extends AppCompatActivity {
 
         final String eventId = getIntent().getExtras().getString("eventId");
         mEventId.setText(eventId);
+
+        // Setting Flightstats Bttn
+        mRequestRideButton = findViewById(R.id.request_button);
+
+        // Lookup flight information using flight stats api
+        mRequestRideButton.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                final JSONObject json = new JSONObject();
+                final String pickupAddress = inputPickup.getText().toString();
+//                'userId': 'testuserid1',
+//                        'eventId': event_id,
+//                        'pickupAddress': 'Tenaya Hall, San Diego, CA 92161',
+//                        'driverStatus': False,
+//                        'toEvent': True
+                try {
+                    json.put("eventId", eventId);
+                    json.put("pickupAddress", pickupAddress);
+                    json.put("toEvent", true);
+                    json.put("driverStatus", false);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                //Do something with the information
+
+                APIUtils.postEventRideRequest(mContext, json, token);
+
+            }
+        });
+
+        // Initializing Request Components
+        mRequestQueue = APIRequestSingleton.getInstance(this.getApplicationContext()).
+                getRequestQueue();
 
     }
 

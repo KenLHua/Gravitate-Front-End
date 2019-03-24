@@ -23,6 +23,7 @@ public class UserEvent extends FirestoreModel {
     private String mDescription;
     private String mFbEventId;
     private String mLocationId;
+    private String mEventId;
 
     public UserEvent() {
     } // Needed for Firebase
@@ -116,5 +117,13 @@ public class UserEvent extends FirestoreModel {
 
     public void setLocationId(String mLocationId) {
         this.mLocationId = mLocationId;
+    }
+
+    public String getEventId() {
+        return mEventId;
+    }
+
+    public void setEventId(String mEventId) {
+        this.mEventId = mEventId;
     }
 }

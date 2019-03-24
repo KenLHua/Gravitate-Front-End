@@ -313,7 +313,7 @@ public class MyEvents extends AppCompatActivity {
                         //Start new activity to show event details
                         Intent intent = new Intent(mContext, CreateEventRide.class);
                         // Pass all the information into the next actiity
-                        intent.putExtra("eventId", model.getId());
+                        intent.putExtra("eventId", model.getEventId());
 
                         mContext.startActivity(intent);
                     }
