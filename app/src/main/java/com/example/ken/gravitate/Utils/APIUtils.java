@@ -408,6 +408,57 @@ public class APIUtils {
           APIRequestSingleton.getInstance(inputFlight).addToRequestQueue(jsonObjectRequest, "postRequest");
 
     }
+
+    public static void postFacebookEvent(
+            final Context myEvents, final JSONObject userEventJSON, final String token) {
+        final String server_url = "https://" + backendUrl + "/me/events";
+        final String TAG = "Upload User Event";
+//        Log.w(TAG, "AirportCode: " + airportCode);
+//        if ( !airportCode.equals("LAX")){
+//            Toast.makeText(inputFlight, "Error: Only LAX flights supported", Toast.LENGTH_LONG).show();
+//            return;
+//        }
+
+        // Formulate the request and handle the response.
+        Log.w(TAG, "REQUEST:Attempt to create jsonObjectRequest");
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.POST, server_url, userEventJSON, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        // Do something with the response
+                        Log.w(TAG, "POST_REQUEST:POST USER EVENT success");
+                        Toast.makeText(myEvents,"Success", Toast.LENGTH_SHORT).show();
+                        try {
+                            String id = response.getString("id");
+                            // Passing information to the next activity
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                        Toast.makeText(myEvents,"Error: Facebook Event not uploaded", Toast.LENGTH_SHORT).show();
+                        error.printStackTrace();
+                        Log.w(TAG, "POST_REQUEST:Upload User Event failed " + new String(error.networkResponse.data) );
+                    }
+                }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String>  params = new HashMap<String, String>();
+                params.put("Authorization", token);
+                return params;
+            }
+        };
+        APIRequestSingleton.getInstance(myEvents).addToRequestQueue(jsonObjectRequest, "postRequest");
+
+    }
+
+
     // time in the form of "##:## AM" or PM
     public static String parsePickupTime(String time, boolean early){
 

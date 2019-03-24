@@ -262,6 +262,10 @@ public class ScheduledEvents extends AppCompatActivity
             case R.id.nav_discover:
                 startActivity(new Intent(ScheduledEvents.this, DiscoverEvents.class));
         }
+        switch(menuItem.getItemId()) {
+            case R.id.nav_my_events:
+                startActivity(new Intent(ScheduledEvents.this, MyEvents.class));
+        }
 
         drawer.closeDrawer(GravityCompat.START);
 

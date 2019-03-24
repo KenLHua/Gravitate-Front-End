@@ -13,23 +13,38 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.ken.gravitate.Models.Event;
+import com.example.ken.gravitate.Models.UserEvent;
 import com.example.ken.gravitate.R;
+import com.example.ken.gravitate.Utils.APIUtils;
 import com.example.ken.gravitate.Utils.EventViewHolder;
+import com.facebook.AccessToken;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.firebase.ui.firestore.SnapshotParser;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.gson.JsonObject;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.time.Instant;
 import java.time.ZoneId;
@@ -55,9 +70,26 @@ public class MyEvents extends AppCompatActivity {
     private Context mContext;
     private boolean hasRide;
     private FirestoreRecyclerAdapter adapter;
+    private Button mUploadEventButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        // Getting REST access token
+        Task<GetTokenResult> tokenTask = FirebaseAuth.getInstance().getAccessToken(false);
+        while(!tokenTask.isComplete()){
+            Log.d("GettingToken", "async");
+            synchronized (this){
+                try{
+                    wait(500);
+                }
+                catch (InterruptedException e){
+                    e.printStackTrace();
+                }
+            }
+        }
+        final String token = tokenTask.getResult().getToken();
+
         hasRide = false;
 
         // Setting UI layout
@@ -77,7 +109,8 @@ public class MyEvents extends AppCompatActivity {
         FirebaseUser user = firebaseAuth.getCurrentUser();
 
         // Getting ride requests from the user's collection
-        eventsRef = db.collection("events");
+        eventsRef = db.collection("users")
+                .document(user.getUid()).collection("events");
         getEventList(eventsRef, eventsView);
         eventsView.setLayoutManager(new LinearLayoutManager(MyEvents.this));
 
@@ -108,6 +141,36 @@ public class MyEvents extends AppCompatActivity {
         swipeContainer.setColorSchemeResources(
                 R.color.colorDark,
                 R.color.colorAccent);
+
+        mUploadEventButton = findViewById(R.id.upload_fb_button);
+
+        mUploadEventButton.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new GraphRequest(
+                        AccessToken.getCurrentAccessToken(),
+                        "/me/events",
+                        null,
+                        HttpMethod.GET,
+                        new GraphRequest.Callback() {
+                            public void onCompleted(GraphResponse response) {
+                                JSONObject responseObject = response.getJSONObject();
+                                Log.d("fb event", responseObject.toString());
+                                try {
+                                    JSONArray eventArray = responseObject.getJSONArray("data");
+                                    JSONObject eventObject = eventArray.getJSONObject(0);
+                                    APIUtils.postFacebookEvent(mContext, eventObject, token);
+                                } catch (JSONException e) {
+                                    Log.e("fb event","Retrieve User Facebook Event failed", e.fillInStackTrace());
+                                }
+
+                            }
+                        }
+                ).executeAsync();
+
+            }
+        });
+
     }
 
     // Display a fragment and handle backstack behavior
@@ -130,17 +193,17 @@ public class MyEvents extends AppCompatActivity {
     // Populate ride request information
     private void getEventList(CollectionReference eventCollectionRef, RecyclerView display) {
         // Get a limit of 10 ride requests from the user
-        Query eventsQuery = eventCollectionRef.orderBy("startTimestamp").limit(10);
+        Query eventsQuery = eventCollectionRef.orderBy("localDateString").limit(10);
 
         // Set the model for firebase to populate the adapter
-        FirestoreRecyclerOptions<Event> options =
+        FirestoreRecyclerOptions<UserEvent> options =
                 new FirestoreRecyclerOptions
-                        .Builder<Event>()
-                        .setQuery(eventsQuery, new SnapshotParser<Event>() {
+                        .Builder<UserEvent>()
+                        .setQuery(eventsQuery, new SnapshotParser<UserEvent>() {
                             @NonNull
                             @Override
-                            public Event parseSnapshot(@NonNull DocumentSnapshot snapshot) {
-                                Event event = snapshot.toObject(Event.class);
+                            public UserEvent parseSnapshot(@NonNull DocumentSnapshot snapshot) {
+                                UserEvent event = snapshot.toObject(UserEvent.class);
                                 event.setId(snapshot.getId());
                                 return event;
                             }
@@ -148,7 +211,7 @@ public class MyEvents extends AppCompatActivity {
                         .build();
 
         // Create the adapter
-        adapter = new FirestoreRecyclerAdapter<Event, EventViewHolder>(options) {
+        adapter = new FirestoreRecyclerAdapter<UserEvent, EventViewHolder>(options) {
 
             private Event mEvent;
 
@@ -166,9 +229,10 @@ public class MyEvents extends AppCompatActivity {
 
             @Override
             // When firestore gives us information, populate the information
-            protected void onBindViewHolder(@NonNull EventViewHolder holder, int i, @NonNull final Event model) {
+            protected void onBindViewHolder(@NonNull EventViewHolder holder, int i, @NonNull final UserEvent model) {
                 // Set background and destination UI elements
-                final String destName = model.getEventLocation();
+//                final String destName = model.getEventLocation();
+                final String destName = model.getName();
                 int cardBackground;
                 if (destName.equals("LAX")) {
                     cardBackground = R.drawable.lax;
@@ -180,11 +244,13 @@ public class MyEvents extends AppCompatActivity {
                 // Format the flight local time to be readable
 //                final String parsedFlightDate = model.getStartTimestamp().toString();
 
-                final Long startTimestamp = model.getStartTimestamp();
-                final ZoneId zoneId = ZoneId.of("America/Los_Angeles");
-                final ZonedDateTime eventDate = ZonedDateTime.ofInstant(Instant.ofEpochSecond(startTimestamp), zoneId);
-                // TODO: refactor and test all operations involved in Datetime conversion
-                final String eventDay = eventDate.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM));
+//                final Long startTimestamp = model.getStartTimestamp();
+//                final ZoneId zoneId = ZoneId.of("America/Los_Angeles");
+//                final ZonedDateTime eventDate = ZonedDateTime.ofInstant(Instant.ofEpochSecond(startTimestamp), zoneId);
+//                // TODO: refactor and test all operations involved in Datetime conversion
+//                final String eventDay = eventDate.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM));
+
+                final String eventDay = model.getLocalDateString();
 
                 final boolean eventStatus = model.getIsClosed();
                 final ArrayList<String> profileImages = new ArrayList<String>();

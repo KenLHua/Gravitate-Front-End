@@ -76,6 +76,16 @@
                     android:layout_height="wrap_content">
                 </TextView>
 
+                <Button
+                    android:id="@+id/upload_fb_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginBottom="4dp"
+                    android:text="Upload Fb Events" />
+
             </RelativeLayout>
             </android.support.v4.widget.SwipeRefreshLayout>
         </FrameLayout>
