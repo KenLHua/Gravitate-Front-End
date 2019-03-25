@@ -28,7 +28,9 @@ public class APIUtils {
 
     private static String backendUrl = "gravitate-dev.appspot.com";
 
-    /** postDeleteMatch IMPLEMENTED BUT FOR FUTURE **/
+    /**
+     * postDeleteMatch IMPLEMENTED BUT FOR FUTURE
+     **/
     /* Method Name: postDeleteMatch
        Description: Sends a POST request to unmatch an Orbit and turn into a PENDING Ride Request
        Params: Context mCtx- Context to make Toast in
@@ -41,7 +43,7 @@ public class APIUtils {
 
         /** Gets Information to construct JSON and Endpoint URL**/
         final String TAG = "Delete Match";
-        final String request_url = "https://" + backendUrl + "/rideRequests/"+ride_request_id + "/unmatch" ;
+        final String request_url = "https://" + backendUrl + "/rideRequests/" + ride_request_id + "/unmatch";
         JSONObject deleteJSON = JSONUtils.deleteMatchJSON(ride_request_id);
 
         // Adds Request to RequestQueue (ASYNC TASK)
@@ -59,11 +61,11 @@ public class APIUtils {
                         // Request Error (App 4-- or Server 5--)
                         Toast.makeText(mCtx, error + "error", Toast.LENGTH_LONG).show();
                     }
-                }){
+                }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 // Adds Authorization Token to Header
-                Map<String, String>  params = new HashMap<String, String>();
+                Map<String, String> params = new HashMap<String, String>();
                 params.put("Authorization", token);
                 return params;
             }
@@ -82,9 +84,9 @@ public class APIUtils {
                String ride_request_id - Ride Request ID to delete
     */
     public static void postDeleteRideRequest(final Context mCtx, final String token, final VolleyCallback callback,
-                                       final String user_id, final String event_id, String ride_request_id) {
+                                             final String user_id, final String event_id, String ride_request_id) {
         /** Gets Information to construct JSON and Endpoint URL**/
-        final String request_url = "https://" + backendUrl + "/rideRequests/"+ride_request_id;
+        final String request_url = "https://" + backendUrl + "/rideRequests/" + ride_request_id;
         final String TAG = "Delete Ride Request";
 //        JSONObject deleteJSON = JSONUtils.deleteRideRequestJSON(user_id, event_id, ride_request_id);
 
@@ -105,11 +107,11 @@ public class APIUtils {
                         Log.w("TAGGIBOI", error);
                         error.printStackTrace();
                     }
-                }){
+                }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 // Adds Authorization Token to Header
-                Map<String, String>  params = new HashMap<String, String>();
+                Map<String, String> params = new HashMap<String, String>();
                 params.put("Authorization", token);
                 return params;
             }
@@ -123,7 +125,7 @@ public class APIUtils {
      *  https://developer.android.com/reference/android/net/Uri.Builder
      *  */
     public static String getFSScheduleURL(String flightCarrier, String flightNumber,
-                                          String flightYear, String flightMonth, String flightDay){
+                                          String flightYear, String flightMonth, String flightDay) {
         String appId = "501e6179";
         String appKey = "d3832a53deb968c36e7e4da1af4e6ed9";
         Uri.Builder builder = new Uri.Builder();
@@ -135,8 +137,8 @@ public class APIUtils {
                 .appendPath(flightYear)
                 .appendPath(flightMonth)
                 .appendPath(flightDay)
-                .appendQueryParameter("appId",appId)
-                .appendQueryParameter("appKey",appKey);
+                .appendQueryParameter("appId", appId)
+                .appendQueryParameter("appKey", appKey);
         Log.w("TAGGIBOI", builder.toString());
         return builder.toString();
     }
@@ -145,7 +147,7 @@ public class APIUtils {
        Description: Constructs Server URL Endpoint to GET User Information
        Params: String user_id - User ID
     */
-    public static String getUserURL( String uid ) {
+    public static String getUserURL(String uid) {
         Uri.Builder builder = new Uri.Builder();
         builder.scheme("https")
                 .path(backendUrl + "/users")
@@ -158,7 +160,7 @@ public class APIUtils {
        Description: Constructs Server URL Endpoint to GET User Information
        Params: FirebaseUser user - User to get information from
     */
-    public static String getUserURL( FirebaseUser user ) {
+    public static String getUserURL(FirebaseUser user) {
         String uid = user.getUid();
         Uri.Builder builder = new Uri.Builder();
         builder.scheme("https")
@@ -169,7 +171,7 @@ public class APIUtils {
     }
 
     public static void postUser(final Context confirmProfile, FirebaseUser user, String display_name, String phone_number, String photo_url, String pickupAddress
-    , final String token, final Class<?> cls ) {
+            , final String token, final Class<?> cls) {
         final String server_url = getUserURL(user);
         final String userID = user.getUid();
         final JSONObject userJSON = JSONUtils.retrieveUserInfo(userID, display_name, phone_number, photo_url, pickupAddress);
@@ -193,16 +195,16 @@ public class APIUtils {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // TODO: Handle error
-                        Toast.makeText(confirmProfile,"Failed to save", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(confirmProfile, "Failed to save", Toast.LENGTH_SHORT).show();
                         error.printStackTrace();
                     }
-                }){
-                    @Override
-                    public Map<String, String> getHeaders() throws AuthFailureError {
-                        Map<String, String>  params = new HashMap<String, String>();
-                        params.put("Authorization", token);
-                        return params;
-                    }
+                }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Authorization", token);
+                return params;
+            }
         };
         APIRequestSingleton.getInstance(confirmProfile).addToRequestQueue(jsonObjectRequest, "postRequest");
     }
@@ -228,7 +230,7 @@ public class APIUtils {
                 }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String>  params = new HashMap<String, String>();
+                Map<String, String> params = new HashMap<String, String>();
                 params.put("Authorization", token);
                 return params;
             }
@@ -253,13 +255,13 @@ public class APIUtils {
                     public void onErrorResponse(VolleyError error) {
                         Toast.makeText(myProfile, error + "error", Toast.LENGTH_LONG).show();
                     }
-                }){
-                    @Override
-                    public Map<String, String> getHeaders() throws AuthFailureError {
-                        Map<String, String>  params = new HashMap<String, String>();
-                        params.put("Authorization", token);
-                        return params;
-                    }
+                }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Authorization", token);
+                return params;
+            }
         };
         APIRequestSingleton.getInstance(myProfile).addToRequestQueue(jsonObjectRequest, "getUserRequest");
     }
@@ -267,7 +269,7 @@ public class APIUtils {
     /* Sends a GET Request to server to retrieve RideRequest Details
      *   RETURNS: JSONObject that contains details
      */
-    public static void getRideRequest(final Context ctx, final String rideRequestId, final String token, final VolleyCallback callback){
+    public static void getRideRequest(final Context ctx, final String rideRequestId, final String token, final VolleyCallback callback) {
         Uri.Builder builder = new Uri.Builder();
         builder.scheme("https")
                 .path(backendUrl + "/rideRequests")
@@ -291,7 +293,7 @@ public class APIUtils {
                 }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String>  params = new HashMap<String, String>();
+                Map<String, String> params = new HashMap<String, String>();
                 params.put("Authorization", token);
                 return params;
             }
@@ -304,7 +306,7 @@ public class APIUtils {
      *  RETURNS: String in JSON format that contains flight information
      * */
     public static void getFlightStats(final Context inputFlight, String request_url, final String pickupAddress,
-                                              final boolean toEvent, final String date, final TextView output, final String token) {
+                                      final boolean toEvent, final String date, final TextView output, final String token) {
 
         final String TAG = "FlightStatsAPI";
         // Formulate the request and handle the response.
@@ -325,27 +327,27 @@ public class APIUtils {
                         Log.w(TAG, "GET_REQUEST: FlightStatsAPI failure");
                     }
                 });
-        APIRequestSingleton.getInstance(inputFlight).addToRequestQueue(stringRequest,"getRequest");
+        APIRequestSingleton.getInstance(inputFlight).addToRequestQueue(stringRequest, "getRequest");
     }
 
-    private static String getAirportAbbr(JSONObject ride_RequestJSON){
+    private static String getAirportAbbr(JSONObject ride_RequestJSON) {
         String abbr = "";
-        try{
+        try {
             abbr = ride_RequestJSON.getString("airportCode");
-        }
-        catch(JSONException e){
+        } catch (JSONException e) {
             final String TAG = "getAirportAbbr";
             Log.w(TAG, "failed: Airport Abbreviation - JSON");
             e.printStackTrace();
         }
         return abbr;
     }
-    public static void postRideRequest(final Context inputFlight,final String pickupAddress, final String date, final JSONObject Ride_RequestJSON, final String token) {
+
+    public static void postRideRequest(final Context inputFlight, final String pickupAddress, final String date, final JSONObject Ride_RequestJSON, final String token) {
         final String server_url = "https://" + backendUrl + "/requestRide/" + "airport";
         final String TAG = "Ride_Request";
         String airportCode = APIUtils.getAirportAbbr(Ride_RequestJSON);
         Log.w(TAG, "AirportCode: " + airportCode);
-        if ( !airportCode.equals("LAX")){
+        if (!airportCode.equals("LAX")) {
             Toast.makeText(inputFlight, "Error: Only LAX flights supported", Toast.LENGTH_LONG).show();
             return;
         }
@@ -359,7 +361,7 @@ public class APIUtils {
                     public void onResponse(JSONObject response) {
                         // Do something with the response
                         Log.w(TAG, "POST_REQUEST:Create Ride Request success");
-                        Toast.makeText(inputFlight,"Success", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(inputFlight, "Success", Toast.LENGTH_SHORT).show();
                         try {
                             String id = response.getString("id");
                             // Passing information to the next activity
@@ -393,19 +395,19 @@ public class APIUtils {
                     @Override
                     public void onErrorResponse(VolleyError error) {
 
-                        Toast.makeText(inputFlight,"Error: Flight Request not made", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(inputFlight, "Error: Flight Request not made", Toast.LENGTH_SHORT).show();
                         error.printStackTrace();
-                        Log.w(TAG, "POST_REQUEST:Create Ride Request failed " + new String(error.networkResponse.data) );
+                        Log.w(TAG, "POST_REQUEST:Create Ride Request failed " + new String(error.networkResponse.data));
                     }
-                }){
-                    @Override
-                    public Map<String, String> getHeaders() throws AuthFailureError {
-                        Map<String, String>  params = new HashMap<String, String>();
-                        params.put("Authorization", token);
-                        return params;
-                    }
+                }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Authorization", token);
+                return params;
+            }
         };
-          APIRequestSingleton.getInstance(inputFlight).addToRequestQueue(jsonObjectRequest, "postRequest");
+        APIRequestSingleton.getInstance(inputFlight).addToRequestQueue(jsonObjectRequest, "postRequest");
 
     }
 
@@ -424,7 +426,7 @@ public class APIUtils {
                     public void onResponse(JSONObject response) {
                         // Do something with the response
                         Log.w(TAG, "POST_REQUEST:Create Event Ride Request success");
-                        Toast.makeText(requestRide,"Success", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(requestRide, "Success", Toast.LENGTH_SHORT).show();
                         try {
                             String id = response.getString("id");
 
@@ -440,14 +442,14 @@ public class APIUtils {
                     @Override
                     public void onErrorResponse(VolleyError error) {
 
-                        Toast.makeText(requestRide,"Error: Event Ride Request not made", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(requestRide, "Error: Event Ride Request not made", Toast.LENGTH_SHORT).show();
                         error.printStackTrace();
-                        Log.w(TAG, "POST_REQUEST:Create Event Ride Request failed " + new String(error.networkResponse.data) );
+                        Log.w(TAG, "POST_REQUEST:Create Event Ride Request failed " + new String(error.networkResponse.data));
                     }
-                }){
+                }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String>  params = new HashMap<String, String>();
+                Map<String, String> params = new HashMap<String, String>();
                 params.put("Authorization", token);
                 return params;
             }
@@ -455,6 +457,56 @@ public class APIUtils {
         APIRequestSingleton.getInstance(requestRide).addToRequestQueue(jsonObjectRequest, "postRequest");
 
     }
+
+    public static void putFacebookEvents(
+            final Context myEvents, final JSONObject userEventJSON, final String token) {
+        final String server_url = "https://" + backendUrl + "/me/events";
+        final String TAG = "Upload User Event";
+//        Log.w(TAG, "AirportCode: " + airportCode);
+//        if ( !airportCode.equals("LAX")){
+//            Toast.makeText(inputFlight, "Error: Only LAX flights supported", Toast.LENGTH_LONG).show();
+//            return;
+//        }
+
+        // Formulate the request and handle the response.
+        Log.w(TAG, "REQUEST:Attempt to create jsonObjectRequest");
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.PUT, server_url, userEventJSON, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        // Do something with the response
+                        Log.w(TAG, "POST_REQUEST:POST USER EVENT success");
+                        Toast.makeText(myEvents, "Success", Toast.LENGTH_SHORT).show();
+                        try {
+                            String id = response.getString("id");
+                            // Passing information to the next activity
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                        Toast.makeText(myEvents, "Error: Facebook Event not uploaded", Toast.LENGTH_SHORT).show();
+                        error.printStackTrace();
+                        Log.w(TAG, "POST_REQUEST:Upload User Event failed " + new String(error.networkResponse.data));
+                    }
+                }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Authorization", token);
+                return params;
+            }
+        };
+        APIRequestSingleton.getInstance(myEvents).addToRequestQueue(jsonObjectRequest, "postRequest");
+
+    }
+
 
     public static void postFacebookEvent(
             final Context myEvents, final JSONObject userEventJSON, final String token) {
@@ -475,7 +527,7 @@ public class APIUtils {
                     public void onResponse(JSONObject response) {
                         // Do something with the response
                         Log.w(TAG, "POST_REQUEST:POST USER EVENT success");
-                        Toast.makeText(myEvents,"Success", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(myEvents, "Success", Toast.LENGTH_SHORT).show();
                         try {
                             String id = response.getString("id");
                             // Passing information to the next activity
@@ -489,14 +541,14 @@ public class APIUtils {
                     @Override
                     public void onErrorResponse(VolleyError error) {
 
-                        Toast.makeText(myEvents,"Error: Facebook Event not uploaded", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(myEvents, "Error: Facebook Event not uploaded", Toast.LENGTH_SHORT).show();
                         error.printStackTrace();
-                        Log.w(TAG, "POST_REQUEST:Upload User Event failed " + new String(error.networkResponse.data) );
+                        Log.w(TAG, "POST_REQUEST:Upload User Event failed " + new String(error.networkResponse.data));
                     }
-                }){
+                }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String>  params = new HashMap<String, String>();
+                Map<String, String> params = new HashMap<String, String>();
                 params.put("Authorization", token);
                 return params;
             }
@@ -507,22 +559,22 @@ public class APIUtils {
 
 
     // time in the form of "##:## AM" or PM
-    public static String parsePickupTime(String time, boolean early){
+    public static String parsePickupTime(String time, boolean early) {
 
-        int hour = Integer.parseInt(time.substring(0,2));
-        int minute = Integer.parseInt(time.substring(3,5));
+        int hour = Integer.parseInt(time.substring(0, 2));
+        int minute = Integer.parseInt(time.substring(3, 5));
         boolean afternoonEarly = false;
         boolean afternoonLate = false;
         String parsedTime = "";
-        if(time.charAt(6) == 'P'){
+        if (time.charAt(6) == 'P') {
             afternoonEarly = true;
             afternoonLate = true;
         }
 
 
-        if (early){
-            if( ((hour <= 5) || hour ==12)){
-                if(hour <= 5){
+        if (early) {
+            if (((hour <= 5) || hour == 12)) {
+                if (hour <= 5) {
                     hour = hour + 12;
                 }
                 afternoonEarly = !afternoonEarly;
@@ -531,44 +583,43 @@ public class APIUtils {
             hour = hour - 5;
 
             parsedTime = parsedTime + hour;
-            if(minute < 9){
-                parsedTime = parsedTime + ":0" + minute; }
-            else{
-                parsedTime = parsedTime + ":" + minute; }
-            if(afternoonEarly){
-                parsedTime = parsedTime + " PM";
+            if (minute < 9) {
+                parsedTime = parsedTime + ":0" + minute;
+            } else {
+                parsedTime = parsedTime + ":" + minute;
             }
-            else{
+            if (afternoonEarly) {
+                parsedTime = parsedTime + " PM";
+            } else {
                 parsedTime = parsedTime + " AM";
             }
-        }
-        else{
-            if( ((hour <= 2) || hour ==12)){
-                if(hour <= 2){
+        } else {
+            if (((hour <= 2) || hour == 12)) {
+                if (hour <= 2) {
                     hour = hour + 12;
                 }
                 afternoonLate = !afternoonLate;
             }
             hour = hour - 2;
             parsedTime = parsedTime + hour;
-            if(minute < 9){
-                parsedTime = parsedTime + ":0" + minute; }
-            else{
-                parsedTime = parsedTime + ":" + minute; }
-            if(afternoonLate){
-                parsedTime = parsedTime + " PM";
+            if (minute < 9) {
+                parsedTime = parsedTime + ":0" + minute;
+            } else {
+                parsedTime = parsedTime + ":" + minute;
             }
-            else{
+            if (afternoonLate) {
+                parsedTime = parsedTime + " PM";
+            } else {
                 parsedTime = parsedTime + " AM";
             }
         }
         return parsedTime;
 
     }
+
     public static void postForceMatch(final Context forceMatch, JSONObject Ride_RequestJSON) {
         final String server_url = "https://" + backendUrl + "/devForceMatch";
         final String TAG = "ForceMatch";
-
 
 
         // Formulate the request and handle the response.
@@ -580,7 +631,7 @@ public class APIUtils {
                     public void onResponse(JSONObject response) {
                         // Do something with the response
                         Log.w(TAG, "POST_REQUEST:Force Match success");
-                        Toast.makeText(forceMatch,"Success", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(forceMatch, "Success", Toast.LENGTH_SHORT).show();
 
                     }
                 }, new Response.ErrorListener() {
@@ -599,50 +650,46 @@ public class APIUtils {
         APIRequestSingleton.getInstance(forceMatch).addToRequestQueue(jsonObjectRequest, "postRequest");
 
 
-
     }
 
-    public static String getFlightTime(JSONObject ride_RequestJSON){
+    public static String getFlightTime(JSONObject ride_RequestJSON) {
         String flightTime = null;
 
         try {
             flightTime = ride_RequestJSON.getString("flightLocalTime");
-            StringBuilder parsedFlightTime = new StringBuilder(flightTime.substring(11,16));
-            int flightHour = Integer.parseInt(parsedFlightTime.substring(0,2));
+            StringBuilder parsedFlightTime = new StringBuilder(flightTime.substring(11, 16));
+            int flightHour = Integer.parseInt(parsedFlightTime.substring(0, 2));
 
 
             // Making the local time in AM/PM form
-            if(flightHour == 0){
+            if (flightHour == 0) {
                 parsedFlightTime.append(" AM");
-                parsedFlightTime.setCharAt(0,'1');
-                parsedFlightTime.setCharAt(1,'2');
-            }
-            else if (flightHour == 12){
+                parsedFlightTime.setCharAt(0, '1');
+                parsedFlightTime.setCharAt(1, '2');
+            } else if (flightHour == 12) {
                 parsedFlightTime.append(" PM");
-            }
-            else{
+            } else {
                 // If the hour is 12 to 23, it is PM
-                if( flightHour > 11){
+                if (flightHour > 11) {
                     parsedFlightTime.append(" PM");
                     flightHour = flightHour % 12;
 
                     // Insert only one hour digit
-                    if(flightHour < 10){
+                    if (flightHour < 10) {
                         parsedFlightTime.setCharAt(0, '0');
                         parsedFlightTime.setCharAt(1, Integer.toString(flightHour).charAt(0));
                     }
                     // Insert two hour digits
-                    else{
+                    else {
                         parsedFlightTime.setCharAt(0, Integer.toString(flightHour).charAt(0));
                         parsedFlightTime.setCharAt(1, Integer.toString(flightHour).charAt(1));
                     }
+                } else {
+                    parsedFlightTime.append(" AM");
                 }
-                else{
-                    parsedFlightTime.append(" AM"); }
             }
             return parsedFlightTime.toString();
-        }
-        catch (JSONException e){
+        } catch (JSONException e) {
             final String TAG = "toJSON";
             Log.w(TAG, "failed: Flight JSON");
             e.printStackTrace();

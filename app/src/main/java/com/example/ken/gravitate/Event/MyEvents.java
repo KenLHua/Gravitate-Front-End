@@ -159,13 +159,11 @@ public class MyEvents extends AppCompatActivity {
                             public void onCompleted(GraphResponse response) {
                                 JSONObject responseObject = response.getJSONObject();
                                 Log.d("fb event", responseObject.toString());
-                                try {
-                                    JSONArray eventArray = responseObject.getJSONArray("data");
-                                    JSONObject eventObject = eventArray.getJSONObject(0);
-                                    APIUtils.postFacebookEvent(mContext, eventObject, token);
-                                } catch (JSONException e) {
-                                    Log.e("fb event","Retrieve User Facebook Event failed", e.fillInStackTrace());
-                                }
+                                    // TODO: add paging for multiple pages of events
+                                    // TODO: only upload events that are in the future
+//                                    JSONArray eventArray = responseObject.getJSONArray("data");
+//                                    JSONObject eventObject = eventArray.getJSONObject(0);
+                                APIUtils.putFacebookEvents(mContext, responseObject, token);
 
                             }
                         }
