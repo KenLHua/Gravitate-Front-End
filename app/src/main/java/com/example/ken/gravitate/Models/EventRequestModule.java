@@ -19,6 +19,8 @@ public class EventRequestModule {
     private String mPickupAddress;
     private DocumentReference mRideRequestRef;
 
+    private String mFbEventId;
+
     public EventRequestModule() {
     } // Needed for Firebase
 
@@ -116,6 +118,11 @@ public class EventRequestModule {
     }
 
 
+    public String getFbEventId() {
+        return mFbEventId;
+    }
 
-
+    public void setFbEventId(String mFbEventId) {
+        this.mFbEventId = mFbEventId;
+    }
 }

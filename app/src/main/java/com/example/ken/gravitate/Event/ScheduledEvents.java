@@ -36,6 +36,10 @@ import com.example.ken.gravitate.Utils.MyViewHolder;
 import com.example.ken.gravitate.Models.EventRequestModule;
 import com.example.ken.gravitate.forcematch2;
 import com.example.ken.gravitate.Utils.VolleyCallback;
+import com.facebook.AccessToken;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -388,7 +392,45 @@ public class ScheduledEvents extends AppCompatActivity
                 // Set the context and fields
                 holder.context = mContext;
                 holder.stillPending = stillPending;
-                holder.background_img.setImageResource(cardBackground);
+
+                final ImageView backgroundImg = holder.background_img;
+
+                String fbEventId = model.getFbEventId();
+                if (fbEventId != null) {
+
+                    // Set card cover with facebook event id
+                    Bundle parameters = new Bundle();
+                    parameters.putString("fields", "cover");
+
+                    new GraphRequest(
+                            AccessToken.getCurrentAccessToken(),
+                            "/"+fbEventId,
+                            parameters,
+                            HttpMethod.GET,
+                            new GraphRequest.Callback() {
+                                public void onCompleted(GraphResponse response) {
+                                    JSONObject responseObject = response.getJSONObject();
+
+                                    Log.d("fb event cover", responseObject.toString());
+                                    try {
+                                        JSONObject coverObject = responseObject.getJSONObject("cover");
+                                        final String coverUrl = coverObject.getString("source");
+                                        new DownloadImageTask(backgroundImg).execute(coverUrl);
+
+                                    } catch (JSONException e) {
+                                        Log.e("fb event cover",
+                                                "Retrieve User Facebook Event Cover photo failed",
+                                                e.fillInStackTrace());
+                                    }
+
+                                }
+                            }
+                    ).executeAsync();
+
+                } else {
+                    backgroundImg.setImageResource(cardBackground);
+                }
+
                 holder.card_dest.setText(destName);
                 // Update whether the "no requests found" is displayed
                 hasRide = true;
