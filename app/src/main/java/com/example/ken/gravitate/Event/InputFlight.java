@@ -81,7 +81,6 @@ public class InputFlight extends AppCompatActivity {
         Task<GetTokenResult> tokenTask = FirebaseAuth.getInstance().getAccessToken(false);
         while(!tokenTask.isComplete()){
             Log.d("GettingToken", "async");
-<<<<<<< HEAD
             try{
                 wait(500);
             }
@@ -91,7 +90,7 @@ public class InputFlight extends AppCompatActivity {
         }
         final String token = tokenTask.getResult().getToken();
 //        APIUtils.testAuthEndpoint(this,token);
-=======
+
             synchronized (this){
                 try{
                     wait(500);
@@ -101,9 +100,7 @@ public class InputFlight extends AppCompatActivity {
                 }
             }
         }
-        final String token = tokenTask.getResult().getToken();
 
->>>>>>> fb9e46d5bbee9e97dad7ea3a041f719930ffb614
 
         mContext = this;
         mOutput = findViewById(R.id.outputText);
