@@ -411,8 +411,8 @@ public class ScheduledEvents extends AppCompatActivity
                                 public void onCompleted(GraphResponse response) {
                                     JSONObject responseObject = response.getJSONObject();
 
-                                    Log.d("fb event cover", responseObject.toString());
                                     try {
+                                        Log.d("fb event cover", responseObject.toString());
                                         JSONObject coverObject = responseObject.getJSONObject("cover");
                                         final String coverUrl = coverObject.getString("source");
                                         new DownloadImageTask(backgroundImg).execute(coverUrl);
