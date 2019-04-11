@@ -138,45 +138,45 @@ public class EditAccount extends AppCompatActivity {
             public void onClick(View v) {
                 callPlaceAutocompleteActivityIntent(filter); }});
 
-        // Facebook log-in integration
-        callbackManager = CallbackManager.Factory.create();
-        LoginManager.getInstance().registerCallback(callbackManager,
-                new FacebookCallback<LoginResult>() {
-                    @Override
-                    public void onSuccess(LoginResult loginResult) {
-                        Toast.makeText(mContext, "Successful fb login. ", Toast.LENGTH_LONG).show();
-                        Log.i("fb login onSuccess", loginResult.toString());
-                        // TODO: delete before release
-                        Log.i("fb login onSuccess Token", loginResult.getAccessToken().getToken());
-
-                    }
-
-                    @Override
-                    public void onCancel() {
-                        Toast.makeText(mContext, "Cancelled fb login. ", Toast.LENGTH_LONG).show();
-                    }
-
-                    @Override
-                    public void onError(FacebookException exception) {
-                        Toast.makeText(mContext, "Error fb login. ", Toast.LENGTH_LONG).show();
-                        Log.i("fb login onError", exception.getMessage());
-                    }
-                });
-
-        // TODO: move to new Activity (will override current use cases)
-        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("user_events"));
-
-        // Test link to someone else's facebook messenger profile
-        findViewById(R.id.fb_mme).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String url = "https://m.me/billyraozx";
-
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse(url));
-                startActivity(i);
-            }
-        });
+//        // Facebook log-in integration
+//        callbackManager = CallbackManager.Factory.create();
+//        LoginManager.getInstance().registerCallback(callbackManager,
+//                new FacebookCallback<LoginResult>() {
+//                    @Override
+//                    public void onSuccess(LoginResult loginResult) {
+//                        Toast.makeText(mContext, "Successful fb login. ", Toast.LENGTH_LONG).show();
+//                        Log.i("fb login onSuccess", loginResult.toString());
+//                        // TODO: delete before release
+//                        Log.i("fb login onSuccess Token", loginResult.getAccessToken().getToken());
+//
+//                    }
+//
+//                    @Override
+//                    public void onCancel() {
+//                        Toast.makeText(mContext, "Cancelled fb login. ", Toast.LENGTH_LONG).show();
+//                    }
+//
+//                    @Override
+//                    public void onError(FacebookException exception) {
+//                        Toast.makeText(mContext, "Error fb login. ", Toast.LENGTH_LONG).show();
+//                        Log.i("fb login onError", exception.getMessage());
+//                    }
+//                });
+//
+//        // TODO: move to new Activity (will override current use cases)
+//        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("user_events"));
+//
+//        // Test link to someone else's facebook messenger profile
+//        findViewById(R.id.fb_mme).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                String url = "https://m.me/billyraozx";
+//
+//                Intent i = new Intent(Intent.ACTION_VIEW);
+//                i.setData(Uri.parse(url));
+//                startActivity(i);
+//            }
+//        });
 
 
 //        findViewById(R.id.fb_event_button).setOnClickListener( new View.OnClickListener()  {
