@@ -104,7 +104,7 @@ public class RiderAdapter extends RecyclerView.Adapter<RiderAdapter.RiderViewHol
         public RiderViewHolder(View itemView, DocumentReference orbitRef, Context context) {
             super(itemView);
             mContext = context;
-<<<<<<< HEAD
+
             Task<com.google.firebase.auth.GetTokenResult> tokenTask = FirebaseAuth.getInstance().getAccessToken(false);
             while(!tokenTask.isComplete()){
                 Log.d("GettingToken", "async");
@@ -113,7 +113,7 @@ public class RiderAdapter extends RecyclerView.Adapter<RiderAdapter.RiderViewHol
                 }
                 catch (InterruptedException e){
                     e.printStackTrace();
-=======
+
             // Getting REST access token
             Task<GetTokenResult> tokenTask = FirebaseAuth.getInstance().getAccessToken(false);
             while(!tokenTask.isComplete()){
@@ -125,16 +125,13 @@ public class RiderAdapter extends RecyclerView.Adapter<RiderAdapter.RiderViewHol
                     catch (InterruptedException e){
                         e.printStackTrace();
                     }
->>>>>>> fb9e46d5bbee9e97dad7ea3a041f719930ffb614
+
                 }
             }
             final String token = tokenTask.getResult().getToken();
 
-<<<<<<< HEAD
-=======
 
             // Get the rider's UI elements
->>>>>>> fb9e46d5bbee9e97dad7ea3a041f719930ffb614
             profile_photo = itemView.findViewById(R.id.profile_photo);
             fullname = itemView.findViewById(R.id.rider_name);
             email = itemView.findViewById(R.id.rider_email);

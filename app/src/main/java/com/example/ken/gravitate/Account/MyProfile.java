@@ -39,7 +39,6 @@ public class MyProfile extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         mContext = MyProfile.this;
 
-<<<<<<< HEAD
         Task<GetTokenResult> tokenTask = FirebaseAuth.getInstance().getAccessToken(false);
         while(!tokenTask.isComplete()){
             Log.d("GettingToken", "async");
@@ -51,9 +50,7 @@ public class MyProfile extends AppCompatActivity {
             }
         }
         final String token = tokenTask.getResult().getToken();
-=======
 
->>>>>>> fb9e46d5bbee9e97dad7ea3a041f719930ffb614
         // Getting current user's information
         FirebaseUser user = AuthSingleton.getInstance().getCurrentUser();
         populateUserInfo(user);
