@@ -411,8 +411,8 @@ public class ScheduledEvents extends AppCompatActivity
                                 public void onCompleted(GraphResponse response) {
                                     JSONObject responseObject = response.getJSONObject();
 
-                                    Log.d("fb event cover", responseObject.toString());
                                     try {
+                                        Log.d("fb event cover", responseObject.toString());
                                         JSONObject coverObject = responseObject.getJSONObject("cover");
                                         final String coverUrl = coverObject.getString("source");
                                         new DownloadImageTask(backgroundImg).execute(coverUrl);
@@ -421,7 +421,12 @@ public class ScheduledEvents extends AppCompatActivity
                                         Log.e("fb event cover",
                                                 "Retrieve User Facebook Event Cover photo failed",
                                                 e.fillInStackTrace());
+                                    } catch (NullPointerException e) {
+                                        Log.e("fb event cover", "Null Pointer Exception",
+                                                e.fillInStackTrace());
+
                                     }
+
 
                                 }
                             }

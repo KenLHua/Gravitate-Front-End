@@ -20,11 +20,11 @@
         android:layout_height="0dp"
         android:fillViewport="true"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintVertical_bias="1.0">
 
 
         <RelativeLayout
@@ -55,19 +55,19 @@
                 android:id="@+id/fullName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
                 android:layout_below="@+id/ContactInfoText"
-                android:layout_alignStart="@+id/ContactInfoText">
+                android:layout_alignStart="@+id/ContactInfoText"
+                android:layout_marginTop="20dp">
 
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/inputFullName"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginEnd="16dp"
-                    android:singleLine="true"
                     android:layout_marginStart="-4dp"
+                    android:layout_marginEnd="16dp"
                     android:backgroundTint="@color/colorAccent"
                     android:hint="Full Name"
+                    android:singleLine="true"
                     android:textSize="18sp" />
             </android.support.design.widget.TextInputLayout>
 
@@ -75,9 +75,9 @@
                 android:id="@+id/phoneNumber"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
                 android:layout_below="@+id/fullName"
-                android:layout_marginStart="22dp">
+                android:layout_marginStart="22dp"
+                android:layout_marginTop="20dp">
 
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/inputPhoneNumber"
@@ -85,12 +85,12 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="-4dp"
                     android:layout_marginEnd="16dp"
-                    android:singleLine="true"
-                    android:maxLength="12"
-                    android:longClickable="false"
                     android:backgroundTint="@color/colorAccent"
                     android:hint="Phone Number"
                     android:inputType="number"
+                    android:longClickable="false"
+                    android:maxLength="12"
+                    android:singleLine="true"
                     android:textSize="18sp" />
             </android.support.design.widget.TextInputLayout>
 
@@ -99,32 +99,25 @@
                 android:id="@+id/postalAddress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
                 android:layout_below="@+id/phoneNumber"
-                android:layout_marginStart="22dp">
+                android:layout_marginStart="22dp"
+                android:layout_marginTop="20dp">
 
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/inputPostalAddress"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"
-                    android:longClickable="false"
+                    android:backgroundTint="@color/colorAccent"
                     android:clickable="true"
                     android:focusable="false"
-                    android:singleLine="true"
-                    android:backgroundTint="@color/colorAccent"
                     android:hint="Address"
                     android:inputType="textPostalAddress"
+                    android:longClickable="false"
+                    android:singleLine="true"
                     android:textSize="18sp" />
             </android.support.design.widget.TextInputLayout>
 
-            <com.facebook.login.widget.LoginButton
-                android:id="@+id/login_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="30dp"
-                android:layout_marginBottom="30dp" />
 
             <Button
                 android:id="@+id/fb_mme"
