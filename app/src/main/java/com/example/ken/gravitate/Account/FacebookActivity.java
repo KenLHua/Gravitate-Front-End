@@ -58,6 +58,7 @@ public class FacebookActivity extends AppCompatActivity {
     private String token;
     private FirebaseUser user;
     private CallbackManager callbackManager;
+    private LoginButton loginButton;
 
 
     @Override
@@ -124,35 +125,6 @@ public class FacebookActivity extends AppCompatActivity {
                     }
                 }, token);
 
-
-        // Facebook log-in integration
-        callbackManager = CallbackManager.Factory.create();
-        LoginManager.getInstance().registerCallback(callbackManager,
-                new FacebookCallback<LoginResult>() {
-                    @Override
-                    public void onSuccess(LoginResult loginResult) {
-                        Toast.makeText(mContext, "Successful fb login. ", Toast.LENGTH_LONG).show();
-                        Log.i("fb login onSuccess", loginResult.toString());
-                        // TODO: delete before release
-                        Log.i("fb login onSuccess Token", loginResult.getAccessToken().getToken());
-
-                    }
-
-                    @Override
-                    public void onCancel() {
-                        Toast.makeText(mContext, "Cancelled fb login. ", Toast.LENGTH_LONG).show();
-                    }
-
-                    @Override
-                    public void onError(FacebookException exception) {
-                        Toast.makeText(mContext, "Error fb login. ", Toast.LENGTH_LONG).show();
-                        Log.i("fb login onError", exception.getMessage());
-                    }
-                });
-
-        // TODO: move to new Activity (will override current use cases)
-        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("user_events"));
-
         // Test link to someone else's facebook messenger profile
         findViewById(R.id.fb_mme).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -174,4 +146,11 @@ public class FacebookActivity extends AppCompatActivity {
 //        } );
 
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
 }

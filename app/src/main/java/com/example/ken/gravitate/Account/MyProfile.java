@@ -16,6 +16,12 @@ import com.example.ken.gravitate.Utils.APIUtils;
 import com.example.ken.gravitate.Utils.AuthSingleton;
 import com.example.ken.gravitate.Utils.DownloadImageTask;
 import com.example.ken.gravitate.Utils.VolleyCallback;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -35,6 +41,9 @@ public class MyProfile extends AppCompatActivity {
     private ImageView mProfileImageDisplay;
     private Context mContext;
     private String token;
+    private LoginButton loginButton; // Facebook login button
+    private CallbackManager callbackManager; // Facebook callback manager
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         mContext = MyProfile.this;
@@ -99,6 +108,43 @@ public class MyProfile extends AppCompatActivity {
             }
         });
 
+
+        // Facebook login
+        loginButton = (LoginButton) findViewById(R.id.login_button);
+        loginButton.setReadPermissions("user_events");
+
+        // Facebook log-in integration
+        callbackManager = CallbackManager.Factory.create();
+        LoginManager.getInstance().registerCallback(callbackManager,
+                new FacebookCallback<LoginResult>() {
+                    @Override
+                    public void onSuccess(LoginResult loginResult) {
+                        Toast.makeText(mContext, "Successful fb login. ", Toast.LENGTH_LONG).show();
+                        Log.i("fb login onSuccess", loginResult.toString());
+                        // TODO: delete before release
+                        Log.i("fb login onSuccess Token", loginResult.getAccessToken().getToken());
+
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        Toast.makeText(mContext, "Cancelled fb login. ", Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onError(FacebookException exception) {
+                        Toast.makeText(mContext, "Error fb login. ", Toast.LENGTH_LONG).show();
+                        Log.i("fb login onError", exception.getMessage());
+                    }
+                });
+
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     // Populate the user's profile page with their database information
