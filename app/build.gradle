@@ -70,6 +70,8 @@ dependencies {
 //    implementation "com.facebook.react:react-native:+" // From node_modules
     implementation 'com.facebook.android:facebook-login:[4,5)'
 
+    // for uber button
+    implementation 'com.uber.sdk:rides-android:0.5.3'
 }
 
 apply plugin: 'com.google.gms.google-services'
