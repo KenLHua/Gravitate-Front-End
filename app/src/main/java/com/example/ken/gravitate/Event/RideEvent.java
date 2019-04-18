@@ -72,7 +72,6 @@ public class RideEvent extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ride_event);
-        RelativeLayout layout = (RelativeLayout) findViewById(R.id.request_uber_main);
 
         mCtx = this;
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -121,19 +120,17 @@ public class RideEvent extends AppCompatActivity {
                 } else {
                     updateOrbitNone();
                 }
-
-
             }
         });
 
         // configuration builder for uber sdk
         SessionConfiguration config = new SessionConfiguration.Builder()
                 // mandatory
-                .setClientId("<CLIENT_ID>")
+                .setClientId("pF6iOhHQDz82jSBQ3q1Am-ZbI_t8IZZR")
                 // required for enhanced button features
-                .setServerToken("<TOKEN>")
+                .setServerToken("4D4ljF4x6hf97r92tXYXMBw3tih1QljnAB36ruFY")
                 // required for implicit grant authentication
-                .setRedirectUri("<REDIRECT_URI>")
+//                .setRedirectUri("<REDIRECT_URI>")
                 // optional: set sandbox as operating environment
                 .setEnvironment(SessionConfiguration.Environment.SANDBOX)
                 .build();
@@ -141,7 +138,7 @@ public class RideEvent extends AppCompatActivity {
         // initialize uber sdk
         UberSdk.initialize(config);
         RideRequestButton requestButton = new RideRequestButton(mCtx);
-        layout.addView(requestButton);
+//        layout.addView(requestButton);
 
         RideParameters rideParams = new RideParameters.Builder()
                 // Optional product_id from /v1/products endpoint (e.g. UberX). If not provided, most cost-efficient product will be used
