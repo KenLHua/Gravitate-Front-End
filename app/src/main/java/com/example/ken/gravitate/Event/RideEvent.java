@@ -137,8 +137,7 @@ public class RideEvent extends AppCompatActivity {
 
         // initialize uber sdk
         UberSdk.initialize(config);
-        RideRequestButton requestButton = new RideRequestButton(mCtx);
-//        layout.addView(requestButton);
+        RideRequestButton requestButton = (RideRequestButton) findViewById(R.id.uber_bttn);
 
         RideParameters rideParams = new RideParameters.Builder()
                 // Optional product_id from /v1/products endpoint (e.g. UberX). If not provided, most cost-efficient product will be used
@@ -150,12 +149,8 @@ public class RideEvent extends AppCompatActivity {
                 .setPickupLocation(37.775304, -122.417522, "Uber HQ", "1455 Market Street, San Francisco")
                 .build();
 
-        // set parameters for the RideRequestButton instance
-        requestButton.setRideParameters(rideParams);
 
         ServerTokenSession session = new ServerTokenSession(config);
-        requestButton.setSession(session);
-        requestButton.loadRideInformation(); // fetch and display estimates within the button
 
         // callback functions allow us to be notified on successfully loaded estimates,
         // API errors, and unexpected errors (e.g. IOException)
@@ -164,19 +159,27 @@ public class RideEvent extends AppCompatActivity {
             @Override
             public void onRideInformationLoaded() {
                 // react to the displayed estimates
+                Log.i("myTag2", "loading info");
             }
 
             @Override
             public void onError(ApiError apiError) {
                 // API error details: /docs/riders/references/api#section-errors
+                Log.e("myTag", apiError.toString());
             }
 
             @Override
             public void onError(Throwable throwable) {
                 // Unexpected error, very likely an IOException
+                Log.e("myTag", throwable.getMessage());
             }
         };
+
+        // set parameters for the RideRequestButton instance
+        requestButton.setRideParameters(rideParams);
+        requestButton.setSession(session);
         requestButton.setCallback(callback);
+        requestButton.loadRideInformation(); // fetch and display estimates within the button
     }
 
 
