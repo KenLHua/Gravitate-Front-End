@@ -70,6 +70,11 @@ dependencies {
 //    implementation "com.facebook.react:react-native:+" // From node_modules
     implementation 'com.facebook.android:facebook-login:[4,5)'
 
+    // JSON parsing library jackson
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.9.8'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.9.8'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.8'
+
 }
 
 apply plugin: 'com.google.gms.google-services'

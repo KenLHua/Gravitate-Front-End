@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.ken.gravitate.Models.AirportRide;
 import com.example.ken.gravitate.Models.AirportRideRequest;
 import com.example.ken.gravitate.Models.Orbit;
 import com.example.ken.gravitate.Models.Rider;
@@ -32,6 +33,7 @@ import com.example.ken.gravitate.Utils.APIUtils;
 import com.example.ken.gravitate.Utils.AuthSingleton;
 import com.example.ken.gravitate.Utils.DownloadImageTask;
 import com.example.ken.gravitate.Utils.VolleyCallback;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -74,45 +76,69 @@ public class RideEvent extends AppCompatActivity {
         });
         setSupportActionBar(toolbar);
 
+        // Getting REST access token
+        Task<GetTokenResult> tokenTask = FirebaseAuth.getInstance().getAccessToken(false);
+        while(!tokenTask.isComplete()){
+            Log.d("GettingToken", "async");
+            synchronized (this){
+                try{
+                    wait(500);
+                }
+                catch (InterruptedException e){
+                    e.printStackTrace();
+                }
+            }
+        }
+        final String token = tokenTask.getResult().getToken();
+
         db = FirebaseFirestore.getInstance();
         final String rideRequestId = getIntent().getExtras().getString("rideRequestId");
-        DocumentReference docRef = db.collection("rideRequests").document(rideRequestId);
-        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                AirportRideRequest rideRequest = documentSnapshot.toObject(AirportRideRequest.class);
+        APIUtils.getRideRequest(mCtx, rideRequestId, token,
+                new VolleyCallback() {
+                    @Override
+                    public void onSuccessResponse(JSONObject result) {
+                        JSONObject response = result;
+                        ObjectMapper mapper = new ObjectMapper();
+                        try {
+                            AirportRide rideRequest = mapper.readValue(result.toString(), AirportRide.class);
+                            /* Check whether the rideRequest is in an orbit */
+                            Boolean isComplete = rideRequest.isRequestCompletion();
 
-                /* Check whether the rideRequest is in an orbit */
-                Boolean isComplete = rideRequest.isRequestCompletion();
+                            /* Get variables required to send REST API request for deletion */
+                            String eventId = rideRequest.getEventId();
+                            String userId = rideRequest.getUserId();
 
-                /* Get variables required to send REST API request for deletion */
-                String eventId = rideRequest.getEventRef().getId();
-                String userId = rideRequest.getUserId();
+                            /* Hide or display remove button */
+                            Boolean hideRemoveButton = isComplete;
+                            updateRemoveButton(eventId, rideRequestId, userId, hideRemoveButton);
 
-                /* Hide or display remove button */
-                Boolean hideRemoveButton = isComplete;
-                updateRemoveButton(eventId, rideRequestId, userId, hideRemoveButton);
+                            /* Update ride request related information */
+                            updateRideRequest(rideRequest);
 
-                /* Update ride request related information */
-                updateRideRequest(rideRequest);
-
-                /* Update orbit related information (if applicable) */
-                if (isComplete) {
-                    DocumentReference orbitRef = rideRequest.getOrbitRef();
-                    orbitRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                        @Override
-                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            Orbit orbit = documentSnapshot.toObject(Orbit.class);
-                            updateOrbitExists(orbit);
+                            /* Update orbit related information (if applicable) */
+                            if (isComplete) {
+                                DocumentReference orbitRef = db.collection("orbits").document(rideRequest.getOrbitId());
+                                orbitRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                        Orbit orbit = documentSnapshot.toObject(Orbit.class);
+                                        updateOrbitExists(orbit);
+                                    }
+                                });
+                            } else {
+                                updateOrbitNone();
+                            }
+                        } catch (Exception e) {
+                            Log.e("json exception", e.toString());
                         }
-                    });
-                } else {
-                    updateOrbitNone();
-                }
+//
+//                        flightLocalTime = response.getString("flightLocalTime");
+//                        pickupAddress = response.getString("pickupAddress");
+//                        baggages = response.getString("baggages");
 
-
-            }
-        });
+                        Log.w("GETRideRequest", "Success");
+                    }
+                });
 
     }
 
@@ -141,7 +167,7 @@ public class RideEvent extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    private void updateRideRequest(AirportRideRequest rideRequest) {
+    private void updateRideRequest(AirportRide rideRequest) {
 
         TextView flightTimeDisplay = findViewById(R.id.flightTime);
         TextView pickupAddressDisplay = findViewById(R.id.pickupAddress);

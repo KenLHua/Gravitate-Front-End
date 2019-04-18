@@ -417,7 +417,7 @@ public class ScheduledEvents extends AppCompatActivity
                                         final String coverUrl = coverObject.getString("source");
                                         new DownloadImageTask(backgroundImg).execute(coverUrl);
 
-                                    } catch (JSONException e) {
+                                    } catch (Exception e) {
                                         Log.e("fb event cover",
                                                 "Retrieve User Facebook Event Cover photo failed",
                                                 e.fillInStackTrace());
