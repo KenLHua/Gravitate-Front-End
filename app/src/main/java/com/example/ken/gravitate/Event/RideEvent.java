@@ -234,7 +234,7 @@ public class RideEvent extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    private void updateRideRequest(AirportRideRequest rideRequest) {
+    private void updateRideRequest(AirportRide rideRequest) {
 
         TextView flightTimeDisplay = findViewById(R.id.flightTime);
         TextView pickupAddressDisplay = findViewById(R.id.pickupAddress);

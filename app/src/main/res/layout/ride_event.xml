@@ -18,16 +18,16 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="20dp"/>
 
-    <!--<Button-->
-        <!--android:id="@+id/delete_ride_bttn"-->
-        <!--style="@style/AppTheme.RoundedCornerMaterialButton"-->
-        <!--android:elevation="8dp"-->
-        <!--android:layout_width="150dp"-->
-        <!--android:layout_height="50dp"-->
-        <!--android:layout_alignParentBottom="true"-->
-        <!--android:layout_centerHorizontal="true"-->
-        <!--android:layout_marginBottom="20dp"-->
-        <!--android:text="Delete" />-->
+    <Button
+        android:id="@+id/delete_ride_bttn"
+        style="@style/AppTheme.RoundedCornerMaterialButton"
+        android:elevation="8dp"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:text="Delete" />
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
