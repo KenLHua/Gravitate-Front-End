@@ -70,6 +70,8 @@ dependencies {
 //    implementation "com.facebook.react:react-native:+" // From node_modules
     implementation 'com.facebook.android:facebook-login:[4,5)'
 
+    // for uber button
+    implementation 'com.uber.sdk:rides-android:0.5.3'
     // JSON parsing library jackson
     implementation 'com.fasterxml.jackson.core:jackson-core:2.9.8'
     implementation 'com.fasterxml.jackson.core:jackson-annotations:2.9.8'

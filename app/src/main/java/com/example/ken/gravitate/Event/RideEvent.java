@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,6 +53,16 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+
+// uber sdk for uber button
+import com.uber.sdk.android.core.UberSdk;
+import com.uber.sdk.android.rides.RideParameters;
+import com.uber.sdk.android.rides.RideRequestButtonCallback;
+import com.uber.sdk.core.auth.Scope;
+import com.uber.sdk.rides.client.SessionConfiguration;
+import com.uber.sdk.android.rides.RideRequestButton;
+import com.uber.sdk.rides.client.ServerTokenSession;
+import com.uber.sdk.rides.client.error.ApiError;
 
 public class RideEvent extends AppCompatActivity {
     private TextView mPartnerName;
@@ -140,6 +151,62 @@ public class RideEvent extends AppCompatActivity {
                     }
                 });
 
+        SessionConfiguration config = new SessionConfiguration.Builder()
+                // mandatory
+                .setClientId("pF6iOhHQDz82jSBQ3q1Am-ZbI_t8IZZR")
+                // required for enhanced button features
+                .setServerToken("4D4ljF4x6hf97r92tXYXMBw3tih1QljnAB36ruFY")
+                // required for implicit grant authentication
+//                .setRedirectUri("<REDIRECT_URI>")
+                // optional: set sandbox as operating environment
+                .setEnvironment(SessionConfiguration.Environment.SANDBOX)
+                .build();
+
+        // initialize uber sdk
+        UberSdk.initialize(config);
+        RideRequestButton requestButton = new RideRequestButton(mCtx);
+//        layout.addView(requestButton);
+
+
+        RideParameters rideParams = new RideParameters.Builder()
+                // Optional product_id from /v1/products endpoint (e.g. UberX). If not provided, most cost-efficient product will be used
+                .setProductId("a1111c8c-c720-46c3-8534-2fcdd730040d")
+                // Required for price estimates; lat (Double), lng (Double), nickname (String), formatted address (String) of dropoff location
+                .setDropoffLocation(
+                        37.775304, -122.417522, "Uber HQ", "1455 Market Street, San Francisco")
+                // Required for pickup estimates; lat (Double), lng (Double), nickname (String), formatted address (String) of pickup location
+                .setPickupLocation(37.775304, -122.417522, "Uber HQ", "1455 Market Street, San Francisco")
+                .build();
+
+        // set parameters for the RideRequestButton instance
+        requestButton.setRideParameters(rideParams);
+
+        ServerTokenSession session = new ServerTokenSession(config);
+        requestButton.setSession(session);
+        requestButton.loadRideInformation(); // fetch and display estimates within the button
+
+        // callback functions allow us to be notified on successfully loaded estimates,
+        // API errors, and unexpected errors (e.g. IOException)
+        RideRequestButtonCallback callback = new RideRequestButtonCallback() {
+
+            @Override
+            public void onRideInformationLoaded() {
+                // react to the displayed estimates
+            }
+
+            @Override
+            public void onError(ApiError apiError) {
+                // API error details: /docs/riders/references/api#section-errors
+            }
+
+
+
+            @Override
+            public void onError(Throwable throwable) {
+                // Unexpected error, very likely an IOException
+            }
+        };
+        requestButton.setCallback(callback);
     }
 
 
@@ -167,7 +234,7 @@ public class RideEvent extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    private void updateRideRequest(AirportRide rideRequest) {
+    private void updateRideRequest(AirportRideRequest rideRequest) {
 
         TextView flightTimeDisplay = findViewById(R.id.flightTime);
         TextView pickupAddressDisplay = findViewById(R.id.pickupAddress);
