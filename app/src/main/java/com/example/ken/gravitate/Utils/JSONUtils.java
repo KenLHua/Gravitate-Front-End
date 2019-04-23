@@ -33,6 +33,7 @@ public class JSONUtils {
             String flightNumber = info.getString("carrierFsCode")+info.getString("flightNumber");
             String departureAirportFsCode = info.getString("departureAirportFsCode");
             String departureTime = info.getString("departureTime");
+            flightJSON.put("rideCategory", "airport");
             flightJSON.put("flightNumber",flightNumber);
             flightJSON.put("flightLocalTime",departureTime);
             flightJSON.put("pickupAddress",pickUpAddress);

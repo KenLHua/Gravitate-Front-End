@@ -157,6 +157,7 @@ public class CreateEventRide extends AppCompatActivity {
 //                        'driverStatus': False,
 //                        'toEvent': True
                 try {
+                    json.put("rideCategory", "event");
                     json.put("eventId", eventId);
                     json.put("pickupAddress", pickupAddress);
                     json.put("toEvent", true);

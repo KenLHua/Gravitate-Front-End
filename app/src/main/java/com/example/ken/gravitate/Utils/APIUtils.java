@@ -343,7 +343,7 @@ public class APIUtils {
     }
 
     public static void postRideRequest(final Context inputFlight, final String pickupAddress, final String date, final JSONObject Ride_RequestJSON, final String token) {
-        final String server_url = "https://" + backendUrl + "/requestRide/" + "airport";
+        final String server_url = "https://" + backendUrl + "/rideRequests";
         final String TAG = "Ride_Request";
         String airportCode = APIUtils.getAirportAbbr(Ride_RequestJSON);
         Log.w(TAG, "AirportCode: " + airportCode);
@@ -414,7 +414,7 @@ public class APIUtils {
     public static void postEventRideRequest(final Context requestRide,
                                             final JSONObject Ride_RequestJSON,
                                             final String token) {
-        final String server_url = "https://" + backendUrl + "/requestRide/" + "event";
+        final String server_url = "https://" + backendUrl + "/rideRequests/";
         final String TAG = "Ride_Request";
 
         // Formulate the request and handle the response.
